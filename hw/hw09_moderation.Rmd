@@ -1,0 +1,40 @@
+---
+title: "Moderation Assignment Instructions"
+output:
+  html_document:
+    highlight: tango
+    theme: readable
+    toc: yes
+    toc_float: yes
+  pdf_document: default
+---
+
+# Submission Guidelines
+
+* Use the template provided: [[RMD]](hw09_moderation_template.Rmd)
+* This is an individual assignment. I understand that you to work with your team/partner on this, but each person must submit their own work, and own writing. 
+* Upload to the corresponding assignment to Google Drive by the due date. 
+    
+
+# Instructions
+
+1. Copy relevant content and code from Step 1-4 for the ANOVA, Chi-Squared, and Regression inferences from your bivariate inference assignment into the appropriate location in the moderation assignment template file. 
+    - We are not doing the full 5 step analysis in this document. 
+2. For each analyses, decide on a third variable to test as a moderating variable.
+    - The potential moderator can be different for each analyses. You need to decide what variables are most appropriate for your research question. 
+    - This **third variable must be categorical.** The fewer number of levels it has the easier it is to interpret. I would recommend using a binary variable. 
+    - Add this variable declaration into your Step 1 for each analysis. 
+3. Adjust your bivariate visualization to account for this third variable. 
+    - Typical methods for plotting a third variable include paneling or coloring by the third variable.
+    - State your thoughts about how the relationship changed with the moderator variable. You should talk about differences between the original analysis and EACH level of your moderator variable (i.e., both males and females). For instance, with the ANOVA, discuss changes in the p-value, means, and graph for males in comparison to the original analysis AND for females in comparison to the original analysis.
+4. Adjust your Research Question to include this third variable. 
+    - Is the relationship between X and Y the same for all levels of Z?
+5. For each analysis, run the original model, and stratified model.  
+    - See examples below for how to do this in R. 
+6. Determine if the third variable is a moderator or not.
+    - You should state what the original analysis shows regarding the relationship you are testing. 
+    - State based on your previous explanation if the third variable moderates the Bivariate Relationship.
+    
+    
+
+

@@ -1,0 +1,113 @@
+---
+title: "Multiple Regression Assignment"
+author: "YOUR NAME HERE"
+output:
+  html_document:
+    highlight: tango
+    theme: readable
+  pdf_document: default
+---
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(knitr)
+opts_chunk$set(warning=FALSE, message=FALSE) 
+library(dplyr)
+library(ggplot2); library(gridExtra)
+library(pander) # Used for printing nice linear model tables
+panderOptions("digits", 3)
+```
+
+# Multiple Linear Regression
+
+## 1. Identify variables
+* Quantitative outcome: 
+* Quantitative predictor: 
+* Binary confounder: 
+ 
+
+## 2. State the research Hypothesis
+
+* Null hypothesis: 
+* Alternative hypothesis:
+* Confounding hypothesis: 
+
+## 3. Fit the simple model
+
+
+## 4. Fit the multivariable model
+
+## 5. Interpret the regression coefficients.
+
+* $b_{0}$: 
+* $b_{1}$: 
+* $b_{2}$: 
+
+## 6. Conclusion
+
+----
+
+# Logistic Regression
+
+
+## 1. Identify variables
+
+* Binary outcome:  
+* Quantitative predictor: 
+* Binary confounder: 
+ 
+
+
+## 2. State hypotheses
+
+* Null hypothesis: 
+* Alternative hypothesis:
+* Confounding hypothesis: 
+
+## 3. Fit the simple model
+
+
+
+## 4. Fit the multivariable model
+
+
+## 5. Interpret the Odds Ratio estimates
+
+
+## 6. Conclusion
+
+----
+
+# Categorical predictors
+
+
+## 1. Identify variables and their data type
+* Outcome:
+* Predictor: 
+* Predictor: 
+ 
+## 2. Write the mathematical model. 
+Define what each $x$ is, and write the mathematical model. You may have to add $x's$. R users, make sure they are wrapped in dollar signs. 
+State what group is the reference group. 
+
+* Let $x_{1}$ be 
+* Let $x_{2}=1$ when  
+* let $x_{3}=1$ when  
+
+
+The reference group is: 
+
+The mathematical model would look like: 
+
+$$ Y \sim \beta_{0} + \beta_{1}*x_{1} + \beta_{2}x_{2} + \beta_{3}x_{3} + \beta_{4}x_{4} + \beta_{5}x_{5} $$
+
+## 3. Fit the multivariable model with both predictors. 
+
+
+## 4. Interpret the regression coefficients. 
+
+* $b_{0}$: 
+* $b_{1}$: 
+* $b_{2}$: 
+* $b_{3}$:
+
+## 5. Conclusion

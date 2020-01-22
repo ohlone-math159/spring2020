@@ -1,0 +1,43 @@
+---
+title: "Bivariate Graphing Assignment"
+author: "your name here"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+> Put the code to load any necessary additional libraries and read in your cleaned data here. Delete this text afterward. You will be docked points for not doing this. 
+
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(knitr)
+opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+# load() your data set here then delete this message
+```
+
+# C ~ C Association
+> Describe each variable in words (what does it say in the codebook) then delete this text. 
+
+```{r}
+# put your code to create the summary table or statistics here
+```
+
+```{r}
+# put your code to create the plot here
+```
+
+> Describe the association between the two variables here in paragraph form. Use N and %'s in your answer. Then delete this text. 
+
+
+# Q ~ C Association
+> same format as above
+> Calculate grouped summary statistics (means, sd by group) and compare them using sentences with numbers to justify your claims. Compare center, shape and spread of the quantitative variable across different levels of the categorical variable. 
+
+
+# (B ~ C, C ~ B, or Q ~ B)
+> same format as above
+
+
+# Q ~ Q Association
+> Calculate the correlation and use it when discussing the direction, strength, and form of this relationship. 

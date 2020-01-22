@@ -1,0 +1,87 @@
+---
+title: "Moderation Assignment"
+author: "your name here"
+output:
+  html_document:
+    highlight: tango
+    theme: flatly
+    toc: yes
+    toc_float: yes
+  pdf_document: default
+---
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(knitr) # for use with the kable() package to make nice tables
+opts_chunk$set(warning=FALSE, message=FALSE, fig.width=8, fig.height=4, fig.align='center') 
+library(dplyr)
+library(ggplot2)
+library(gridExtra) # to use grid.arrange() to put plots side by side
+
+# load your data here
+```
+
+# ANOVA
+
+1. **Identify response, explanatory, and moderating variables**
+
+* Categorical explanatory variable = 
+* Quantitative response variable = 
+* Categorical Potential Moderator = 
+
+2. **Visualize and summarise the potential effect of the moderator** 
+
+
+3. **Write the relationship you want to examine in the form of a research question - including a statement about the modifier**
+
+
+4. **Fit both the original, and stratified models.**
+
+
+5. **Determine if the Third Variable is a moderator or not.**
+
+
+
+---- 
+
+# Chi-Squared Test of Equal Proportions
+
+1. **Identify response, explanatory, and moderating variables**
+
+* Categorical explanatory variable = 
+* Categorical response variable = 
+* Categorical Potential Moderator = 
+
+2. **Visualize and summarise the potential effect of the moderator** 
+
+
+3. **Write the relationship you want to examine in the form of a research question - including a statement about the modifier**
+
+
+4. **Fit both the original, and stratified models.**
+
+
+5. **Determine if the Third Variable is a moderator or not.**
+
+
+---- 
+
+# Linear Regression
+
+1. **Identify response, explanatory, and moderating variables**
+
+* Quantitative explanatory variable = 
+* Quantitative response variable = 
+* Categorical Potential Moderator = 
+
+2. **Visualize and summarise the potential effect of the moderator** 
+
+
+3. **Write the relationship you want to examine in the form of a research question - including a statement about the modifier**
+
+
+4. **Fit both the original, and stratified models.**
+
+
+5. **Determine if the Third Variable is a moderator or not.**
+
+

@@ -1,0 +1,54 @@
+---
+title: "Bivariate Inference"
+output:
+  html_document:
+    highlight: tango
+    theme: readable
+    toc: yes
+    toc_float: yes
+  word_document:
+    toc: yes
+  pdf_document: default
+css: ../css/sandstone.css
+---
+
+# Overview
+We've been visually exploring relationships between two variables by creating appropriate plots to assess how the distribution of a primary outcome (response/dependent) variable changes according to the level of a predictor (explanatory/independent/covariate) variable. We can learn a lot by conducting exploratory data analysis, and if description is the goal then this is where your work can stop. 
+
+However, if you want to make conclusions or **inference** about a relationship, then formal statistical analysis techniques are needed. We start here by formally testing if relationships or associations between *two* measures exist, then later will see how additional third variables can potentially disrupt or enhance any association that you may find. 
+
+## Assignment Instructions
+In this assignment you will practice <span style="color:blue">**FIVE(5)**</span> different types of bivariate analysis: 
+
+1. (Q~B) Quantitative Outcome ~ Binary Categorical Explanatory == Two-sample t-tests for a difference in means
+2. (Q~C) Quantitative Outcome ~ Categorical Explanatory == ANOVA
+3. (B~C) Binary Outcome ~ Categorical (or Binary) Explanatory ==  $\chi^{2}$ test of Association.
+4. (Q~Q) Quantitative Outcome ~ Quantitative Explanatory == Correlation analysis 
+5. (Q~Q) Quantitative Outcome ~ Quantitative Explanatory == Linear regression analysis
+
+For each analysis you will do the following steps: 
+
+1. State which variable (including the variable name from your codebook) will be your explanatory variable and which will be your response variable. 
+    - Remember, you have some variables in your codebook that can act as both categorical and quantitative. 
+    - Decide which of those variables makes sense to “explain” the other. Don’t just blindly pick a bunch of variables. 
+    - Think about the relationship among your variables, keeping in mind your original research questions. You may use gender as your categorical explanatory variable if you are struggling to find an explanatory and response relationship that makes sense. 
+2. Create an appropriate bivariate plot to visualize the relationship you are exploring. Summarize the relationship between the explanatory and outcome variables in short paragraph form. 
+3. Write the relationship you want to examine in the form of a research question. 
+    - State the null and alternative hypotheses as sentences. 
+4. Perform an appropriate statistical analysis using the full five step method as outlined in class and described below. 
+    - Define the parameters being tested. ($\rho$, $p_{1}$, $\mu_{1}$, $\beta_{1}$ etc)
+    - Translate the null and alternative hypotheses into $H_{0}$ and $H_{A}$ with symbols. 
+    - State and verify assumptions of the test. Even if these assumptions are potentially violated, for the purposes of this assignment, acknowledge this limitation and continue with the prescribed analysis.
+    - Conduct the analysis using your software program of choice. Make a decision whether or not to reject the null hypothesis. State your p-value. 
+5. Write a conclusion in context of the problem. 
+
+
+## Examples: 
+Model inference examples can all be found in the course packet, Chapter 6. 
+
+## Submission Instructions:  
+
+* Use [this template](hw08_bivariate_inference_template.Rmd) to answer the questions. 
+    - Replace `template` with your userid. 
+* Submit the final version as a PDF to the `08 Bivariate Inference` folder in Google Drive. 
+

@@ -1,0 +1,132 @@
+---
+title: "Graphing Bivariate Relationships"
+output:
+  html_document:
+    highlight: tango
+    theme: readable
+    toc: yes
+    toc_float: yes
+  pdf_document: default
+css: ../css/sandstone.css
+---
+
+# Overview
+
+To fully explore the relationship between two variables both summary statistics and visualizations are important. For this assignment you will describe the relationship between these **four** specific combinations of data types: 
+
+* Categorical explanatory and categorical explanatory variable. (C ~ C)
+* Quantitative explanatory and categorical explanatory variable. (Q ~ C)
+* Any combination of the above with a binary variable (B ~ C, C ~ B, or Q ~ B)
+* Quantitative response and quantitative explanatory variable. (Q ~ Q)
+
+
+Before you start, 
+
+1. Determine what variables you want to graph based on your research topic. 
+    * You will need a mixture of categorical and quantitative variables for this assignment. 
+    * You should use variables that are relevant to your research topic. 
+    * If you have not yet identified both a quantitative, a binary, and a categorical variable that you are interested in, now is the time to go back to the codebook and figure this out. 
+2. Recode variables as needed. 
+    * If your response variable is categorical with many levels, you must collapse the levels down to fewer than 5 levels. 
+    * It is perfectly acceptable to recode variables temporarily for exploratory purposes and not put it in your data management file.
+
+If you do not already have a binary (B) variable in your clean data you can either a) go back and edit your `dm` file to include a binary varible, or b) dichotomize one of your categorical (C) varibles into two levels. (Make a new variable, don't overwrite your categorical variable).   
+
+
+# Instructions
+
+0. Use the template provided: [[RMD]](hw05_biv_graphing_template.Rmd). Replace the `template` in the file name with your username. 
+
+For each bivariate relationship under consideration you will do the following: 
+
+1. Name and explain the two variables under consideration. 
+
+2. Create the appropriate graphic for bivariate relationship under consideration. For these plots binary variables are treated as categorical variables with only 2 levels. 
+    * C ~ C: Side by side barplot
+    * Q ~ C: Paneled histogram with density overlaid, or a grouped boxplot with overlaid violin plot. 
+    * Q ~ Q: Scatterplot. Add both lowess and linear trend lines.
+
+3. Calculate appropriate grouped summary statistics
+    * For continuous outcomes you'll want to describe measures including the sample size, mean, median, range and variance for each level of the categorical variable. 
+    * For categorical outcomes you'll want to calculate %'s of your outcome measurement across levels of your covariate. 
+        - i.e. proportion of males who are smokers compared to proportion of females who are smokers
+        - or proportion of smokers who are male, compared to proportion of non-smokers who are male. 
+
+4. Explain the relationship or trends you see in the data in a summary paragraph. Put this paragraph below the graphic. 
+    * Use summary statistics in your text explanation. 
+    * Use specific features of the graphic in your text explanation.
+        - i.e. are there outliers only in one group?
+        - Do the data seem clumped or clustered in one region of the scatterplot? 
+        - Is there a linear or non-linear pattern? 
+        - Does one combination of categorical levels (C~C) seem to hold most the data? 
+        - Are there any outlying data points? Don't list off each one, just state if there is and where approximately it's at. 
+
+5. Submit your knitted PDF to the **05 Bivariate Graphics** folder in Google Drive
+
+## Example
+In these examples I use a combination of `ggplot2` and `sjPlot` for plotting, `dplyr` for data management and to create summary statistics, `knitr` to create nice tables, `gridExtra` to put plots side by side. You do not need to report this information in your assignment. This is for your knowledge only. I also explain what I'm doing in code here for you to learn. you do not need to explain your own code. 
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2); library(dplyr); library(knitr); 
+library(scales); library(gridExtra); library(sjPlot)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+### C ~ C Association
+For this example I am using the `NC Births` data set, data on 1000 births in 2004 from North Carolina. 
+This example explores the association between the smoking status of the mother (`habit`) and whether or not the baby was born prematurely (`premie`). 
+
+```{r, echo=FALSE}
+nc <- read.csv("https://norcalbiostat.netlify.com/data/NCbirths.csv", header=TRUE)
+```
+
+Frequency tables to get counts, and _row_ percents because I specifically want to compare of premie babies within the smoking and non-smoking groups. 
+```{r}
+kable(addmargins(table(nc$habit, nc$premie)))
+kable(prop.table(table(nc$habit, nc$premie), margin=1)*100, digits=1)
+```
+
+```{r}
+sjp.xtab(x=nc$habit, grp=nc$premie, show.total=FALSE, margin='row')
+```
+
+Contrary to what I was expecting, there is equal proportion of prematurely born babies to non-smokers (133/739, 15.2%) compared to babies born to smokers (19/107, 15.1%). There is no association between the smoking status of the mother and the likelihood of the baby being born prematurely. 
+
+### Q ~ C Association
+
+This example explores the association between the length of an iris petal and the species of iris. The quantitative response variable is petal length (`Petal.Length`) and the categorical explanatory variable is species (`Species`). 
+
+```{r, fig.width=5, fig.height=3, fig.align='center', warning=FALSE, message=FALSE}
+iris %>% group_by(Species) %>% 
+         summarise(mean=mean(Petal.Length), 
+                   sd=sd(Petal.Length), 
+                   n=n()) %>% 
+         kable(digits=2)
+
+ggplot(iris, aes(x=Species, y=Petal.Length, fill=Species)) + 
+  geom_boxplot(width=.4) + geom_violin(alpha=.3) + 
+  stat_summary(fun.y="mean", geom="point", size=3, pch=17, 
+    position=position_dodge(width=0.75)) + theme_bw()
+```
+
+There are 50 iris plants within each species. There is clear difference in the average Petal length across the species. _Setosa_ has the smallest average petal length of 1.46 cm and the smallest variation with a standard deviation of 0.17cm.  _Veriscolor_ has an average petal length of 4.26cm with SD of 0.47cm, and _Virginica_ has the largest average petal length of 5.55cm and the largest variation with a standard deviation of 0.55cm.  
+
+### Q ~ Q Association
+
+This example explores the association between length of an iris petal and the length of the sepal. The quantitative response variable is petal length (`Petal.Length`) and the quantitative explanatory variable is sepal length (`Sepal.Length`).
+
+```{r}
+cor(iris$Petal.Length, iris$Sepal.Length) # calculate the correlation
+
+ggplot(iris, aes(x=Sepal.Length, y=Petal.Length)) + geom_point() + 
+  geom_smooth(se=FALSE, col="brown") + geom_smooth(se=FALSE, method="lm")
+```
+
+There is a positive association between sepal and petal length of an iris. The correlation coefficient is 0.87, but the form of the data may not be linear. There is a cluster of values below 2cm petal length which are separated away from the rest of the data. It is hard to assess the linearity of this relationship due to the separate clusters. 
+
+
+
+
+
+
+
+
