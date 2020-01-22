@@ -1,0 +1,112 @@
+---
+title: "HW 01- Introduction to the class"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default
+---
+
+# Assignment Overview
+The purpose of this assignment is to get you working in R Studio, to do a little self reflection and examination of your learning habits, and assess understanding of first week statistical concepts.
+ 
+
+# Instructions
+The specific details for each step are described below. 
+
+* Knitting this document, the **guide**, will allow you to view this in proper format in your browser.
+* You will answer the questions directly in the Rmarkdown **template** file provided.
+* Rmarkdown cheatsheet https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf 
+* When you are done, spellcheck your work using the spellcheck button in R Studio (2 icons to the left of Knit). 
+* Knit the final document. It will automatically open in a new window. 
+* Rename the template file to `hw01_username` ( i.e. `hw01_jrico` ) 
+* Upload this file to Canvas. 
+
+
+# Part 1: Getting Started with Slack
+
+### Slack
+1. Go to https://join.slack.com/t/rico-159-s20/shared_invite/enQtOTE0MzEyMjc5ODI0LWMzNjljZjYzNmI3YjljMDFkYjA5YWFkMzhiNTcwMWU5YWU4ZTJiMTE5N2M1ZDJlY2U4NjBlMjIwMjFiMzRjMDYand make an account to join our workspace. 
+2. Download either the desktop app or the phone app. 
+3. Post an introduction to yourself in the #introductions channel. Tell us a little about you! Year, major, hometown, any extracurricular activities, one thing you are hoping to get out of this class, a photo of yourself.  Oh.. and of course any mention of pets should include a photo!
+        
+
+# Part 2: Examination and Improvement of our Learning 
+Because we all have room for improvement, here are a few tasks for you to become a better learner. 
+
+First I want you to create a "Learning Journal". This could be a composition notebook, a smaller 5x7 
+journal, loose papers in a binder or an electronic document on your computer/cloud. We will be engaging
+in several activities throughout the semseter aimed to help you become active and effective learners. 
+I will do several check-ins on your journal throughout the semester to ensure that it is being used. 
+
+Some of these tasks will ask you to reflect on a reading. Here is a link to help you understand more
+about what that actually means and how to write a reflection. 
+https://www.quora.com/What-does-it-mean-to-reflect-on-reading
+
+### Metacognition 
+
+1. Introduce yourself to the concept of metacognition at;  
+    https://sites.google.com/a/uwlax.edu/exploring-how-students-learn/what-s-all-the-fuss-about-metacognition  
+
+2. Take the *Metacognition Awareness Inventory* at;   
+    https://www.harford.edu/~/media/PDF/Student-Services/Tutoring/Metacognition%20Awareness%20Inventory.ashx
+
+3. Submit your scores at;  
+    https://forms.gle/JDk1C6cKrYiSWcR38
+
+4. Write a reflection in your **Learning Journal** on metacognition and your test results. Were you surprised by the results? 
+
+
+### Habits for Success
+
+5.  Watch this video (21min) on **Hidden Key to Understanding and Overcoming Procrastination**, https://mcgraw.princeton.edu/node/2641 , and write **one** observation that really made you think about yourself.  
+
+6.  Select one link to examine from this site https://mcgraw.princeton.edu/undergraduates/resources-handouts-and-advice-undergraduates , and write **one** thing that you will attempt to incorporate into your studies this semester.
+
+
+### Learning Strategies
+7. From the reading materials page in Canvas, download and read the **Learning (Your First Job)** article. Answer at least **4** of the following questions in this document. Choose one of these to put into your learning journal. 
+
+    + What was the most important insight you gained from the reading? 
+    + What surprised you most in the reading?
+    + What did you already know?
+    + Have you been taught how to learn before?  Where?  What did you learn about learning?
+    + What will you do differently during a lecture, if anything, given what you read?
+    + How will you prepare differently for exams, given what you read?
+    + Can you think of other good learning practices that the reading didn't mention?
+  
+# Part 3 : Statistics 
+
+The following questions are to assess your understanding of our first week's statistical topics.
+
+8.  **Infections Can Lower IQ** A headline in June 2015 proclaims “Infections can lower IQ.” The headline is based on a study in which scientists gave an IQ test to Danish men at age 19. They also analyzed the hospital records of the men and found that 35% of them had been in a hospital with an infection such as an STI or a urinary tract infection. The average IQ score was lower for the men who had an infection than for the men who hadn’t.  
+
+    + What are the cases in this study?
+    + What is the explanatory variable? Is it categorical or quantitative?
+    + What is the response variable? Is it categorical or quantitative?
+    + Does the headline imply causation?
+    + Is the study an experiment or an observational study?
+    + Is it appropriate to conclude causation in this case?
+
+\
+
+9. **Hormones and Fish Fertility** When women take birth control pills, some of the hormones found in the pills eventually make their way into lakes and waterways. In one study, a water sample was taken from various lakes. The data indicate that as the concentration of estrogen in the lake water goes up, the fertility level of fish in the lake goes down. The estrogen level is measured in parts per trillion (ppt) and the fertility level is recorded as the percent of eggs fertilized. 
+
+    + What are the cases in this study? 
+    + What are the variables? 
+    + Classify each variable as either categorical or quantitative.
+    + Identify the explanatory and response variables.
+
+\
+
+10. **Drinking Age** A biased sampling situation is described for the following study;  
+
+    To estimate the proportion of Americans who support changing the drinking age from 21 to 18, a random sample of 100 college students are asked the question, “Would you support a measure to lower the drinking age from 21 to 18?”  
+    
+    + What is the sample?
+    + What is the researcher's population of interest?
+    + To what population we can generalize to, (for our given sample)?
+
