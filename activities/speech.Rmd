@@ -1,0 +1,52 @@
+---
+title: "Sampling Activity: Gettysburg's Address"
+output: 
+  ioslides_presentation:
+    widescreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Background
+
+Sampling is often an cost-effective method to gain information about a population, compared to conducting a Census.
+    
+It is critical when sampling to utilize a sampling method that minimizes any potential bias.    
+
+  >- **Statistical Inference** is the process of using data from a sample to gain information about a population.
+  
+  >- **Sampling Bias** occurs when the method for selecting a sample causes the sample's properties to not reflect the population's properties.
+  
+  >- If **Sampling Bias** is present and **Statistical Inferences** are potentially erroneous.
+
+
+
+## Activity
+
+Your objective is to use a sample to estimate the **population mean** for number of letters (i.e., word length) in each word spoken in the Gettysburg Address.
+
+  >- What is the **mean** word length for the following population of words?  
+  {Dog, Cat, Horse, Iguana, Parrot} ?
+  >- $\frac{3+3+5+6+6}{5}=4.6$
+
+
+## Gettysburg Address {.smaller}
+
+Four score and seven years ago our fathers brought forth upon this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. 
+
+Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. 
+
+But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth. 
+
+
+## Gettysburg Address : Random Sampling
+
+```{r, echo=F}
+speech <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRq8oZv7Hry8oUk6ApjnXU6aCYa1vbCLwQsiaHu6uSK5w9Z4NmffV_EUdt_xGepnFzdFKBzg3Cqirej/pub?gid=0&single=true&output=csv")
+speech
+```
+
+
+
