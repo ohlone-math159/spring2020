@@ -7,13 +7,14 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
 ```
 
 ## Background
 
 Sampling is often an cost-effective method to gain information about a population, compared to conducting a Census.
     
-It is critical when sampling to utilize a sampling method that minimizes any potential bias.    
+It is critical when sampling to utilize a sampling method that minimizes any potential bias.      
 
   >- **Statistical Inference** is the process of using data from a sample to gain information about a population.
   
@@ -41,11 +42,17 @@ Now we are engaged in a great civil war, testing whether that nation, or any nat
 But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth. 
 
 
-## Gettysburg Address : Random Sampling
+## Gettysburg Address : Random Sampling {.smaller}
 
-```{r, echo=F}
+```{r}
 speech <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRq8oZv7Hry8oUk6ApjnXU6aCYa1vbCLwQsiaHu6uSK5w9Z4NmffV_EUdt_xGepnFzdFKBzg3Cqirej/pub?gid=0&single=true&output=csv")
-speech
+```
+
+
+```{r, echo=T}
+speech_sample <- sample_n(speech, 10)
+speech_sample
+mean(speech_sample$Length)
 ```
 
 
