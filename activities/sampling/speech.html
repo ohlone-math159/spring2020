@@ -3138,7 +3138,10 @@ slide:not(.current) .plotly.html-widget{
 <p>Your objective is to use a sample to estimate the <strong>population mean</strong> for number of letters (i.e., word length) in each word spoken in the Gettysburg Address.</p>
 
 <ul class = 'build'>
-<li>What is the <strong>mean</strong> word length for the following population of words?<br/>{Dog, Cat, Horse, Iguana, Parrot} ?</li>
+<li>What is the <strong>mean</strong> word length for the following population of words?<br/>{Dog, Cat, Horse, Iguana, Parrot}</li>
+</ul>
+
+<ul class = 'build'>
 <li>\(\frac{3+3+5+6+6}{5}=4.6\)</li>
 </ul>
 
@@ -3150,26 +3153,44 @@ slide:not(.current) .plotly.html-widget{
 
 <p>But, in a larger sense, we can not dedicate – we can not consecrate – we can not hallow – this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us – that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion – that we here highly resolve that these dead shall not have died in vain – that this nation, under God, shall have a new birth of freedom – and that government of the people, by the people, for the people, shall not perish from the earth.</p>
 
-</article></slide><slide class=""><hgroup><h2>Gettysburg Address : Random Sampling</h2></hgroup><article  id="gettysburg-address-random-sampling" class="smaller">
+</article></slide><slide class=""><hgroup><h2>Representative Sampling via Random Sampling</h2></hgroup><article  id="representative-sampling-via-random-sampling">
+
+<ul class = 'build'>
+<li>A <strong>representative sample</strong> resembles the population, only in smaller numbers.</li>
+</ul>
+
+<ul class = 'build'>
+<li>Random sampling tends to produce a representative sample.</li>
+</ul>
+
+<ul class = 'build'>
+<li>Random sampling avoids sampling bias.</li>
+</ul>
+
+<ul class = 'build'>
+<li>How do we take a random sample of words from the Gettysburg Address?</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Random Sampling in R</h2></hgroup><article  id="random-sampling-in-r" class="smaller">
 
 <pre class = 'prettyprint lang-r'>speech_sample &lt;- sample_n(speech, 10)
 speech_sample</pre>
 
-<pre >##     ID      Word Length
-## 1  208        we      2
-## 2  149        we      2
-## 3  182      thus      4
-## 4  200 remaining      9
-## 5  257        by      2
-## 6  127      here      4
-## 7  109    cannot      6
-## 8  156    forget      6
-## 9   16    nation      6
-## 10 123       and      3</pre>
+<pre >##     ID     Word Length
+## 1  199     task      4
+## 2  211 devotion      8
+## 3  103      But      3
+## 4    4    seven      5
+## 5  237       in      2
+## 6  157     what      4
+## 7  249       of      2
+## 8  139  detract      7
+## 9  100   should      6
+## 10 259   people      6</pre>
 
 <pre class = 'prettyprint lang-r'>mean(speech_sample$Length)</pre>
 
-<pre >## [1] 4.4</pre></article></slide>
+<pre >## [1] 4.7</pre></article></slide>
 
 
   <slide class="backdrop"></slide>
