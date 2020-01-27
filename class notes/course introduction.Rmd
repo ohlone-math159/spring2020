@@ -31,7 +31,9 @@ Welcome to Math 159 - Statistics.  As we wait for everyone to arrive, you can co
 
 </div>
 
+## My Journey Here
 
+<img src="journey.png" width ="90%" />
 
 
 ## Course Big Picture
