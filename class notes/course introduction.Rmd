@@ -51,6 +51,8 @@ In this project-based course, you will have the opportunity to answer questions 
 
   >- [OpenIntro Statistics](https://leanpub.com/openintro-statistics)
   
+  >- [Passion Driven Statistics Videos](https://www.youtube.com/watch?v=_8A0zx51BKs&feature=youtu.be)
+  
   >- [RAD_course_notes](https://norcalbiostat.github.io/MATH315/reading/RAD_course_notes_f19.pdf)
 
   >- [ModernDive](https://moderndive.netlify.com/)
@@ -59,7 +61,15 @@ In this project-based course, you will have the opportunity to answer questions 
   
   >- [Slack](https://rico-159-s20.slack.com)
 
-## RStudioCloud
+
+## Expectations
+
+In your groups discuss the following;  
+
+  - What do you expect from a classmate in group settings?
+  - What is challenging for you when working in a group?
+  - How can we support eachother in groups?
+  
 
   
 
