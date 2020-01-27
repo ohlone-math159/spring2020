@@ -16,21 +16,59 @@ QR Code for First Day Survey
 
 ![](images/1st_day_survey_link.png)
 
-## Slide with Bullets
+## Surveys
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+  >- A researcher often collects data about a population through surveys
+  >- If the survey reaches the entire population it is called a census
+  >- Typically surveys only sample a portion of the population
 
-## Slide with R Output
+## Categorizing a Survey 
 
-```{r cars, echo = TRUE}
-summary(cars)
-```
+  >- Two primary data collection methods
+  >- Experiments and observational studies
+  >- A survey is an Observational Study
 
-## Slide with Plot
+## Disciminating Experiments and Observational Studies
 
-```{r pressure}
-plot(pressure)
-```
+  >- In experiments, the researchers intentionally interfere with the subjects.
+  >- In observational studies, the researchers attempt to minimize any inteference with the subjects (merely observing).
 
+## Differences in Possible Conclusions from Experiments and Observational Studies
+
+  >- In experiments, it is possible to infer causal relationships between variables.
+  >- In observational studies, it is possible to identify associations between variables.
+  >- **Caution**: association does not imply causation.
+  
+## Types of Variables
+
+  >- Categorical 
+  >- Numerical
+
+## List of Variables from Survey 
+
+<div style="float: left; width: 50%;">
+
+  - name
+  - section
+  - n_courses
+  - n_semesters
+  - n_credits_earned
+  - enrolled_hybrid_online
+  - transporation_method
+  - distance_miles
+
+  
+</div>
+
+<div style="float: right; width: 50%;">
+
+  - distance_minutes
+  - taken_statistics
+  - taken_cc_statistics
+  - highest_math
+  - comfort_decimals
+  - commitment
+  - missed_days
+  - wake_by_alarm
+
+</div>

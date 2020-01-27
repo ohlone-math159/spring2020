@@ -23,10 +23,9 @@ Now it is time for you to formulate your own Research Question and refine it usi
 # Instructions
 The specific details for each step are described below. You will write the assignment directly in a Google document. 
 
-* This is a group project assignment
 * Use header formats to clearly denote each step
-* Write your assignment directly in a Google Document in the **02 Research Question Formulation** folder. 
-* Name this file `rq_pairname` i.e. `rq_donatello_aguilar.pdf` 
+* Write your assignment using the template provided, and upload in Canvas.
+* Name the template file `hw02_rq_name` i.e. `hw02_rq_jose_rico.html` 
 
 ## Peer Review
 This assignment will be subject to peer review, but with no revision period. 

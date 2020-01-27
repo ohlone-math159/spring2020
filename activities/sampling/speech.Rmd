@@ -13,7 +13,7 @@ library(dplyr)
 
 ## Background
 
-Sampling is often an cost-effective method to gain information about a population, compared to conducting a Census.
+Sampling is often a mre pratical method to gain information about a population, compared to conducting a Census.
     
 It is critical when sampling to utilize a sampling method that minimizes any potential bias.      
 

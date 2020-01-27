@@ -1,0 +1,66 @@
+---
+title: "course introduction"
+output:
+  ioslides_presentation:
+    widescreen: yes
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Course Big Picture
+
+This course introduces you to modern statistical data analysis techniques so that you can make data-informed decisions. At the end of the semester you will present your research findings in a poster presentation format to your peers.
+
+In this project-based course, you will have the opportunity to answer questions that you feel passionately about through independent research based on existing data. The course offers a lot of one-on-one support, directed opportunities to work with other students, and training in the skills required to complete a project of your own design. We will use collaborative tools and software that are common in many workplaces and research labs. These skills will prepare you for many different career types.
+
+## Course Philosophy
+
+  >- I aspire to develop an inclusive learning community with a supportive culture for all students. 
+
+  >- My intention is to create a climate that allows my student to be empowered and in control of their learning.  
+
+  >- Class time is an opportunity to engage with and collaboratively process statistical ideas.  
+
+  >- This requires students to publicly share and explain their thinking and understanding.  
+
+  >- My main role is to inquire into student thinking and provide support that promotes further development.  
+
+  >- My ultimate aim is to provide an environment that allows my students the freedom and support to creatively explore statistical concepts.
+
+## Supportive Learning Community
+
+  >- In our classroom, the strength of diversity and individual differences are respected, appreciated, and recognized as a source of strength.  
+  
+  >- Students are encouraged and expected to speak up and participate during class and to carefully and respectfully listen and respond to each other.  
+  
+  >- Any attitudes or actions that are destructive to the sense of community that we strive to create are not welcome and I will actively monitor and address any concerns.
+
+
+## Grading Components
+
+  >- weekly assignments 
+  >- learning journal
+  >- in-class activities
+  >- project
+  >- exams
+
+## Learning Materials
+
+  >- [OpenIntro Statistics](https://leanpub.com/openintro-statistics)
+  
+  >- [RAD_course_notes](https://norcalbiostat.github.io/MATH315/reading/RAD_course_notes_f19.pdf)
+
+  >- [ModernDive](https://moderndive.netlify.com/)
+  
+  >- [RStudioCloud](rstudio.cloud)
+  
+  >- [Slack](https://rico-159-s20.slack.com)
+
+## RStudioCloud
+
+  
+
+
