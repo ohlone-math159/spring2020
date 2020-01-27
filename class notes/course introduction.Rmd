@@ -10,6 +10,30 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+## Course Start-Up
+
+Welcome to Math 159 - Statistics.  As we wait for everyone to arrive, you can complete these tasks;
+
+<div style="float: left; width: 50%;">
+
+  - construct a name plate **First Name , Last Initial** on both sides
+  - complete on-line 1st Day Survey (QR code below) - actual link in Canvas announcement
+  - ![](surveylink.png)
+
+  
+</div>
+
+<div style="float: right; width: 50%;">
+
+  - begin on student information form
+  - read syllabus on Canvas
+
+
+</div>
+
+
+
+
 ## Course Big Picture
 
 This course introduces you to modern statistical data analysis techniques so that you can make data-informed decisions. At the end of the semester you will present your research findings in a poster presentation format to your peers.
@@ -41,13 +65,16 @@ In this project-based course, you will have the opportunity to answer questions 
 
 ## Grading Components
 
-  >- weekly assignments 
-  >- learning journal
-  >- in-class activities
-  >- project
-  >- exams
+  >- weekly assignments (30%)
+  >- preparatory quizzes (10%)
+  >- learning journal (10%)
+  >- in-class activities (10%)
+  >- project (20%)
+  >- exams (20%)
 
 ## Learning Materials
+
+  >- [Syllabus](https://docs.google.com/spreadsheets/d/1YZLfiyLst8LQpotE0RUOWvw54hWWXJw4AQYgt627Z8Q/edit?usp=sharing)
 
   >- [OpenIntro Statistics](https://leanpub.com/openintro-statistics)
   
@@ -70,7 +97,14 @@ In your groups discuss the following;
   - What is challenging for you when working in a group?
   - How can we support eachother in groups?
   
+## Your Next Steps 
 
+  - Bring your fully charged laptop to class
+  - Download Learning Materials (OpenIntro, RAD notes)
+  - Start on Assignment #1 - Introduction (File in Canvas)
+  - Access the Syllabus and Calendar (a single Google Document)
+    - Get started on the readings and videos
+    
   
 
 

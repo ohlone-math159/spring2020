@@ -22,7 +22,7 @@ The specific details for each step are described below.
 * Rmarkdown cheatsheet https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf 
 * When you are done, spellcheck your work using the spellcheck button in R Studio (2 icons to the left of Knit). 
 * Knit the final document. It will automatically open in a new window. 
-* Rename the template file to `hw01_username` ( i.e. `hw01_jrico` ) 
+* Rename the template file to `hw01_username` ( i.e. `hw01_jrico.html` ) 
 * Upload this file to Canvas. 
 
 
