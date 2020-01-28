@@ -44,7 +44,15 @@ Recorder/Reporter    | keep notes summarizing discussion and serves as spokesper
 Harmonizer | strives to create a harmonious and positive team atmosphere, while allowing a full expression of ideas
 Checker | checks to make sure all group members are engaged and understand the concepts and group conclusions
 
+## First Group Tasks
 
+In your group, make sure everyone is able to;  
+
+  - get onto the wireless network
+  - sign up for our Slack space
+  - sign into our RStudio.Cloud, and start/open the **WeeklyAssignments**
+  - download OpenIntro Statistics 4th edition PDF
+  - download the RAD_Course_Notes
 
 
 
