@@ -13,7 +13,7 @@ library(dplyr)
 
 ## Background
 
-Sampling is often a mre pratical method to gain information about a population, compared to conducting a Census.
+Sampling is often a more practical method to gain information about a population, compared to conducting a Census.
     
 It is critical when sampling to utilize a sampling method that minimizes any potential bias.      
 
@@ -21,13 +21,13 @@ It is critical when sampling to utilize a sampling method that minimizes any pot
   
   >- **Sampling Bias** occurs when the method for selecting a sample causes the sample's properties to not reflect the population's properties.
   
-  >- If **Sampling Bias** is present and **Statistical Inferences** are potentially erroneous.
+  >- If **Sampling Bias** is present, **Statistical Inferences** are potentially erroneous.
 
 
 
 ## Activity
 
-Your objective is to use a sample to estimate the **population mean** for number of letters (i.e., word length) in each word spoken in the Gettysburg Address.
+Your objective is to use a sample to estimate the **population mean** for number of letters (i.e., word length) in all the words spoken in the Gettysburg Address.
 
   >- What is the **mean** word length for the following population of words?  
   {Dog, Cat, Horse, Iguana, Parrot} 
@@ -55,6 +55,33 @@ But, in a larger sense, we can not dedicate -- we can not consecrate -- we can n
   >- Random sampling avoids sampling bias.
   
   >- How do we take a random sample of words from the Gettysburg Address?
+
+
+## Obtain random numbers in R {.smaller}
+
+```{r, echo=T}
+sample(1:268, 10)  
+```
+
+Help File - **?sample**
+
+**Description**
+sample takes a sample of the specified size from the elements of x using either with or without replacement.
+
+**Usage**
+sample(x, size, replace = FALSE, prob = NULL)
+
+
+**Arguments**
+**x**	- either a vector of one or more elements from which to choose, or a positive integer. See ‘Details.’
+
+**n**	- a positive number, the number of items to choose from. See ‘Details.’
+
+**size** - a non-negative integer giving the number of items to choose.
+
+**replace**	- should sampling be with replacement?
+
+**prob** - a vector of probability weights for obtaining the elements of the vector being sampled.
 
 
 ## Random Sampling in R {.smaller}

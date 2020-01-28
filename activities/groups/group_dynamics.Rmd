@@ -1,0 +1,50 @@
+---
+title: "groups"
+output:
+  ioslides_presentation:
+    widescreen: yes
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Week 1 Groups
+
+Everyone should be in their group of either 3 or 4.
+
+Once in your group;
+
+  - Introduce yourself
+  - Share your the following
+    - hometown
+    - job (if any)
+    - major and/or career interest
+    - favorite food, music artist or tv show
+  - And if you are **adventurous** - *share an experience from the break, or your dream vacation, or your favorite childhood moment*
+
+
+## Group Dynamics 
+
+In your groups discuss the following;  
+
+  - What is challenging for you when working in a group?
+  - How can we support eachother in groups?
+  - What do you expect from a classmate in group setting?
+
+## Group Roles
+
+In your group, decide on roles for the rest of the week
+
+Role | Description
+-----|------------
+Facilitator | moderates the discussion, keeps the group on task, and distibutes work
+Recorder/Reporter    | keep notes summarizing discussion and serves as spokesperson for the group
+Harmonizer | strives to create a harmonious and positive team atmosphere, while allowing a full expression of ideas
+Checker | checks to make sure all group members are engaged and understand the concepts and group conclusions
+
+
+
+
+
