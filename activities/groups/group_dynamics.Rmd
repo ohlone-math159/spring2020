@@ -39,7 +39,7 @@ In your group, decide on roles for the rest of the week
 
 Role | Description
 -----|------------
-Facilitator | moderates the discussion, keeps the group on task, and distibutes work
+Facilitator | moderates the discussion, keeps the group on task, and distributes work
 Recorder/Reporter    | keep notes summarizing discussion and serves as spokesperson for the group
 Harmonizer | strives to create a harmonious and positive team atmosphere, while allowing a full expression of ideas
 Checker | checks to make sure all group members are engaged and understand the concepts and group conclusions
