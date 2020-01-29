@@ -9,6 +9,10 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(knitr)
+library(scales)
 ```
 
 ## Background
@@ -33,7 +37,7 @@ To estimate what percent of people in the US wash their hands after using a publ
 
 ## Sampling in 1948 Presidential Election {.smaller}
 
-The day after the 1948 presidential election, the Chicago Tribune ran the headline “Dewey Defeats Truman.” However, Harry S Truman defeated Thomas E. Dewey to become the 33rd president of the United States. The newspaper went to press before all the results had come in, and the headline was based partly on the results of a large telephone poll which showed Dewey sweeping Truman.
+The day after the 1948 presidential election, the Chicago Tribune ran the headline “Dewey Defeats Truman.” However, Harry S Truman defeated Thomas E. Dewey to become the 33rd president of the United States. The newspaper went to press before all the results had come in, and the headline was based partly on the results of a large nationwide telephone poll which showed Dewey sweeping Truman.
 
 **What is the sample and what is the population?**
 
@@ -49,7 +53,7 @@ The day after the 1948 presidential election, the Chicago Tribune ran the headli
 
 ## Airline Satisifaction Survey
 
-After a flight, one of the authors received an email from the airline asking her to fill out a survey regarding her satisfaction with the travel experience. The airline analyzes the data from all responses to such emails.
+An airline sends an email to everyone who took a flight on their airline in the past month asking them to complete a survey regarding their satisfaction with the travel experience. The airline analyzes the data from all responses to such emails.
 
 **What is the sample and in what population is the airline interested?**  
 
@@ -63,7 +67,7 @@ After a flight, one of the authors received an email from the airline asking her
 
 An online poll conducted in April 2014 on biblegateway.com asked, “How often do you talk about the Bible in your normal course of conversation?” Over 5000 people answered the question, and 78% of respondents chose the most frequent option: Multiple times a week. 
 
-**Can we infer that 78% of people talk about the bible multiple times a week? Why or why not?**
+**Can we infer that 78% of all people talk about the bible multiple times a week? Why or why not?**
 
   >- <div class="red"> No. People who visit the website for Bible Gateway and choose to take the poll are probably more likely than the general public to talk about the bible. This sample is not representative of the population of all people, so the results cannot be generalized to all people. </div>
   
@@ -75,7 +79,7 @@ Your objective is to use a sample to estimate the **population mean** for number
   {Dog, Cat, Horse, Iguana, Parrot} 
 
   
-  >- $\frac{3+3+5+6+6}{5}=4.6$
+  >- <div class="red"> $\frac{3+3+5+6+6}{5}=4.6$ </div>
 
 
 ## Gettysburg Address {.smaller}
@@ -88,6 +92,43 @@ But, in a larger sense, we can not dedicate -- we can not consecrate -- we can n
 
 [CNN Article](https://www.cnn.com/2015/11/19/us/gettysburg-address-famous-quotes/index.html) 
 
+
+## Graphic of Gettysburg Address
+```{r}
+speech <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRq8oZv7Hry8oUk6ApjnXU6aCYa1vbCLwQsiaHu6uSK5w9Z4NmffV_EUdt_xGepnFzdFKBzg3Cqirej/pub?gid=0&single=true&output=csv")
+```
+
+```{r, echo=T}
+ggplot(speech, aes(ID, Length)) +
+  geom_bar(stat='identity', width=1, aes(fill=Length, color=Length))
+```
+
+
+## Distribution (by counts) of a Numerical Variable
+```{r, fig.height=3}
+ggplot(speech, aes(Length)) +
+  geom_histogram(fill="steelblue", color="white", center=0, binwidth = 1)
+```
+
+Distribution of Words by Length
+```{r}
+table(speech$Length)
+```
+
+
+## Distribution (by percent of whole)
+
+```{r, fig.height=3}
+ggplot(speech, aes(Length)) +
+  geom_histogram(fill="steelblue", color="white", center=0, binwidth = 1,  aes(y = ..density..)) +
+  scale_y_continuous(labels = percent_format())
+```
+
+Distribution of Words by Length
+```{r}
+round(prop.table(table(speech$Length)),3)
+```
+
 ## Representative Sampling via Random Sampling
 
   >- A **representative sample** resembles the population, only in smaller numbers.
@@ -97,6 +138,7 @@ But, in a larger sense, we can not dedicate -- we can not consecrate -- we can n
   >- Random sampling avoids sampling bias.
   
   >- How do we take a random sample of words from the Gettysburg Address?
+
 
 
 ## Obtain random numbers in R {.smaller}
