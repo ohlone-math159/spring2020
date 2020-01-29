@@ -1,0 +1,65 @@
+---
+title: 'HW 1: Introduction to the class'
+author: "Math 159 - Jose Rico"
+date: "Date"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default 
+---
+
+## Part 2: Examination and Improvement of our Learning 
+
+### Habits for Success
+5.  Your **one** observation or question from the videos or podcast.  
+
+**I listened to the podcast.....**
+
+6.  Your **one** thing that you will attempt to incorporate into your studies this semester.
+
+I am going to study....
+
+### Learning Strategies
+7. Answer at least **4** of the following questions from the reading. (please remove unanswered questions)  
+
+    + What was the most important insight you gained from the reading? 
+    + What surprised you most in the reading?
+    + What did you already know?
+    + Have you been taught how to learn before?  Where?  What did you learn about learning?
+    + What will you do differently during a lecture, if anything, given what you read?
+    + How will you prepare differently for exams, given what you read?
+    + Can you think of other good learning practices that the reading didn't mention?  
+
+## Part 3 : Statistics 
+
+The following questions are to assess your understanding of our first week's statistical topics.  
+
+8.  **Infections Can Lower IQ** A headline in June 2015 proclaims “Infections can lower IQ.” The headline is based on a study in which scientists gave an IQ test to Danish men at age 19. They also analyzed the hospital records of the men and found that 35% of them had been in a hospital with an infection such as an STI or a urinary tract infection. The average IQ score was lower for the men who had an infection than for the men who hadn’t.  
+
+    + What are the cases in this study?
+    + What is the explanatory variable? Is it categorical or quantitative?
+    + What is the response variable? Is it categorical or quantitative?
+    + Does the headline imply causation?
+    + Is the study an experiment or an observational study?
+    + Is it appropriate to conclude causation in this case?
+
+\
+9. **Hormones and Fish Fertility** When women take birth control pills, some of the hormones found in the pills eventually make their way into lakes and waterways. In one study, a water sample was taken from various lakes. The data indicate that as the concentration of estrogen in the lake water goes up, the fertility level of fish in the lake goes down. The estrogen level is measured in parts per trillion (ppt) and the fertility level is recorded as the percent of eggs fertilized. 
+
+    + What are the cases in this study? 
+    + What are the variables? 
+    + Classify each variable as either categorical or quantitative.
+    + Identify the explanatory and response variables.
+
+\
+10. **Drinking Age** A biased sampling situation is described for the following study;  
+
+    To estimate the proportion of Americans who support changing the drinking age from 21 to 18, a random sample of 100 college students are asked the question, “Would you support a measure to lower the drinking age from 21 to 18?”  
+    
+    + What is the sample?
+    + What is the researcher's population of interest?
+    + To what population we can generalize to, (for our given sample)?
