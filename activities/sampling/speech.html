@@ -3133,6 +3133,71 @@ slide:not(.current) .plotly.html-widget{
 <li>If <strong>Sampling Bias</strong> is present, <strong>Statistical Inferences</strong> are potentially erroneous.</li>
 </ul>
 
+</article></slide><slide class=""><hgroup><h2>Identify Sample and Population</h2></hgroup><article  id="identify-sample-and-population">
+
+<p>To estimate what percent of people in the US wash their hands after using a public restroom, researchers pretended to comb their hair while observing 6000 people in public restrooms throughout the United States. They found that 85% of the people who were observed washed their hands after going to the bathroom.</p>
+
+<p><strong>What is the sample in this study? What is a reasonable population to which we might generalize?</strong></p>
+
+<ul class = 'build'>
+<li><div class="red">
+The sample is the 6000 people who were observed. A reasonable population to generalize to would be all people in the US. There are other reasonable answers to give for the population, such as all people in the US who use public restrooms or all people in the US who use public restrooms in the cities in which the study was conducted. Also, people might behave differently when alone than when there is someone else in the restroom with them, so we might want to restrict the population to people in a restroom with someone else.</div></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Sampling in 1948 Presidential Election</h2></hgroup><article  id="sampling-in-1948-presidential-election" class="smaller">
+
+<p>The day after the 1948 presidential election, the Chicago Tribune ran the headline &ldquo;Dewey Defeats Truman.&rdquo; However, Harry S Truman defeated Thomas E. Dewey to become the 33rd president of the United States. The newspaper went to press before all the results had come in, and the headline was based partly on the results of a large telephone poll which showed Dewey sweeping Truman.</p>
+
+<p><strong>What is the sample and what is the population?</strong></p>
+
+<ul class = 'build'>
+<li><div class="red">
+The sample is all the people who participated in the telephone poll. The population is all voting Americans.</div></li>
+</ul>
+
+<p><strong>What did the pollsters want to infer about the population based on the sample?</strong></p>
+
+<ul class = 'build'>
+<li><div class="red">
+The pollsters wanted to estimate the percentage of all voting Americans who would vote for each candidate.</div></li>
+</ul>
+
+<p><strong>Why do you think the telephone poll yielded such inaccurate results?</strong></p>
+
+<ul class = 'build'>
+<li><div class="red">
+One reason the telephone poll may have yielded inaccurate results is that people with telephones in 1948 were not representative of all American voters. People with telephones tended to be wealthier and prefer Dewey while people without phones tended to prefer Truman.</div></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Airline Satisifaction Survey</h2></hgroup><article  id="airline-satisifaction-survey">
+
+<p>After a flight, one of the authors received an email from the airline asking her to fill out a survey regarding her satisfaction with the travel experience. The airline analyzes the data from all responses to such emails.</p>
+
+<p><strong>What is the sample and in what population is the airline interested?</strong></p>
+
+<ul class = 'build'>
+<li><div class="red">
+The sample is all people who choose to fill out the survey and the population is all people who fly this airline.</div></li>
+</ul>
+
+<p><strong>Do you expect these survey results to accurately portray customer satisfaction?</strong></p>
+
+<ul class = 'build'>
+<li><div class="red">
+The survey results will probably not accurately portray customer satisfaction. Many people won’t bother to fill out the survey if the flight was uneventful, while people with a particularly bad or good experience are more likely to fill out the survey.</div></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Online Polls</h2></hgroup><article  id="online-polls">
+
+<p>An online poll conducted in April 2014 on biblegateway.com asked, &ldquo;How often do you talk about the Bible in your normal course of conversation?&rdquo; Over 5000 people answered the question, and 78% of respondents chose the most frequent option: Multiple times a week.</p>
+
+<p><strong>Can we infer that 78% of people talk about the bible multiple times a week? Why or why not?</strong></p>
+
+<ul class = 'build'>
+<li><div class="red">
+No. People who visit the website for Bible Gateway and choose to take the poll are probably more likely than the general public to talk about the bible. This sample is not representative of the population of all people, so the results cannot be generalized to all people.</div></li>
+</ul>
+
 </article></slide><slide class=""><hgroup><h2>Activity</h2></hgroup><article  id="activity">
 
 <p>Your objective is to use a sample to estimate the <strong>population mean</strong> for number of letters (i.e., word length) in all the words spoken in the Gettysburg Address.</p>
@@ -3177,7 +3242,7 @@ slide:not(.current) .plotly.html-widget{
 
 <pre class = 'prettyprint lang-r'>sample(1:268, 10)  </pre>
 
-<pre >##  [1] 190 144   8 166 256  98  87 121 104  33</pre>
+<pre >##  [1]  17   3 110 231  95 114 133 226 223 228</pre>
 
 <p>Help File - <strong>?sample</strong></p>
 
@@ -3201,20 +3266,20 @@ slide:not(.current) .plotly.html-widget{
 speech_sample</pre>
 
 <pre >##     ID     Word Length
-## 1  256   people      6
-## 2  175     work      4
-## 3  105        a      1
-## 4  169       be      2
-## 5  111       we      2
-## 6  123      and      3
-## 7   41  whether      7
-## 8  211 devotion      8
-## 9  187       It      2
-## 10  58       on      2</pre>
+## 1  110 dedicate      8
+## 2  146     long      4
+## 3  155    never      5
+## 4  178      who      3
+## 5   11     upon      4
+## 6  208       we      2
+## 7   84     gave      4
+## 8   76        a      1
+## 9  145      nor      3
+## 10 192       to      2</pre>
 
 <pre class = 'prettyprint lang-r'>mean(speech_sample$Length)</pre>
 
-<pre >## [1] 3.7</pre>
+<pre >## [1] 3.6</pre>
 
 </article></slide><slide class=""><hgroup><h2>Random Sampling Simulation from RossmanChance</h2></hgroup><article  id="random-sampling-simulation-from-rossmanchance">
 
