@@ -99,7 +99,7 @@ But, in a larger sense, we can not dedicate -- we can not consecrate -- we can n
 speech <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRq8oZv7Hry8oUk6ApjnXU6aCYa1vbCLwQsiaHu6uSK5w9Z4NmffV_EUdt_xGepnFzdFKBzg3Cqirej/pub?gid=0&single=true&output=csv")
 ```
 
-```{r, echo=T}
+```{r, echo=F}
 ggplot(speech, aes(ID, Length)) +
   geom_bar(stat='identity', width=1, aes(fill=Length, color=Length))
 ```
@@ -116,19 +116,19 @@ speech %>%
 ```
 
 
-## Distribution (by counts) of a Numerical Variable
-```{r, fig.height=3}
+## Distribution (by counts) of a Numerical Variable 
+```{r, fig.height=3, echo=F}
 ggplot(speech, aes(Length)) +
   geom_histogram(fill="steelblue", color="white", center=0, binwidth = 1)
 ```
 
 Distribution of Words by Length
-```{r}
+```{r,echo=F}
 table(speech$Length)
 ```
 
 
-## Distribution (by percent of whole)
+## Distribution (by percent of whole) 
 
 ```{r, fig.height=3}
 ggplot(speech, aes(Length)) +
@@ -139,7 +139,6 @@ ggplot(speech, aes(Length)) +
 Distribution of Words by Length
 ```{r}
 round(prop.table(table(speech$Length)),3)
-
 ```
 
 ## Representative Sampling via Random Sampling
