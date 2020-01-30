@@ -103,6 +103,15 @@ ggplot(speech, aes(ID, Length)) +
   geom_bar(stat='identity', width=1, aes(fill=Length, color=Length))
 ```
 
+```{r}
+speech %>% 
+  arrange(Length) %>% 
+  mutate(n=1:nrow(speech)) %>% 
+  ggplot( aes(n, Length)) +
+  geom_bar(stat='identity', width=1, fill="steelblue", color="white")+
+  scale_y_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11))
+```
+
 
 ## Distribution (by counts) of a Numerical Variable
 ```{r, fig.height=3}
