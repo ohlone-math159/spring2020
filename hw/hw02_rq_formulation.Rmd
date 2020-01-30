@@ -28,10 +28,8 @@ The specific details for each step are described below. You will write the assig
 * Name the template file `hw02_rq_name` i.e. `hw02_rq_jose_rico.html` 
 
 ## Peer Review
-This assignment will be subject to peer review, but with no revision period. 
-After the due date, check the [Peer review assignment sheet for your assignment(s). 
-In Google Docs directly, use the commenting feature to provide feedback on this assignment. 
-Check the [[project]](../project.html) page for instructions on how to provide a review. 
+This assignment will be subject to peer review, but with no revision period. Details to follow
+
 
 What specifically to look for: 
 
