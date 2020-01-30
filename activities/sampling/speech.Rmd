@@ -4,6 +4,7 @@ output:
   ioslides_presentation:
     widescreen: yes
   beamer_presentation: default
+  highlight: tango
 ---
 
 ```{r setup, include=FALSE}
@@ -103,12 +104,14 @@ ggplot(speech, aes(ID, Length)) +
   geom_bar(stat='identity', width=1, aes(fill=Length, color=Length))
 ```
 
+
+## Graphic - sorted by word length
 ```{r}
 speech %>% 
   arrange(Length) %>% 
   mutate(n=1:nrow(speech)) %>% 
   ggplot( aes(n, Length)) +
-  geom_bar(stat='identity', width=1, fill="steelblue", color="white")+
+  geom_bar(stat='identity',width=1, fill="steelblue", color="white")+
   scale_y_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11))
 ```
 
@@ -136,6 +139,7 @@ ggplot(speech, aes(Length)) +
 Distribution of Words by Length
 ```{r}
 round(prop.table(table(speech$Length)),3)
+
 ```
 
 ## Representative Sampling via Random Sampling
