@@ -1,0 +1,58 @@
+---
+title: "speech-in-class-practice"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Create a variable in R
+```{r}
+class_data1 <- c(5.3, 4.3, 4.8, 4.8, 5.1, 5.8, 5.6, 4.7, 7.5, 6.7, 6.3, 6.9, 7.1, 4.4, 6.3, 6.8, 6.0, 6.4, 5.3, 6.2, 5.1, 5.4, 5.5, 5.3, 3.6, 4.9, 6.0, 4.9)
+```
+
+Numerical Summary of my variable
+```{r}
+summary(class_data1)
+```
+
+Visualization of the Variable
+```{r}
+hist(class_data1)
+```
+
+Load in Data from published Google Sheet
+```{r}
+speech <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRq8oZv7Hry8oUk6ApjnXU6aCYa1vbCLwQsiaHu6uSK5w9Z4NmffV_EUdt_xGepnFzdFKBzg3Cqirej/pub?gid=0&single=true&output=csv")
+```
+
+
+Visualization of Distribution of variable `Length` for Population
+```{r}
+hist(speech$Length, right=F)
+```
+
+
+
+Summary of Numerical Variable (Population of all words)
+```{r}
+summary(speech$Length)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
