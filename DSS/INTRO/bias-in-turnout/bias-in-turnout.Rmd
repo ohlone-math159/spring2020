@@ -1,0 +1,216 @@
+---
+title: "Bias in Self-reported Turnout"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+Surveys are frequently used to measure political behavior such as
+voter turnout, but some researchers are concerned about the accuracy
+of self-reports.  In particular, they worry about possible *social
+desirability bias* where in post-election surveys, respondents who did
+not vote in an election lie about not having voted because they may
+feel that they should have voted.  Is such a bias present in the
+American National Election Studies (ANES)?  The ANES is a nation-wide
+survey that has been conducted for every election since 1948.  The
+ANES conducts face-to-face interviews with a nationally representative
+sample of adults.  The table below displays the names and descriptions
+of variables in the `turnout.csv` data file.
+
+--------------------------------------------------------------------------------
+ Name                 Description
+ -------------------- ----------------------------------------------------------
+ `year`               Election year
+ 
+ `VEP`                Voting Eligible Population (in thousands) 
+ 
+ `VAP`                Voting Age Population (in thousands) 
+ 
+ `total`              Total ballots cast for highest office (in thousands) 
+ 
+ `felons`             Total ineligible felons (in thousands) 
+ 
+ `noncitizens`        Total non-citizens (in thousands) 
+ 
+ `overseas`           Total eligible overseas voters (in thousands)
+ 
+ `osvoters`           Total ballots counted by overseas voters (in thousands)
+--------------------------------------------------------------------------------
+
+We will also make use of derivative data files `pres_turnout.csv`, `mid_turnout.csv`, 
+`earlier_turnout.csv`, and `later_turnout.csv`.
+
+## Question 1
+
+Load the data into R and check the dimensions of the data.
+  How many observations are
+  there?  Using the function `head()` and the argument `n`, list
+  the range of years covered by the data. What type are all the
+  variables in the dataframe?
+
+## Answer 1
+
+```{r}
+turnout <- read.csv("data/turnout.csv")
+dim(turnout)
+head(turnout, n = 14)
+```
+
+There are `r dim(turnout)[1]` observations in this data set.  The
+data covers the time period from
+`r min(turnout$year)` to `r max(turnout$year)`. All variables in
+the dataframe have integer values.
+
+## Question 2
+
+Calculate the turnout rate based on the voting age population or
+  VAP and add it to the data as a new variable. Note that for this data set, 
+  we must add the total number of
+  eligible overseas voters since the *VAP* variable does not
+  include these individuals in the count. Next, calculate the turnout
+  rate using the voting eligible population or VEP and add it to the
+  data as a new variable.  What difference
+  do you observe? Make sure to leave comments identifying the
+  calculations. **Hint:** We can use the function `View()` to
+  browse the newly created variables.
+  
+## Answer 2
+
+```{r}
+## calculate turnout rate based on VAP
+turnout$VAPtr <- turnout$total/(turnout$VAP + turnout$overseas) * 100
+turnout$VAPtr
+## calculate turnout rate based on VEP
+turnout$VEPtr <- turnout$total/turnout$VEP * 100
+turnout$VEPtr
+## View(turnout)
+```
+
+We find that the VAP turnout rate is consistently lower than the VEP 
+turnout rate. This result is due to the fact that the VAP includes 
+numerous individuals who are ineligible to vote.
+
+## Question 3
+
+Compute the difference between VAP and ANES estimates of turnout
+  rate.  How big is the difference on average?  Conduct the same 
+  comparison for the VEP and ANES estimates of voter turnout. Make sure to 
+  leave comments identifying the calculations.
+  Briefly comment on the results.
+
+## Answer 3
+
+```{r}
+## compare VAP and ANES
+turnout$diffVAP <- turnout$ANES - turnout$VAPtr
+mean(turnout$diffVAP)
+## compare VEP and ANES
+turnout$diffVEP <- turnout$ANES - turnout$VEPtr
+mean(turnout$diffVEP)
+```
+
+On average, the ANES turnout rate is `r round(mean(turnout$diffVAP), 2)`
+percentage points higher than the VAP turnout rate. Comparatively, we
+find that on average, the ANES turnout rate is
+`r round(mean(turnout$diffVEP), 2)` percentage points higher than the VEP
+turnout rate. The ANES
+turnout rate is higher than both the VAP and VEP turnout
+rates. However, because the VAP turnout rate is consistently lower
+than the VEP turnout rate, we find that the difference between the VEP
+and ANES turnout rates is less than the difference between the VAP and
+ANES turnout rates.
+
+## Question 4
+
+Presidential elections and midterm elections occur every four years,
+  staggered by two years with respect to each other. Let's investigate 
+  differences in midterm and
+  presidential elections by loading the data 
+  from `pres_turnout.csv` and `mid_turnout.csv`.
+  Compute and compare the mean VEP turnout rate with the ANES turnout rate
+  separately for presidential elections and midterm elections.  Note
+  that the data set excludes the year 2006. Does the bias of the ANES
+  vary across election types? 
+
+## Answer 4
+
+```{r}
+## presidential
+pres_turnout <- read.csv("data/pres_turnout.csv")
+pres_turnout$VEPtr <- pres_turnout$total/pres_turnout$VEP * 100
+mean(pres_turnout$ANES - pres_turnout$VEPtr)
+## midterm
+mid_turnout <- read.csv("data/mid_turnout.csv")
+mid_turnout$VEPtr <- mid_turnout$total/mid_turnout$VEP * 100
+mean(mid_turnout$ANES - mid_turnout$VEPtr)
+```
+
+On average, the bias is higher among presidential elections than
+midterm elections. The ANES turnout rate is on average
+`r round(mean(pres_turnout$ANES - pres_turnout$VEPtr), 2)` 
+percentage points higher than the VEP
+turnout rate in presidential elections.  In midterm elections, the
+ANES turnout rate is on average `r round(mean(mid_turnout$ANES - mid_turnout$VEPtr), 2)`
+percentage points higher than the VEP turnout rate.
+
+## Question 5
+
+Load data from `earlier_turnout.csv` and `later_turnout.csv` 
+  so as to separately examine the first and second halves 
+  of the year range of the original `turnout.csv` dataset.
+  Calculate the mean difference between the VEP
+  turnout rate and the ANES turnout rate
+  within each period.  Has the bias of the ANES increased over time?
+
+## Answer 5
+
+```{r}
+earlier_turnout <- read.csv("data/earlier_turnout.csv") # first half
+later_turnout <- read.csv("data/later_turnout.csv") # second half
+## comparison
+earlier_turnout$VEPtr <- earlier_turnout$total/earlier_turnout$VEP * 100
+mean(earlier_turnout$ANES - earlier_turnout$VEPtr)
+later_turnout$VEPtr <- later_turnout$total/later_turnout$VEP * 100
+mean(later_turnout$ANES - later_turnout$VEPtr)
+```
+
+We find that the bias of the ANES has increased over
+time. For the first half of election years, the ANES turnout rate is
+on average `r round(mean(earlier_turnout$ANES - earlier_turnout$VEPtr), 2)` percentage points
+higher than the VEP turnout rate. Comparatively, the ANES is on
+average `r round(mean(later_turnout$ANES - later_turnout$VEPtr), 2)` percentage points higher
+than the VEP turnout rate among the later election years.
+
+## Question 6
+
+The ANES does not interview overseas voters and
+  prisoners. Calculate an adjustment to the VAP turnout
+  rate. Begin by subtracting the total number of ineligible felons and
+  non-citizens from the VAP to calculate an adjusted VAP. Next,
+  calculate an adjusted VAP turnout rate, taking care to subtract the
+  number of overseas ballots counted from the total ballots.
+  Compare the mean adjusted VAP, mean unadjusted VAP, and mean VEP to
+  the ANES turnout rate. Briefly discuss the results.
+  
+## Answer 6
+
+```{r}
+turnout$adj.VAP <- turnout$VAP - (turnout$felons + turnout$noncit)
+turnout$adj.VAPtr <- (turnout$total - turnout$osvoters) / turnout$adj.VAP * 100
+turnout$adj.diff <- turnout$ANES - turnout$adj.VAPtr
+## compare adjusted difference to non-adjusted VAP as well as VEP
+mean(turnout$adj.diff)
+mean(turnout$diffVAP)
+mean(turnout$diffVEP)
+```
+
+The mean adjusted VAP turnout rate is closer to the ANES turnout rate than
+the non-adjusted VAP or VEP turnout rates. The mean adjusted VAP
+turnout rate is `r round(mean(turnout$adj.diff), 2)` percentage points lower
+than the ANES turnout rate. The non-adjusted VAP turnout rate is
+`r round(mean(turnout$diffVAP), 2)` percentage points lower than the ANES
+turnout rate while the VEP turnout rate is `r round(mean(turnout$diffVEP), 2)` 
+percentage points lower.  In general it appears that the ANES
+overestimates turnout rates. However, by adjusting the VAP rate to
+reflect the conditions of the ANES survey, we reduce the difference in
+estimated turnout rates.

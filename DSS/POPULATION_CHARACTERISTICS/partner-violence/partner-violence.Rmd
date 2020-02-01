@@ -1,0 +1,133 @@
+---
+title: "Access to Information and Attitudes towards Intimate Partner Violence"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+In this exercise, we examine cross-national differences in attitudes towards domestic violence and access to information. We explore the hypothesis that there is an association at an aggregate level between the extent to which individuals in a country have access to knowledge and new information, both through formal schooling and through the mass media, and their likelihood of condemning acts of intimate partner violence.  This exercise is in part based on: 
+
+Pierotti, Rachel. (2013). "[Increasing Rejection of Intimate Partner Violence: Evidence of Global Cultural Diffusion](http://dx.doi.org/10.1177/0003122413480363)." *American Sociological Review*, 78: 240-265. 
+
+We use data from the Demographic and Health Surveys, which are a set of over 300 nationally, regionally and residentially representative surveys that have been fielded in developing countries around the world, beginning in 1992. The surveys employ a stratified two-stage cluster design. In the first stage enumeration areas (EA) are drawn from Census files. In the second stage within each EA a sample of households is drawn from an updated list of households. In addition, the surveys have identical questionnaires and trainings for interviewers, enabling the data from one country to be directly compared with data collected in other countries. It is important to note that different groups of countries are surveyed every year. 
+
+In the study, the author used these data to show that "women with greater access to global cultural scripts through urban living, secondary education, or access to media were more likely to reject intimate partner violence." The data set is in the csv file `dhs_ipv.csv`. The names and descriptions of variables are:
+
+-------------------------------------------------------------------------------
+Name             Description
+---------------- ---------------------------------------------------------
+`beat_goesout`   Percentage of women in each country that think a husband is justified to beat his wife if she goes                     out without telling him. 
+
+`beat_burnfood`  Percentage of women in each country that think a husband is justified to beat his wife if she burns                    his food.  
+
+`no_media`       Percentage of women in each country that rarely encounter a newspaper, radio, or television. 
+
+`sec_school`     Percentage of women in each country with secondary or higher education.
+
+`year`           Year of the survey
+
+`region`         Region of the world
+
+`country`        Country
+-------------------------------------------------------------------------------
+
+Note that there are two indicators of *attitudes towards domestic violence*: `beat_goesout` and `beat_burnfood`. There are also two indicators of *access to information*: `sec_school` and `no_media`. 
+
+## Question 1
+
+Let's begin by examining the association between attitudes towards intimate partner violence and the two exposure to information variables in our data. Load the `dhs_ipv.csv` data set. Use scatterplots to examine the bivariate relationship between `beat_goesout` and `no_media` as well as between `beat_goesout` and `sec_school`. Repeat these bivariate graphs between `beat_burnfood` and  `no_media`, as well as `beat_burnfood` and `sec_school`. Briefly interpret these graphs in light of the hypothesis of the study.
+
+## Answer 1
+
+```{r}
+dhs <- read.csv("data/dhs_ipv.csv")
+## Plot 1: Goes Out vs Low Media Exposure
+plot(dhs$beat_goesout, dhs$no_media, ylab = " % Low Media Exposure", xlab = "% Agree when Goes Out", 
+     main = "Domestic Violence vs Low Media Exposure")
+## Plot 2: Gooes Out vs Female Education
+plot(dhs$beat_goesout, dhs$sec_school, ylab = "% Educated Women", xlab = "% Agree when Goes Out", 
+      main = "Domestic Violence vs Education")
+## Plot 3: Burn food vs Low Media Exposure
+plot(dhs$beat_burnfood, dhs$no_media, ylab = " % Low Media Exposure", xlab = "% Agree when Burns Food ", 
+     main = "Domestic Violence vs Low Media Exposure")
+## Plot 4: Burn food vs Female Education
+plot(dhs$beat_burnfood, dhs$sec_school, ylab = "% Educated Women", xlab = "% Agree when Burns Food", 
+    main = "Domestic Violence vs Education")
+```
+
+Overall, these plots suggest that the association between attitudes towards intimate partner violence, media exposure and female education behave in the expected direction. For instance, bivariate graphs show a clear positive relationship between the percentage of women with low media exposure and the percentage of women that agree that intimate partner violence is justified in specific situations, such as `beat_goesout` and `beat_burnfood`. Similarly, these plots show a negative relationship between the percentage of educated women and the level of agreement with intimate partner violence. 
+
+## Question 2
+
+Compute the correlation coefficient between `beat_burnfood` and media exposure, as well as between `beat_burnfood` and education. Remember to use complete observations. What do these measures tell us about the association between education and media exposure with attitudes towards intimate partner violence?
+
+## Answer 2
+
+```{r}
+cor(dhs$beat_burnfood, dhs$no_media, use = "complete.obs")
+cor(dhs$beat_burnfood, dhs$sec_school, use = "complete.obs")
+```
+
+The correlation coefficient represents how on average two variables move together relative to their respective means. In this case, the correlation coefficient between `beat_burnfood` and `no_media`  is of `r round(cor(dhs$beat_burnfood, dhs$no_media, use = "complete.obs"), 2)`, indicating that this relationship is positive and strong. In the case of `beat_burnfood` and `sec_school`  the relationship is negative and moderately strong.  
+
+## Question 3
+
+We proceed to explore the national-level differences in attitudes towards domestic violence. First, compare the variation in the variable `beat_burnfood` for each `region`. What are the main differences across regions, e.g., in terms of the median and variance of the distributions for each region?  Second, examine the distribution of `no_media` by region of the world. Similarly comment on the main differences in the distributions of this variable across regions.
+
+## Answer 3
+
+```{r}
+## beat_burnfood
+## Median by Region 
+median(dhs$beat_burnfood[dhs$region == "Middle East and Central Asia"], na.rm = TRUE)
+median(dhs$beat_burnfood[dhs$region == "Asia"], na.rm = TRUE)
+median(dhs$beat_burnfood[dhs$region == "Sub-Saharan Africa"], na.rm = TRUE)
+median(dhs$beat_burnfood[dhs$region == "Latin America"], na.rm = TRUE)
+## Variance by Region 
+var(dhs$beat_burnfood[dhs$region == "Middle East and Central Asia"], na.rm = TRUE)
+var(dhs$beat_burnfood[dhs$region == "Asia"], na.rm = TRUE)
+var(dhs$beat_burnfood[dhs$region == "Sub-Saharan Africa"], na.rm = TRUE)
+var(dhs$beat_burnfood[dhs$region == "Latin America"], na.rm = TRUE)
+## no_media
+## Median by Region 
+median(dhs$no_media[dhs$region == "Middle East and Central Asia"], na.rm = TRUE)
+median(dhs$no_media[dhs$region == "Asia"], na.rm = TRUE)
+median(dhs$no_media[dhs$region == "Sub-Saharan Africa"], na.rm = TRUE)
+median(dhs$no_media[dhs$region == "Latin America"], na.rm = TRUE)
+## Variance by Region 
+var(dhs$no_media[dhs$region == "Middle East and Central Asia"], na.rm = TRUE)
+var(dhs$no_media[dhs$region == "Asia"], na.rm = TRUE)
+var(dhs$no_media[dhs$region == "Sub-Saharan Africa"], na.rm = TRUE)
+var(dhs$no_media[dhs$region == "Latin America"], na.rm = TRUE)
+```
+
+In Asia, Latin America, and the Middle East/Central Asia the median of the distribution of `beat_burnfood` is similarly low. Yet, in comparison to Latin America, there is a higher dispersion (variance) of women's attitudes in the Middle East/Central Asia and Asia. Most importantly, we can see that in Sub-Saharan Africa the median of the distribution is significantly higher than in the other regions, and more dispersed (higher variance).
+
+Moreover, we see some important differences in the distribution of low exposure to the media. While in the Middle East/Central Asia the median of the distribution is around `r round(median(dhs$no_media[dhs$region == "Middle East and Central Asia"], na.rm = TRUE), 2)` % and is highly concentrated around this value (low variance), in Sub-Saharan Africa the median is at `r round(median(dhs$no_media[dhs$region == "Sub-Saharan Africa"], na.rm = TRUE), 2)` % and there is a great deal of variation (high variance). 
+
+## Question 4
+
+An important point of the researcher's hypothesis is that the support towards intimate partner violence should *decrease* over time, as more women across regions have access to formal schooling and exposure to mass media. To test this idea, using time-series scatter plots, examine the trends in `beat_burnfood` from 1999-2014 *within each region*. Additionally, compute the correlation between time and `beat_burnfood` in this period by region (and across all regions). Comment on the results. **Hint:** The function `subset()` may be useful for conducting analyses on separate regions. `subset()` takes two arguments, a dataframe followed by logical test, and returns a subsetted dataframe where all observations pass the given logical test.
+
+## Answer 4
+
+```{r}
+## Subsetting 
+asia <- subset(dhs, region == "Asia")
+lam <- subset(dhs, region == "Latin America")
+africa <- subset(dhs, region == "Sub-Saharan Africa")
+me <- subset(dhs, region == "Middle East and Central Asia")
+## plot
+plot(lam$beat_burnfood, lam$year, main = "Attitudes towards Domestic Violence,\n Latin America, 1999-2014")
+plot(africa$beat_burnfood, africa$year, main = "Attitudes towards Domestic Violence,\n Africa, 1999-2014")
+plot(asia$beat_burnfood, asia$year, main = "Attitudes towards Domestic Violence,\n Asia, 1999-2014")
+plot(me$beat_burnfood, me$year, main = "Attitudes towards Domestic Violence,\n Middle East, 1999-2014")
+## correlations
+cor(lam$beat_burnfood, lam$year, use = "complete.obs")
+cor(africa$beat_burnfood, africa$year, use = "complete.obs")
+cor(asia$beat_burnfood, asia$year, use = "complete.obs")
+cor(me$beat_burnfood, me$year, use = "complete.obs")
+cor(dhs$beat_burnfood, dhs$year, use = "complete.obs")
+```
+
+The time-series plots show noisy but mostly declining trends in attitudes towards domestic violence for all regions save Asia (which appears to exhibit a very slight positive trend). Correlation coefficients between `year` and `beat_burnfood` confirm what the plots suggest: Latin America, Africa, and the Middle East/Central Asia have moderate to moderately weak negative correlations, and Asia shows a slight positive correlation. Across all regions, however, there is nonetheless a slight negative correlation of `r round(cor(dhs$beat_burnfood, dhs$year, use = "complete.obs"), 2)`.

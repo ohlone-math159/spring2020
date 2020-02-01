@@ -1,0 +1,247 @@
+---
+title: "Voting in the United Nations General Assembly"
+output:
+  html_document:
+    df_print: paged
+---
+
+Like legislators in the US Congress, the member states of the United
+Nations (UN) are politically divided on many issues such as trade,
+nuclear disarmament, and human rights.  During the Cold War, countries
+in the UN General Assembly tended to split into two factions: one led
+by the capitalist United States and the other by the communist Soviet
+Union.  In this exercise, we will analyze how states' ideological
+positions, as captured by their votes on UN resolutions, have changed
+since the fall of communism.
+
+This exercise is based on Michael A. Bailey, Anton Strezhnev, and 
+Erik Voeten. "Estimating Dynamic State Preferences from United Nations Voting Data."
+ *Journal of Conflict Resolution*, August 2015.
+
+The data is called `unvoting.csv` and the variables are:
+
+--------------------------------------------------------------------------------
+ Name                 Description
+ -------------------- ----------------------------------------------------------
+ `CountryName`        The name of the country
+ 
+ `idealpoint`         Its estimated ideal point
+ 
+ `Year`               The year for which the ideal point is estimated
+ 
+ `PctAgreeUS`         The percentage of votes that agree with the US 
+                      on the same issue
+ 
+ `PctAgreeRUSSIA`     The percentage of votes that agree with Russia/the Soviet 
+                      Union on the same issue
+--------------------------------------------------------------------------------
+
+We will also make use of derivative data in files `unvotingYearAvg.csv` 
+and `formersoviet.csv`.
+
+In the analysis that follows, we measure state preferences in two
+ways. Note that the data for 1964 are missing due to the absence of
+roll call data. 
+
+First, we can use the percentage of votes by each country that
+coincide with votes on the same issue cast by the two major Cold War
+powers: the United States and the Soviet Union. For example, if a
+country voted for ten resolutions in 1992, and if its vote matched the
+United States's vote on exactly six of these resolutions, the variable
+`PctAgreeUS` in 1992 would equal 60 for this country. 
+
+Second, we
+can also measure state preferences in terms of numerical ideal points.  
+These ideal
+points capture what international relations scholars have called
+countries' *liberalism* on issues such as political freedom,
+democratization, and financial liberalization. The two measures are
+highly correlated, with larger (more liberal) ideal points
+corresponding to a higher percentage of votes that agree with the US.
+
+## Question 1
+
+We begin by examining how the distribution of state ideal points
+   has changed since the end of communism. Plot the distribution of
+   ideal points separately for 1980 and 2000 - about ten years before
+   and after the fall of the Berlin Wall, respectively - using the
+   function `hist()`.  Add median to each plot as a vertical line.  How
+   do the two distributions differ?
+   Pay attention to the degree of polarization and give a brief
+   substantive interpretation of the results. **Hint:**
+   To simplify the code, we can use the function `subset()` 
+   to create a new dataframe for each period. `subset()` takes
+   two arguments, a dataframe followed by 
+   logical test, and returns a subsetted dataframe where all
+   observations pass the given logical test.
+
+## Answer 1
+
+```{r, ans1}
+## Load data
+un <- read.csv("data/unvoting.csv")
+## Create subsets
+un1980 <- subset(un, subset = Year == 1980)
+un2000 <- subset(un, subset = Year == 2000)
+## Generate histograms
+hist(un1980$idealpoint, xlim = c(-3, 3), xlab = "Ideal points",
+    main = "1980")
+abline(v = median(un1980$idealpoint))
+hist(un2000$idealpoint, xlim = c(-3, 3), xlab = "Ideal points",
+    main = "2000")
+abline(v = median(un2000$idealpoint))
+```
+
+Perhaps surprisingly, the fall of communism did not lead to
+ideological convergence across states.  Rather, in 2000, most states
+clustered at around either 1 or -1.  Although the range of the
+distribution moved in a more liberal direction, the median and modal
+UN member-state became less liberal over time.
+
+## Question 2
+
+Next, examine how the number of countries voting with the US has
+  changed over time. To do so, we will load and use the data in
+  `unvotingYearAvg.csv`, which is a transformed version of 
+  `unvoting.csv` containing yearly averages and medians 
+  of all its numeric variables. Plot the average percent agreement with US across
+  all counties over time.  Note that the function we use to make
+  scatter plots, `plot()`, can also be made to produce line plots
+  by specifying the optional argument `type` as `"l"`. Also, add 
+  the average percent agreement
+  with Russia as another line for comparison using the function
+  `lines()`. `lines()` behaves like `abline()` and 
+  takes the exact same arguments as `plot()`.  Does the US appear to
+  be getting more or less isolated over time, as compared to Russia?
+  Give a brief substantive interpretation
+  of the results.
+
+## Answer 2
+
+```{r}
+## Load yearly average data
+un.year.avg <- read.csv("data/unvotingYearAvg.csv")
+## Plot
+plot(x = un.year.avg$Year, y = un.year.avg$meanPctAgreeUS, 
+     ylim = c(0, 1), xlab = "Year", ylab = "Average percent agreement", 
+     type = "l", col = "blue")
+lines(x = un.year.avg$Year, y = un.year.avg$meanPctAgreeRUSSIA, 
+     ylim = c(0, 1), xlab = "Year", ylab = "Average percent agreement", 
+     type = "l", col = "red")
+```
+
+In recent years, there have been far fewer pro-US countries than pro-
+Russia countries. In fact, since the end of World War II, Russia
+appears to have gotten more and more popular while the US has
+consistently been isolated.
+
+## Question 3
+
+One problem of using the percentage of votes that agree with the
+  US or Russia as a measure of state preferences is that the
+  ideological positions, and consequently the voting patterns, of the
+  two countries might have themselves changed over time.  This makes
+  it difficult to know which countries' ideological positions have
+  changed.  Investigate this issue by plotting the evolution of the
+  two countries' ideal points over time. Add the yearly median ideal
+  point of all countries. How might the results of this analysis
+  modify (or not) your interpretation of the previous analysis? **Hint:**
+  The `Year` variable in `unvotingYearAvg.csv` contains all 
+  unique years in the data in increasing order.
+
+## Answer 3
+
+```{r}
+plot(x = un.year.avg$Year, y = un$idealpoint[un$CountryAbb == "USA"], 
+     ylim = c(-3, 3), xlab = "Year", ylab = "Ideal Point",
+     type = "l", col = "blue")
+lines(x = un.year.avg$Year, y = un$idealpoint[un$CountryAbb == "RUS"], 
+      col = "red")
+lines(x = un.year.avg$Year, y = un.year.avg$medianIdealpoint)
+```
+
+The United States has remained more liberal than the median UN
+member-state, but this distance has grown over time. On the other
+hand, Russia has become more liberal than the median UN member-state,
+but is much closer to the median than the US. This suggests that
+Russia is becoming more popular not because countries are moving
+closer to Russia's ideology, but because Russia has moved closer to
+the median after the fall of the Soviet Union.
+
+## Question 4
+
+Let's examine how countries that were formerly part of the
+  Soviet Union differ in terms of their ideology and UN voting
+  compared to countries that were not part of the Soviet Union.  The
+  former Soviet Union countries are: Estonia, Latvia, Lithuania,
+  Belarus, Moldova, Ukraine, Armenia, Azerbaijian, Georgia,
+  Kazakhstan, Kyrgyzstan, Tajikistan, Uzbekistan, and Russia. 
+  (A variable containing these country names can be found in
+  the file `formersoviet.csv`.) The
+  `%in%` operator, which is used as `x %in% y`, may be
+  useful.  This operator returns a logical vector whose element is
+  `TRUE` (`FALSE`) if the corresponding element of vector
+  `x` is equal to a value contained in vector `y`.  Focus
+  on the most recently available UN data from 2012 and plot each
+  Post-Soviet Union state's ideal point against the percentage of its
+  votes that agree with the United States. Compare the post Soviet
+  Union states within the same plot against the other countries using
+  the function `points()`. `points()` behaves like 
+  `abline()` and takes the same arguments as `plot()`.
+  Briefly comment on what you observe.
+
+## Answer 4
+
+```{r}
+## Load names
+post.soviet <- read.csv("data/formersoviet.csv")$formerSovCountryName
+## An indicator variable for post Soviet Union states
+un$post.soviet <- ifelse(un$CountryName %in% post.soviet, 1, 0)
+## Plot
+un12 <- subset(un, subset = (Year == 2012))
+plot(x = un12$idealpoint[un12$post.soviet == 1], 
+     y = un12$PctAgreeUS[un12$post.soviet == 1], pch = 16, 
+     xlim = c(-3, 3), ylim = c(0, 1), col = "red", 
+     xlab = "Ideal Points", 
+     ylab = "Proportion of Votes Agreeing with US")
+points(x = un12$idealpoint[un12$post.soviet == 0], 
+       y = un12$PctAgreeUS[un12$post.soviet == 0], pch = 17, 
+       col = "blue")
+```
+
+Interestingly, the ideal points of Post-Soviet countries are located
+in the center of the distribution of all countries.  The distribution
+of non post-Soviet countries is much more spread. Many Central Asian
+countries remain non-liberal.  However, countries such as Estonia,
+Latvia, and Lithuania are among the most liberal countries in 2012,
+similar to countries such as Belgium, Denmark, and the Netherlands.
+
+## Question 5
+
+We have just seen that while some post-Soviet countries have
+  retained non-liberal ideologies, other post-Soviet countries were
+  much more liberal in 2012. Let's examine how the median ideal points
+  of Soviet/post-Soviet countries and all other countries has varied
+  over all the years in the data. Plot these median ideal points by
+  year using the variables `formerSovMedianIdealPt` and 
+  `nonFormerSovMedianIdealPt` in the `unvotingYearAvg.csv` data set. Be
+  sure to indicate 1989, the year of the fall of the Berlin
+  Wall, on the graph.  Briefly comment on what you observe.
+
+## Answer 5
+
+```{r}
+## Plot
+plot(x = un.year.avg$Year, 
+     y = un.year.avg$formerSovMedianIdealPt, 
+     type = "l", ylim = c(-3, 3), xlab = "Year", ylab = "Ideal point")
+lines(x = un.year.avg$Year,
+      y = un.year.avg$nonFormerSovMedianIdealPt, 
+      col = "red")
+abline(v = 1989, lty = "dashed")
+```
+
+Before the fall of the Berlin Wall, the median Soviet state was far
+below (less liberal than) the median non-Soviet UN country. However,
+since the fall of the Berlin Wall, the median post-Soviet state has
+actually been more liberal than the median non-post-Soviet UN country.
