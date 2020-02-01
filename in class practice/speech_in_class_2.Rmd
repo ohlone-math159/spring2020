@@ -1,0 +1,64 @@
+---
+title: "speech_in_class"
+output: 
+  html_document:
+   highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Reading in my data from google doc
+```{r}
+speech <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRq8oZv7Hry8oUk6ApjnXU6aCYa1vbCLwQsiaHu6uSK5w9Z4NmffV_EUdt_xGepnFzdFKBzg3Cqirej/pub?gid=0&single=true&output=csv")
+```
+
+Calculate the Average Word Length (Mean)
+```{r}
+mean(speech$Length)
+```
+
+Take a random sample of 10 rows from the `speech` dataframe, using `sample_n`.  The `sample_n` function is part of the `dplyr` package. First, we must install the package and then `library` the package
+
+library the `dplyr` package
+```{r, message=FALSE}
+library(dplyr)
+```
+
+random sample of 10 rows from the `speech` dataframe
+```{r}
+speech_10_random <- sample_n(speech,10)
+```
+
+View sample
+```{r}
+speech_10_random
+```
+
+Calculate mean word length for my random sample
+```{r}
+mean(speech_10_random$Length)
+```
+
+Sample and Calculate Mean in One Chunk
+```{r}
+speech_10_random_run <- sample_n(speech,10)
+mean(speech_10_random_run$Length)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
