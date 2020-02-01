@@ -1,0 +1,22 @@
+---
+title: "study_adtl_notes"
+author: "Jose Rico"
+date: "1/31/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Observational Studies
+
+For example, an ecologist might be interested in estimating the average shell thickness of bald eagle eggs. A social scientist studying a rural community may want to determine whether age and attitude toward abortion are related. These are examples of studies that are observational in nature. In these studies, we want to observe characteristics of members of an existing population or of several populations, and then use the resulting information to draw conclusions. In observational studies, it is important to obtain samples that are representative of the corresponding populations. 
+
+## Experiments
+
+Sometimes the questions we are trying to answer deal with the effect of certain explana-tory variables on some response and cannot be answered using data from an observational study. These questions are often of the form, “What happens when . . . ?” or, “What is the effect of . . . ?” For example, an educator may wonder what would happen to test scores if the required lab time for a chemistry course was increased from 3 hours to 6 hours per week. To answer such questions, an experiment is carried out to collect relevant data. The value of some response variable (test score in the chemistry example) is recorded under different experimental conditions (3-hour lab and 6-hour lab). In an experiment, one or more explanatory variables, also sometimes called factors, define the experimental conditions. 
+
+##  Conclusion
+
+The type of conclusion that can be drawn from a statistical study depends on how the study was conducted. Both observational studies and experiments can be used to compare groups, but in an experiment the researcher controls who is in which group, whereas this is not the case in an observational study. This seemingly small difference is critical when it comes to drawing conclusions based on data from the study

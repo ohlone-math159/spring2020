@@ -110,15 +110,13 @@ audit %>%
 
 
 ```{r}
-dt <- audit_mut %>% 
+audit_mut %>% 
   tabyl(callback_c, crimrec_c, black_c ) %>% 
   adorn_totals(c("row","col")) %>% 
   adorn_percentages("col") %>% 
   adorn_pct_formatting(digits=2) %>% 
-  adorn_ns()
+  adorn_ns() 
 
-kable(dt, "latex", booktabs=T) %>%
- kable_styling(latex_options = c("striped"))
 ```
 
 

@@ -21,30 +21,85 @@ QR Code for First Day Survey
   >- A researcher often collects data about a population through surveys
   >- If the survey reaches the entire population it is called a census
   >- Typically surveys only sample a portion of the population
+  >- Obtain a sample that is representative of the population is critical
 
 ## Categorizing a Survey 
 
   >- Two primary data collection methods
   >- Experiments and observational studies
-  >- A survey is an observational study
 
 ## Disciminating Experiments and Observational Studies
 
-  >- In experiments, the researchers intentionally interfere with the subjects.
-  >- In observational studies, the researchers attempt to minimize any inteference with the subjects (merely observing).
+  >- In observational studies, the researchers attempt to minimize any inteference with the subjects (merely observing or asking questions).
+  
+  >- In experiments, the researchers intentionally interfere with the subjects (usually through treatment variables)
+
+## Goals of Observational Studies
+
+  >- identify associations between variables
+  >- generalize findings beyond the sample  
+
+
+## Case Study
+
+![](images/spanking.png){width=60%}
+
+[Times Article](http://content.time.com/time/health/article/0,8599,1926222,00.html)
+
+
+## Spanking Study Details
+
+  - The sample consisted of;  
+    - 806 kids (age 2 to 4)
+    - 704 kids (age 5 to 9) 
+
+  >- IQ was measured at the beginning of the study and again 4 years later. 
+
+  >- For the younger group, the average IQ of kids who were not spanked was 5 points higher.
+
+  >- For the older group, the average IQ of kids who were not spanked was 2.8 points higher.
+
+  >- These headlines all imply that spanking was the cause of the observed difference in IQ. 
+  
+  >- **Is this conclusion reasonable?** 
+
+
+## Green Spaces Make Kids Smarter
+
+An article is titled, "Green Spaces Make Kids Smarter."  
+
+  >- sample was 2,623 schoolchildren in Barcelona. 
+  
+  >- primary variables were;
+  
+  >- amount of greenery around the children’s schools
+    
+  >- children’s year-long improvement in working memory and attention span
+    
+  >- The children who had more vegetation around their schools showed more progress on the memory and attention test over the course of a year.
+
+  >- **Is this conclusion reasonable?**
+
 
 ## Differences in Possible Conclusions from Experiments and Observational Studies
 
-  >- In experiments, it is possible to infer causal relationships between variables.
+When examining data we can often find associations / relationships between variables, but we should be skeptical of concluding causation.
+
   >- In observational studies, it is possible to identify associations between variables.
+  >- In a properly run experiment, it is possible to infer causal relationships between variables.
+  >- There are techniques that attempt to determine causality from observational studies.
   >- **Caution**: association does not imply causation.
   
 ## Types of Variables
 
-  >- Categorical 
-  >- Numerical
+  >- Categorical / Qualitative
+    
+  >- Numerical / Quantitative
+
 
 ## List of Variables from Survey 
+
+In your groups, classify each variables as either **categorical** or **numerical**
 
 <div style="float: left; width: 50%;">
 
