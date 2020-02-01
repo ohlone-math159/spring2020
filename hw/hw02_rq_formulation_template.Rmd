@@ -1,0 +1,48 @@
+---
+title: "HW02 - Formulating a research question"
+author: "Your Name"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default
+---
+
+## Topic area statement: 
+
+
+
+## Personal Codebook: 
+
+To put the snips (images) in this document.  
+
+First upload the images to the `hw` folder. 
+Then follow the example shown below
+![](cb1.png)
+
+
+## Draft of a few Research Questions
+
+
+
+## Literature review - Three Articles
+
+
+### Article 1
+
+
+### Article 2
+
+
+### Article 3
+
+
+
+## Refinement of your Research Questions
+
+
+    
+    

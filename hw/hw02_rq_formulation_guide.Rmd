@@ -28,7 +28,7 @@ The specific details for each step are described below. You will write the assig
 * Name the template file `hw02_rq_name` i.e. `hw02_rq_jose_rico.html` 
 
 ## Peer Review
-This assignment will be subject to peer review, but with no revision period. Details to follow
+This assignment will be subject to peer review, but with no revision period. Details to follow.
 
 
 What specifically to look for: 
@@ -139,7 +139,7 @@ My research question is: Is self-efficacy associated with parent relations and a
 Based on your literature review some of your draft questions may already be answered, or you noticed that your question is a still too vague. Now is the time to refine this question. Here are some example revisions. 
 
 > Questions example:  
-> a) Does the number of cigarettes smoked in the past month relate to nicotine dependence in college-aged adults in the United States?
+> a) Does the number of cigarettes smoked in the past month relate to nicotine dependence in college-aged adults in the United States?  
 > b) Is there a relationship between smoking frequency and suicide? Is this relationship the same in males and females?
 
 
