@@ -40,6 +40,15 @@ Summary of Numerical Variable (Population of all words)
 summary(speech$Length)
 ```
 
+```{r}
+library(dplyr)
+```
+
+Take a random sample of 10 rows from speech data frame
+```{r}
+rs10 <- sample_n(speech, 10)  #first input is data frame, next input is number of rows
+mean(rs10$Length)  # inputs are -  dataframe = rs10, column(var) = Length
+```
 
 
 
