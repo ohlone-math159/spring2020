@@ -193,6 +193,20 @@ speech_sample
 mean(speech_sample$Length)
 ```
 
+## Sampling  ( 3-2-1 Bridge Instructions )
+
+In your **Learning Journal** - Under **Week 2 - Bridge Activities**
+
+ >- **Phase 1: Record 3 words**   
+ ( Quickly write down 3 words that come to mind when you think of *sampling* )
+
+
+ >- **Phase 2: Ask 2 questions**  
+ ( Write down 2 questions that you were wondering when thinking about *sampling*)
+ 
+ >- **Phase 3: Develop a analogy or metaphor**  
+ ( Write an analogy that encapsulates your ideas about *sampling* )
+
 ## Random Sampling Simulation from RossmanChance
 
 [Sampling App](http://www.rossmanchance.com/applets/OneSample.html?population=gettysburg)
