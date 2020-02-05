@@ -35,6 +35,7 @@ speech_10_random <- sample_n(speech,10)
 View sample
 ```{r}
 speech_10_random
+
 ```
 
 Calculate mean word length for my random sample

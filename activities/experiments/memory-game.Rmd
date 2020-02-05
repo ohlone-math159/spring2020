@@ -34,6 +34,9 @@ When you click the **Knit** button a document will be generated that includes bo
 - When I give you the ok, answer as many questions as you can.
 - You will have 3 minutes.
 
+## Entry of Score in Google Form
+
+
 ## Nature of the Experiment
 
 - There were 2 different sets of instructions which I randomly assigned to each student
@@ -49,6 +52,10 @@ When you click the **Knit** button a document will be generated that includes bo
   >- <div class="red"> Explanatory is which of the instructions you received (A or B)  </div>
   
   >- <div class="red"> Response is your score on the Assessment of Recall </div>
+
+## Data Analysis
+
+
 
 
 

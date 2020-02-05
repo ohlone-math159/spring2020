@@ -1,0 +1,54 @@
+---
+title: "survey_in_class"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Library necessary packages
+```{r}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+```
+
+
+Load in Data Frame from Google Sheet
+```{r}
+survey <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2lrzJEgClEcXTm2Kkf15ZBVgeUC_tvAlRIw8vNNLkNB3WkWJuemRH8psEwlMJ776XkM2j6RpZB6sJ/pub?gid=615584630&single=true&output=csv")
+```
+
+View data with `glimpse` function from `dplyr` package
+```{r}
+glimpse(survey)
+```
+
+View Summary of data frame
+```{r}
+summary(survey)
+```
+
+Visualize Semester Completed
+```{r}
+survey %>% 
+  filter(sem_completed < 20) %>% 
+  ggplot(aes(sem_completed))+
+  geom_histogram(binwidth=1, center=0, color="white", fill="steelblue")
+  
+```
+
+Table the variable `sem_completed`
+```{r}
+table(survey$sem_completed)
+```
+
+View Percents
+```{r}
+round(prop.table(table(survey$sem_completed)),2)
+```
+
+
+
+
