@@ -1,0 +1,46 @@
+---
+title: "memory_analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Library necessary packages
+```{r}
+library(ggplot2)
+library(dplyr)
+library(janitor)
+```
+
+Load in Data
+```{r}
+memory <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQkKUZAjpjYpzppNkdrV0IjegsNHzIwMM9WuYN-ICN4XUWUmRN_HzJv_51AKk-tsCIedyHsIgPFaXZ9/pub?gid=0&single=true&output=csv")
+```
+
+```{r}
+memory %>% 
+  ggplot(aes(x=number_correct))+
+  geom_histogram()+
+  facet_wrap(~instructions_received, ncol=1)
+```
+
+```{r}
+memory %>% 
+  group_by(instructions_received) %>% 
+  summarize(avg_score = mean(number_correct))
+```
+
+```{r}
+memory %>% 
+  group_by(instructions_received) %>% 
+  summarize(avg_hours_slept = mean(hours_slept))
+```
+
+
+```{r}
+memory %>% 
+  tabyl(instructions_received, english_native)
+```
+
