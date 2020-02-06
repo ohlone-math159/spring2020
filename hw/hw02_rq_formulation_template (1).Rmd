@@ -19,8 +19,9 @@ output:
 
 To put the snips (images) in this document.  
 
-First upload the images to the `hw` folder. 
+First upload the images to the subfolder `image` of the`hw` folder. 
 Then follow the example shown below
+![](images/H4ID1 -health_limits_act.png)
 ![](images/h4id1 - health -limits- activitiy.png)
 
 ![](images/H4WS5 -- friends_race.png)
