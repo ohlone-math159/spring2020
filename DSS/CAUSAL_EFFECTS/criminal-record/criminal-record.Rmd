@@ -70,6 +70,12 @@ Now we examine the central question of the study. Calculate the proportion of ca
 
 
 Change 1 and 0 to actual factors with dpylr's `mutate` function
+```{r}
+glimpse(audit)
+```
+
+
+
 
 ```{r}
 audit_mut <- audit %>% 
@@ -81,6 +87,10 @@ audit_mut <- audit %>%
               callback_c = factor(callback, 
                   labels = c("no_callback", "callback"))
               )
+```
+
+```{r}
+glimpse(audit_mut)
 ```
 
 

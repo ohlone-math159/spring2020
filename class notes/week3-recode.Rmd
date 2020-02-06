@@ -1,0 +1,52 @@
+---
+title: "Untitled"
+author: "Jose Rico"
+date: "2/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+
+```{r}
+load("~/R/spring2020/data/addhealth1.RData")
+load("~/R/spring2020/data/addhealth4.RData")
+```
+
+```{r}
+mydata_raw <- addhealth4 %>% 
+  select(H4ID1)
+```
+
+```{r}
+glimpse(mydata_raw)
+```
+
+
+```{r}
+mydata_clean <- mydata_raw %>% 
+  mutate(new = recode_factor(H4ID1,
+                             "1"="not limited",
+                             "2"="limited a little",
+                             "3"="limited a lot",
+                             "8"="don't know",
+                             .ordered=T))
+                              
+
+
+mydata_clean %>% 
+  tabyl(H4ID1,new)
+```
+
+```{r}
+mydata_clean$new
+```
+
+
