@@ -17,11 +17,7 @@ output:
 
 ## Personal Codebook: 
 
-To put the snips (images) in this document.  
 
-First upload the images to the `hw` folder. 
-Then follow the example shown below
-![](cb1.png)
 
 
 ## Draft of a few Research Questions

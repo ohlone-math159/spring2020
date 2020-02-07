@@ -13,7 +13,7 @@ output:
 
 ## Topic area statement: 
 
-
+last thing----->??????
 
 ## Personal Codebook: 
 
@@ -31,22 +31,10 @@ Then follow the example shown below
 
 ## Draft of a few Research Questions
 
-
-
-## Literature review - Three Articles
-
-
-### Article 1
-
-
-### Article 2
-
-
-### Article 3
+Is someone's physical activity related to depression?
 
 
 
-## Refinement of your Research Questions
 
 ## Formative assessment:  Statistics Concepts
 
