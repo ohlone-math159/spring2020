@@ -1,13 +1,13 @@
 ---
 title: "hw03 - Data Preparation"
 output:
-  pdf_document: default
   html_document:
     theme: sandstone
     highlight: tango
     toc: yes
     toc_float: yes
     css: ../css/sandstone.css
+  pdf_document: default
 ---
 
 # Assignment Overview

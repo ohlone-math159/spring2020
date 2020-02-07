@@ -2,16 +2,13 @@
 title: "Data Management - your data set name here"
 author: "your name here"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r,warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 library(dplyr)
-library(descr)
-# put the code to load any necessary R libraries and import your raw data here. Delete this text afterward. 
-# raw <- read..
 ```
 
 # Select only chosen variables
