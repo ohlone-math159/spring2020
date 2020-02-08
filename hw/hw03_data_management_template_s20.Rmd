@@ -1,5 +1,6 @@
 ---
 title: "Week Three Assignment - Data Preparation"
+author: "your name here"
 output:
   html_document:
     theme: sandstone
@@ -38,7 +39,13 @@ Load in your raw data file - with `load` command for the `addhealth4` data
 
 ## Recoding of variables
 
+### Variable 1
 
+### Variable 2
+
+### Variable 3
+
+### Variable 4
 
 ## Cleaned data frame
 
