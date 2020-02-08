@@ -39,13 +39,31 @@ knitr::opts_chunk$set(echo = FALSE)
 
   >- Instructions B:  For the next few minutes, your task is to LISTEN quietly.   The BEST TECHNIQUE for short term memory recall is to VISUALIZE whatever you hear.  For example, if the teacher says “the red motorcycle was in the barn,” you might picture a red motorcycle in a barn.  ATTEMPT TO VISUALIZE IN YOUR MIND all of the statements the teacher reads! 
 
+## Purpose of the Experiment
+
+What do you suppose is the **research question** that this experiment is attempting to answer?
+
+## Purpose of Random Assigment 
+
+What do you suppose is the purpose of **randomly assigning** the instructions to each subject?
+
+
 ## Explanatory and Response Variables
 
-  >- What do you suppose are the explanatoy and response variables for this experiment?
+  >- What do you suppose are the explanatory and response variables for this experiment?
   
   >- <div class="red"> Explanatory is which of the instructions you received (A or B)  </div>
   
   >- <div class="red"> Response is your score on the Assessment of Recall </div>
+
+## Causality
+
+Do you think that from this experiment, we will be able to infer **causation**?  (*the instructions were the sole cause of the differences groups' to performance*)
+
+## Generalization
+
+Do you think we can **generalize** the conclusion of our experiment to a larger population (*beyond this group of students*) ?
+
 
 ## Data Analysis
 
