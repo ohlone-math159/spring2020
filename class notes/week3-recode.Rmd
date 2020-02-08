@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "week-3-recoding-variables"
 author: "Jose Rico"
 date: "2/5/2020"
 output: html_document
@@ -16,7 +16,6 @@ library(janitor)
 
 
 ```{r}
-load("~/R/spring2020/data/addhealth1.RData")
 load("~/R/spring2020/data/addhealth4.RData")
 ```
 

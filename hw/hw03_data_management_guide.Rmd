@@ -25,14 +25,19 @@ You are **not** expected to have completed data management for every one of your
 
 # Instructions 
 
-1. `Save As` the `template.Rmd` so a new file is created with your name in it.
+1. Create your Assignment 3 Rmd with your name
+    - `Save As` the `template.Rmd` so a new file is created with your name in it.
+
  
-2.  Library the `dplyr` and `janitor` packages
+2. Library necessary packages
+    - `dplyr` and `janitor` packages
 
 ```{r}
 library(dplyr)
 library(janitor)
+library(kableExtra)
 ```
+
 
 3.  Load in your data.
 
@@ -41,7 +46,9 @@ Load in your raw data file - with `load` command for the `addhealth4` data
 load("~/R/spring2020/data/addhealth4.RData")
 ```
 
-4. Use the `select` function from `dplyr` package to select the variables from your codebook (**HW02**).  
+
+4.  Create a new data frame with just the variable that you are interested in.
+    - Use the `select` function from `dplyr` package to select the variables from your codebook (**HW02**).  
     - As you select your variables put this selection into a new data frame called `mydata`. 
     - (Later you might need to add variable to your selection, which will just require you to modify and run this `Rmd`)
 
@@ -50,14 +57,15 @@ mydata <- addhealth4 %>%
   select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11 )
 ```
 
+
 5. Check each variable for necessary adjustments. Complete each of the following steps for each variable.
     - Recode the data as necessary 
     - Choose a variable name that you and your audience will understand
     - Always confirm your recodes worked as intended by creating another table or summary. 
 
 ## Example 1 -`RACE` variable.
-Checking the Codebook
-![](images/race.png)
+Checking the Codebook  
+![](images/race.png){width=6in}
 
 Let's look at the `RACE` variable using two methods
 
@@ -87,7 +95,7 @@ mydata_c %>%
   select(RACE, race_c)
 ```
 
-Another check is do the percentage in the codebook match your new variable.
+Another way to check is to create a table so you can see if the percentages in the codebook match for your newly constructe variable.
 
 ```{r}
 mydata_c %>% 
@@ -95,7 +103,7 @@ mydata_c %>%
   adorn_pct_formatting(digits=2)
 ```
 
-## Example 2 - H4DA11 
+## Example 2 - `H4DA11` variable
 Checking the codebook  
 ![](images/vigorous_24h.png)
 
@@ -127,24 +135,33 @@ mydata_c %>%
   adorn_pct_formatting(digits=2)
 ```
 
-6. Select only the variables that you want to keep, so you only have the version of the variables that you want in your data frame.
 
-```{r, eval=FALSE}
+6. Create your final cleaned data frame.
+    - Select only the variables that you want to keep, so you only have the version of the variables that you want in your data frame.
+
+```{r}
 clean <- mydata_c %>% select(race_c, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, vigorous_activity)
 ```
 
 You can also use `select` to remove variable with the `-variable`
-```{r, eval=FALSE}
+```{r}
 #clean <- mydata_c %>% select(-RACE, -H4DA11)
 ```
+
 
 7. Save the resulting data set to your `data` folder as `datasetname_clean.Rdata` e.g. `addhealth_clean.Rdata`. 
     - This will serve as your analysis data set to do all your subsequent assignments on. 
 
-```{r, eval=FALSE}
+```{r}
 save(clean, file="~/R/spring2020/data/myaddhealth_clean.Rdata")
 ```
 
 
+8.  Create a table with all your variables
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+RACE |  race_c  | subject's race
+H4DA11 |vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
 
 
