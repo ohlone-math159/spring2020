@@ -43,9 +43,13 @@ knitr::opts_chunk$set(echo = FALSE)
 
 What do you suppose is the **research question** that this experiment is attempting to answer?
 
-## Purpose of Random Assigment 
+  >- <div class="red"> The research question is "Do people tend to remember better when they are given instructions to visualize what's being said?" </div>
+
+## Purpose of Random Assignment 
 
 What do you suppose is the purpose of **randomly assigning** the instructions to each subject?
+
+  >- <div class="red"> Random assignment of the treatment is an effort to make the two groups similar. </div>
 
 
 ## Explanatory and Response Variables
@@ -60,9 +64,15 @@ What do you suppose is the purpose of **randomly assigning** the instructions to
 
 Do you think that from this experiment, we will be able to infer **causation**?  (*the instructions were the sole cause of the differences groups' to performance*)
 
+  >- <div class="red"> Since we used random assignment of the subject into the two groups, we should have similar group characteristics.  Therefore the only real difference between the tow groups is the instructions received.  So, any difference in performance can be attributed to the difference in instructions.  </div>
+  
+  >- <div class="red"> We also need to see if there was actually a difference in performance between the groups.  The larger difference the more confident we can be that the treatment is causing a difference in performance. </div>
+  
 ## Generalization
 
 Do you think we can **generalize** the conclusion of our experiment to a larger population (*beyond this group of students*) ?
+
+  >- <div class="red"> Our sample was just a convenience sample of students in a statistics course.  (Maybe we generalize to all college students or maybe all people, but this could potentially be an over-generalization ) </div>
 
 
 ## Data Analysis
