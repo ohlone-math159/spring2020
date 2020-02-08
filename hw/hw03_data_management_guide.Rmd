@@ -10,6 +10,11 @@ output:
   pdf_document: default
 ---
 
+
+```{r, echo=F}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE) #Chunk default settings 
+```
+
 # Assignment Overview
 
 By now you should know what variables you want to use, and you've looked over the codebook enough now that you have an idea of some potential problems that you will encounter. This assignment uses your chosen research data, and the variables that you chose in the last assignment when you created a personal research codebook. You will thoughtfully review the variables you are interested in, document which ones will need changed and how. 
@@ -36,7 +41,9 @@ Load in your raw data file - with `load` command for the `addhealth4` data
 load("~/R/spring2020/data/addhealth4.RData")
 ```
 
-4. Use the `select` function from `dplyr` package to select the variables from your codebook (**HW02**).  As you select your variables put this selection into a new data frame called `mydata`. (Later you might need to add variable to your selection, which will just require you to modify and run this `Rmd`)
+4. Use the `select` function from `dplyr` package to select the variables from your codebook (**HW02**).  
+    - As you select your variables put this selection into a new data frame called `mydata`. 
+    - (Later you might need to add variable to your selection, which will just require you to modify and run this `Rmd`)
 
 ```{r}
 mydata <- addhealth4 %>% 
@@ -44,10 +51,8 @@ mydata <- addhealth4 %>%
 ```
 
 5. Check each variable for necessary adjustments. Complete each of the following steps for each variable.
-    - First explain in english what the variable name is and what it measures. 
-    - Then examine the variable using the `freq` function in the `descr` package. 
-    - Identify the data type of the variable using `class`. Does this match with the intended data type? 
-    - Recode the data as necessary (See section 1.4 in the course packet)
+    - Recode the data as necessary 
+    - Choose a variable name that you and your audience will understand
     - Always confirm your recodes worked as intended by creating another table or summary. 
 
 ## Example 1 -`RACE` variable.
@@ -108,6 +113,8 @@ mydata_c <- mydata_c %>%
                                 .ordered=T))
 ```
 
+**??? Should I have done something differently to handle the 1 missing ???**
+
 Check
 ```{r}
 mydata_c %>% 
@@ -120,67 +127,24 @@ mydata_c %>%
   adorn_pct_formatting(digits=2)
 ```
 
-```{r}
-mydata_c %>% 
-  tabyl(H4DA11) %>% 
-  adorn_pct_formatting(digits=2)
-```
-
-6. Remove the variables that you modified, so you only have the version of the variables that you want in your data frame.
-
-    - Similar to how you trimmed down `raw` into `mydata`, now you want to only keep the variables that you want to save into your analysis data set. 
-    - e.g. I only want to keep the categorical version of `health`. 
+6. Select only the variables that you want to keep, so you only have the version of the variables that you want in your data frame.
 
 ```{r, eval=FALSE}
-clean <- mydata %>% select(age, marital, cesd, health_cat)
+clean <- mydata_c %>% select(race_c, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, vigorous_activity)
 ```
 
-8. Save the resulting data set to your `data` folder as `datasetname_clean.Rdata` e.g. `addhealth_clean.Rdata`. 
+You can also use `select` to remove variable with the `-variable`
+```{r, eval=FALSE}
+#clean <- mydata_c %>% select(-RACE, -H4DA11)
+```
+
+7. Save the resulting data set to your `data` folder as `datasetname_clean.Rdata` e.g. `addhealth_clean.Rdata`. 
     - This will serve as your analysis data set to do all your subsequent assignments on. 
 
 ```{r, eval=FALSE}
-save(clean, file="depression_clean.Rdata")
+save(clean, file="~/R/spring2020/data/myaddhealth_clean.Rdata")
 ```
 
-# Example
 
-The variable `health` records a persons perceived general health as being either Excellent, Good, Fair or Poor. This is considered an ordinal categorical variable. 
-
-```{r}
-freq(mydata$health)
-class(mydata$health)
-```
-
-The variable `health` currently is an integer with numeric values 1-4, but the codebook states that this is a categorical variable where 1=Excellent, 2=Good, 3=Fair, 4=Poor. 
-So I need to convert this numeric variable to a factor variable. There are no values outside the 1-4 range, such as a -9 that codes for missing data so I do not need to make any further adjustments (You want to code out missing before you convert variables to factors)
-
-```{r}
-mydata$health_cat <- factor(mydata$health, labels=c("Excellent", "Good", "Fair", "Poor"))
-```
-
-I will confirm that the recode worked by making a two-way `table`
-```{r}
-table(mydata$health, mydata$health_cat, useNA="always")
-```
-This shows that all 1's are now 'excellent', 4's are now 'poor' and so forth. 
-
-
-## Example 2
-
-Here is an example data management file for the Add Health data: https://norcalbiostat.netlify.com/data/dm_addhlth.html as an example. _Warning, do not copy this code from the HTML file directly. It will contain special characters that will prevent your code from working. Plus the sleep variable didn't quite work the way we intended._ 
-
-
-# Submission instructions
-
-This is an individual assignment using your project data
-
-Upload your <span style="color:red">RMD code</span> file only to the **hw03 Data Management** folder in Google Drive. 
-  
-* I will download this file and run it on my computer.
-* It must run for credit. If it compiles to PDF for you then this should be no problem for me. 
-
-
-
-Check the rubric in Blackboard learn for more grade specific details. 
 
 
