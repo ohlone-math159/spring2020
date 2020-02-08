@@ -43,16 +43,91 @@ mydata <- addhealth4 %>%
   select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11 )
 ```
 
-6. Check each variable for necessary adjustments. Complete each of the following steps for each variable.
+5. Check each variable for necessary adjustments. Complete each of the following steps for each variable.
     - First explain in english what the variable name is and what it measures. 
     - Then examine the variable using the `freq` function in the `descr` package. 
     - Identify the data type of the variable using `class`. Does this match with the intended data type? 
     - Recode the data as necessary (See section 1.4 in the course packet)
     - Always confirm your recodes worked as intended by creating another table or summary. 
 
-(See example at bottom of page)
+## Example 1 -`RACE` variable.
+Checking the Codebook
+![](images/race.png)
 
-7. Restrict the variables to only the ones you are investigating. 
+Let's look at the `RACE` variable using two methods
+
+```{r}
+glimpse(mydata)
+```
+
+We can see that `RACE` is coded with numbers 1 through 6. Replacing the coded numbers with the actual labels will make future analysis easier to understand.  
+
+We will use the `recode_factor` function from `dplyr` to accomplish this *replacement* (**i.e., recoding**) task.
+```{r}
+mydata_c <- mydata %>% 
+  mutate(race_c = recode_factor(RACE,
+                                "5"="white",
+                                "2"="black",
+                                "4"="asian_pacific_islander",
+                                "3"="native_american",
+                                "1"="multiple_races",
+                                "6"="other",
+                                .ordered=T))
+```
+
+You should always confirm that your function did as intended.  You can check by comparing the two variables
+
+```{r}
+mydata_c %>% 
+  select(RACE, race_c)
+```
+
+Another check is do the percentage in the codebook match your new variable.
+
+```{r}
+mydata_c %>% 
+  tabyl(race_c) %>% 
+  adorn_pct_formatting(digits=2)
+```
+
+## Example 2 - H4DA11 
+Checking the codebook  
+![](images/vigorous_24h.png)
+
+We'll do the same process.  In addition we'll choose a new varaible name so we don't need to remember what `H4DA11` means.
+
+**Note - this time I am working off my new data frame `mydata_c`
+
+```{r}
+mydata_c <- mydata_c %>% 
+  mutate(vigorous_activity = recode_factor(H4DA11,
+                                "0"="no",
+                                "1"="yes",
+                                "6"="refused",
+                                "8"="don't know",
+                                .ordered=T))
+```
+
+Check
+```{r}
+mydata_c %>% 
+  select(H4DA11, vigorous_activity)
+```
+
+```{r}
+mydata_c %>% 
+  tabyl(vigorous_activity) %>% 
+  adorn_pct_formatting(digits=2)
+```
+
+```{r}
+mydata_c %>% 
+  tabyl(H4DA11) %>% 
+  adorn_pct_formatting(digits=2)
+```
+
+6. Remove the variables that you modified, so you only have the version of the variables that you want in your data frame.
+
     - Similar to how you trimmed down `raw` into `mydata`, now you want to only keep the variables that you want to save into your analysis data set. 
     - e.g. I only want to keep the categorical version of `health`. 
 
