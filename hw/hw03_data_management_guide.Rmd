@@ -21,7 +21,7 @@ By now you should know what variables you want to use, and you've looked over th
 
 All raw data needs to stay raw, and all changes need to be documented. You will create a script/code file that will make all changes to the data in a programatically and reproducible way. You will create a single code file that imports your raw data, performs some data cleaning steps, and saves out an analysis ready data set that you will use throughout the semester. 
 
-You are **not** expected to have completed data management for every one of your variables under consideration by the submission date. 
+You are **not** expected to have completed data management for every one of your variables under consideration by the submission date.   My expectation is that you have started the process and at least **4** variables have been recoded and confirmed that the recoding was successful (error-free)
 
 # Instructions 
 
