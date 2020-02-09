@@ -1,0 +1,83 @@
+---
+title: "week-3-recoding-variables"
+output:
+  ioslides_presentation:
+    widescreen: yes
+  beamer_presentation: default
+---
+
+## Knitr Options
+
+```{r setup, include=T}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+  >- `echo` = **TRUE** tells Knit operation to show code along with output for all chunks
+
+## Library Command
+
+```{r, message=FALSE, warning= F}
+library(tidyverse)
+library(janitor)
+```
+
+  >- loads in the `tidyverse` and `janitor` packages
+
+## Getting the data file into the R environment
+
+An easy trick is to click on the data and look in the `Console` for the proper function notation.
+```{r}
+load("~/R/spring2020/data/addhealth4.RData")
+```
+
+
+## Trimming your data file to just the variables you want 
+
+```{r}
+mydata_raw <- addhealth4 %>% 
+  select(H4ID1)
+```
+
+  >- we just selected a single variable `H4ID1` and placed it into the dataframe `mydata_raw`
+
+## `gimpse` the new dataframe
+
+```{r}
+glimpse(mydata_raw)
+```
+
+## Looking at Codebook for `H4ID1`
+
+![](~/R/spring2020/hw/images/H4ID1 -health_limits_act.png)
+
+
+## Mutate and Recoding Functions
+
+```{r}
+mydata_c <- mydata_raw %>% 
+  mutate(health_limit_activity = recode_factor(H4ID1,
+                             "1"="not limited",
+                             "2"="limited a little",
+                             "3"="limited a lot",
+                             "8"="don't know",
+                             .ordered=T))
+                              
+```
+
+## Checking the accuracy of your work - Option 1
+
+```{r}
+mydata_c %>% 
+  tabyl(H4ID1,health_limit_activity)
+```
+
+## Checking the accuracy of your work - Option 2
+
+```{r}
+mydata_c %>% 
+  tabyl(health_limit_activity) %>% 
+  adorn_pct_formatting(digits=1)
+```
+
+
+
