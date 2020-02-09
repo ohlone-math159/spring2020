@@ -26,7 +26,7 @@ library(janitor)
 ## Load in original data 
 Load in your raw data file - with `load` command for the `addhealth4` data
 ```{r}
-#load("~/R/spring2020/data/addhealth4.RData")
+#load("/cloud/project/data/addhealth4.RData")
 ```
 
 
@@ -61,7 +61,7 @@ Alternative Approach to Step 1: You can also use `select` to remove variable wit
 
 **Step 2**: Save the resulting data set to your `data` folder as `datasetname_clean.Rdata` e.g. `addhealth_clean.Rdata`. 
 ```{r}
-#save(clean, file="~/R/spring2020/data/myaddhealth_clean.Rdata")
+#save(clean, file="/cloud/project/data/myaddhealth_clean.Rdata")
 ```
 
 
