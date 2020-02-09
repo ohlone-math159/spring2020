@@ -42,7 +42,7 @@ library(janitor)
 
 Load in your raw data file - with `load` command for the `addhealth4` data
 ```{r}
-load("~/R/spring2020/data/addhealth4.RData")
+load("/cloud/project/data/addhealth4.RData")
 ```
 
 
@@ -152,7 +152,7 @@ You can also use `select` to remove variable with the `-variable`
     - This will serve as your analysis data set to do all your subsequent assignments on. 
 
 ```{r}
-save(clean, file="~/R/spring2020/data/myaddhealth_clean.Rdata")
+save(clean, file="/cloud/project/data/myaddhealth_clean.Rdata")
 ```
 
 

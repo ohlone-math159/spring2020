@@ -26,8 +26,13 @@ library(janitor)
 ## Getting the data file into the R environment
 
 An easy trick is to click on the data and look in the `Console` for the proper function notation.
+
+![](images/loading.png){width=50%}
+
+Once you know the command - copy it and insert it in a chunk.
+
 ```{r}
-load("~/R/spring2020/data/addhealth4.RData")
+load("/cloud/project/data/addhealth4.RData")
 ```
 
 
@@ -48,7 +53,7 @@ glimpse(mydata_raw)
 
 ## Looking at Codebook for `H4ID1`
 
-![](~/R/spring2020/hw/images/H4ID1 -health_limits_act.png)
+![](/cloud/project/hw/images/H4ID1 -health_limits_act.png)
 
 
 ## Mutate and Recoding Functions
