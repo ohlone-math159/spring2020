@@ -35,7 +35,6 @@ You are **not** expected to have completed data management for every one of your
 ```{r}
 library(dplyr)
 library(janitor)
-library(kableExtra)
 ```
 
 

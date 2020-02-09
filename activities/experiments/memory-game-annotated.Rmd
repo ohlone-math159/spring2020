@@ -1,0 +1,55 @@
+---
+title: "memory-game"
+output:
+  ioslides_presentation:
+    widescreen: yes
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Memory Game `Instructions
+
+- As I hand out the instructions, keep them face down.
+- When I give you the ok, read the instructions carefully.
+
+
+## Start
+
+- I will now read 25 statements.
+- Follow the instructions you read.
+
+
+## Assessment of Recall
+
+- As I hand out the 20 questions, keep them face down.
+- When I give you the ok, answer as many questions as you can.
+- You will have 3 minutes.
+
+## Entry of Score in Google Form
+
+
+## Nature of the Experiment
+
+- There were 2 different sets of instructions which I randomly assigned to each student
+
+  >- Instructions A:  For the next few minutes, your task is to LISTEN quietly and TRY NOT TO FORGET what you hear.
+
+  >- Instructions B:  For the next few minutes, your task is to LISTEN quietly.   The BEST TECHNIQUE for short term memory recall is to VISUALIZE whatever you hear.  For example, if the teacher says “the red motorcycle was in the barn,” you might picture a red motorcycle in a barn.  ATTEMPT TO VISUALIZE IN YOUR MIND all of the statements the teacher reads! 
+
+## Explanatory and Response Variables
+
+  >- What do you suppose are the explanatoy and response variables for this experiment?
+  
+  >- <div class="red"> Explanatory is which of the instructions you received (A or B)  </div>
+  
+  >- <div class="red"> Response is your score on the Assessment of Recall </div>
+
+## Data Analysis
+
+
+
+
+
