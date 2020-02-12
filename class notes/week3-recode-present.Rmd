@@ -40,7 +40,7 @@ load("/cloud/project/data/addhealth4.RData")
 
 ```{r}
 mydata_raw <- addhealth4 %>% 
-  select(H4ID1)
+  select(H4ID1, H4ED2)
 ```
 
   >- we just selected a single variable `H4ID1` and placed it into the dataframe `mydata_raw`
@@ -84,5 +84,101 @@ mydata_c %>%
   adorn_pct_formatting(digits=1)
 ```
 
+## Categorical Variable with many levels {.smaller}
 
+Example 3 -`H4ED2` variable.  Check the Codebook  
+![](images/H4ed2.png){width=50%}  
+![](images/h4ed2-b.png){width=50%}
 
+## Recoding to 4 levels
+
+```{r}
+mydata_c <- mydata_raw %>% 
+  mutate(educ_completed = recode_factor(H4ED2,
+                             "1"="not hs grad",
+                             "2"="not hs grad",
+                             "3"="hs grad",
+                             "4"="hs grad",
+                             "5"="hs grad",
+                             "6"="hs grad",
+                             "7"="bachelors",
+                             "8"="bachelors",
+                             "9"="adv degree",
+                             "10"="adv degree",
+                             "11"="adv degree",
+                             "12"="bachelors",
+                             "13"="adv degree",
+                             "98"="don't know",
+                             .ordered=T))
+                              
+```
+
+## Checking accuracy
+
+```{r}
+mydata_c %>% 
+  tabyl(educ_completed) %>% 
+  adorn_pct_formatting(digits=1)
+```
+
+## Try again - Recode to 5 levels
+
+```{r}
+mydata_c <- mydata_raw %>% 
+  mutate(educ_completed_5 = recode_factor(H4ED2,
+                             "1"="not hs grad",
+                             "2"="not hs grad",
+                             "3"="hs grad",
+                             "4"="post hs",
+                             "5"="post hs",
+                             "6"="post hs",
+                             "7"="bachelors",
+                             "8"="bachelors",
+                             "9"="adv degree",
+                             "10"="adv degree",
+                             "11"="adv degree",
+                             "12"="bachelors",
+                             "13"="adv degree",
+                             "98"="don't know",
+                             .ordered=T))
+                              
+```
+
+## Checking accuracy
+
+```{r}
+mydata_c %>% 
+  tabyl(educ_completed_5) %>% 
+  adorn_pct_formatting(digits=1)
+```
+
+## Recode to a Binary Variable (Yes/No)
+
+```{r}
+mydata_c <- mydata_raw %>% 
+  mutate(college_deg = recode_factor(H4ED2,
+                             "1"="no",
+                             "2"="no",
+                             "3"="no",
+                             "4"="no",
+                             "5"="no",
+                             "6"="no",
+                             "7"="yes",
+                             "8"="yes",
+                             "9"="yes",
+                             "10"="yes",
+                             "11"="yes",
+                             "12"="yes",
+                             "13"="yes",
+                             "98"="don't know",
+                             .ordered=T))
+                              
+```
+
+## Checking accuracy
+
+```{r}
+mydata_c %>% 
+  tabyl(college_deg) %>% 
+  adorn_pct_formatting(digits=1)
+```

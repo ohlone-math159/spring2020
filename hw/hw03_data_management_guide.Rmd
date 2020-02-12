@@ -21,7 +21,7 @@ By now you should know what variables you want to use, and you've looked over th
 
 All raw data needs to stay raw, and all changes need to be documented. You will create a script/code file that will make all changes to the data in a programatically and reproducible way. You will create a single code file that imports your raw data, performs some data cleaning steps, and saves out an analysis ready data set that you will use throughout the semester. 
 
-You are **not** expected to have completed data management for every one of your variables under consideration by the submission date.   My expectation is that you have started the process and at least **4** variables have been recoded and confirmed that the recoding was successful (error-free)
+You are **not** expected to have completed data management for every one of your variables under consideration by the submission date.   My expectation is that you have started the process and at least **4** variables have been recoded and confirmed that the recoding was successful (error-free).  
 
 # Instructions 
 
@@ -53,7 +53,7 @@ load("/cloud/project/data/addhealth4.RData")
 
 ```{r}
 mydata <- addhealth4 %>% 
-  select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11 )
+  select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11, H4ED2 )
 ```
 
 
@@ -125,7 +125,7 @@ mydata_c <- mydata_c %>%
 Check
 ```{r}
 mydata_c %>% 
-  select(H4DA11, vigorous_activity)
+  tabyl(H4DA11, vigorous_activity)
 ```
 
 ```{r}
@@ -133,6 +133,15 @@ mydata_c %>%
   tabyl(vigorous_activity) %>% 
   adorn_pct_formatting(digits=2)
 ```
+
+## Example 3 -`H4ED2` variable.
+
+Check the Codebook
+![](images/H4ed2.png)
+![](images/h4ed2-b.png)
+
+This variables has 14 different levels, which could make analysis challenging.  So, one strategy is to collapse the levels to fewer.  **Need to complete for next semester**
+
 
 
 6. Create your final cleaned data frame.

@@ -1,0 +1,201 @@
+---
+title: "Week Three Assignment - Data Preparation"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default
+---
+
+
+
+
+```{r, include=FALSE}
+library("tidyverse")
+library("janitor")
+```
+# Data and data management
+
+## First step--load data
+
+I'll be using 2018 ACS (American Community Survey) data on Fremont, Newark, and Union City residents for almost all examples in this book. To load the data, copy the command below into a Jupyter notbook or RMarkdown file. The data is loaded using the `readRDS` command and loaded with the name `ACS2018_TriCity_raw`. You will always start an analysis with loading data.
+
+```{r}
+ACS2018_TriCity_raw <- readRDS("/cloud/project/data/ACS2018_TriCity.rds")
+```
+
+NOTE: If you are loading an `RData` file, use the `load` command with no arrow. Ex: `load("~/Data/data.RData")`.
+
+Notice you specify the file to load inside the parentheses and in quotes. The arrow `<-` tells R to load the data into `ACS2018_TriCity_raw`.
+
+You can call the data whatever you want. It doesn't have to be called `ACS2018_TriCity_raw`. You could have called it `lolz` and the arrow can point the other direction.
+
+```{r}
+readRDS("/cloud/project/data/ACS2018_TriCity.rds") -> lolz
+```
+
+### Viewing data
+
+After you've loaded the data. You probably want to see what the data contains. The easiest way is to just type the name of the data you want to see.
+
+```{r}
+ACS2018_TriCity_raw
+```
+
+There is too much data to fit so the computer luckily is smart enough to show only the first 10 rows and first several columns with a caveat that there are "3,252 more rows, and 275 more variables:". The `glimpse` command gives an overview of the data. It lists how many rows the data has (3,262) and how many variables (286) as well as their names. It also shows different values from each variable.
+
+```{r}
+ACS2018_TriCity_raw %>%
+  glimpse()
+```
+
+### The Pipe
+
+We are taking the `ACS2018_TriCity_raw` data and telling the `glimpse` command to give us a "glimpse" of the data. Notice that there are several weird looking symbols, `%>%` in between the data and command. They are called the "pipe". If you want a command to do something to data you type `data %>% command`. You can do several things to your data with several pipes. For example,
+
+```r
+data %>%
+  cut() %>%
+  marinate() %>%
+  cook() %>%
+  eat()
+```
+
+tells R to load the `data` and then do several things to it. The first pipe tells R to take the `data` and `cut` it. The second pipe tells R to take the stuff which was `cut` and then `marinate` it. The third pipe tells R to take the `cut` and `marinate`(d) data and `cook` it. The fourth and final pipe tells R to take the `cut`, `marinated`(d) and `cook`(ed) data and `eat` it. You'll use the pipe a lot to string together different commands.
+
+### Looking at one variable
+
+There's no need to always see all 286 variables. Instead we will `select` one or more variables needed for analysis. Let's start with selecting a variable which tells us the subject's sex.
+
+```{r}
+ACS2018_TriCity_raw %>%
+  select(SEX)
+```
+
+Success, we only see the sex of the subject. However it's in a basically unreadable state. According to the codebook:
+
+> Character 1  
+> Sex  
+> 1 .Male  
+> 2 .Female  
+
+We need to **recode** the values by turning `1`'s into `Male` and `2`'s into `Female`. However we don't want to change the `SEX` variable. Instead we will create a new variable called `new_SEX`. We will accomplish this task in two parts. 
+
+### Mutate 
+
+We need to create a new variable using `mutate`. `mutate` takes a variable and creates a new variable by doing something to the old variable. For instance, maybe we want to add 7 to everyone's age. 
+
+```{r}
+ACS2018_TriCity_raw %>%
+  select(AGEP) %>%
+  mutate(new_AGEP = AGEP + 7)
+```
+
+It's fairly straight forward the equation in mutate is `old variable = new variable (changed)`.
+
+### Recode
+
+The `recode` function does the heavy lifting of turning all `1`'s into `Male`.
+
+```{r, eval=FALSE}
+recode(oldvarible,
+       "old value 1" = "new value 1",
+       "old value 2" = "new value 2")
+```
+
+We put everything together to get this code which uses both `mutate` and `recode` to make a new `SEX` variable which says `Male` and `Female`.
+
+
+```{r}
+ACS2018_TriCity_raw %>%
+  select(SEX) %>%
+  mutate(new_SEX = recode(SEX,
+                          "1" = "Male",
+                          "2" = "Female"))
+```
+
+`mutate` creates a new variable called `new_sex`. How are we making the new variable? By `recode`(ing) the variable `SEX`. Notice how inside of the recode we explain how the old value of `1` is to be come `Male` and similarly for `2` and `Female`.
+
+It's important to note that we did not change the `SEX` instead a new one was created. Also we didn't add `new_SEX` to `ACS2018_TriCity_raw` (check yourself and see). You would need to use `<-` to save the results with the new variable.
+
+## Putting it all together with several variables
+
+Let's say you have ten variables for your research questions, `SEX`, `DEYE`, `DEAR`, `AGEP`, `WAGP`, `WKHP`, `NP`, `BDSP`, `RNTP`, and `HINCP`. Let's make a new raw data set with just those. 
+
+Ignore: 
+
+```{r}
+mydata_raw <- ACS2018_TriCity_raw %>%
+  select(SEX, DEYE, DEAR, AGEP, WAGP, WKHP)
+```
+
+It doesn't print anything because R is saving the ten variables into `mydata_raw`. Let's `glimpse` it to see.
+
+```{r}
+mydata_raw %>%
+  glimpse
+```
+
+Success. It only has the six variables. It's simpler if you only work with the variables you need. Now we need to recode the variables and save them into a new dataframe called `mydata_clean`. The data dictionary says to make the following replacements for `DEAR` and `DEYE`:
+
+> Character 1  
+> DEAR  
+> Hearing difficulty   
+> 1 .Yes  
+> 2 .No  
+>
+> Character 1  
+> DEYE  
+> Vision difficulty   
+> 1 .Yes  
+> 2 .No  
+
+We won't recode the others. `AGEP` is the person's age so it stays a number. `WAGP` is a person's wage so it's also supposed to be a number. `WKHP` is the number of hours the person worked which also should stay as a number.
+
+```{r}
+mydata_clean <- mydata_raw %>%
+  mutate(new_SEX = recode(SEX, 
+                          "1" = "Male",
+                          "2" = "Female")) %>%
+  mutate(new_DEYE = recode(DEYE, 
+                          "1" = "Eye difficulty",
+                          "2" = "No eye difficulty")) %>%
+  mutate(new_DEAR = recode(DEAR, 
+                          "1" = "Hearing difficulty",
+                          "2" = "No hearing difficulty"))
+
+```
+
+```{r}
+mydata_clean %>%
+  glimpse
+```
+
+Never change the original data! If you recode a variable or change values, create a new one. This is one of the principles of reproducible analysis--don't change the original data and document all changes.
+
+Now let's remove the original variables. We will "subtract" them away using `select`. Remeber that we need to save the changes with the arrow `<-`
+
+```{r}
+mydata_clean <- mydata_clean %>%
+  select(-SEX, 
+         -DEAR, 
+         -DEYE)
+```
+```{r}
+mydata_clean %>%
+  glimpse
+```
+
+## Saving your clean data
+
+Now that we've created a new data frame with only the variables that we need and they're clean, we can save it. We will save our data (`myclean_data`) into the `Data` directory as `myclean_data.rds`.
+
+```{r}
+save(mydata_clean, file="/cloud/project/data/myclean_data.Rdata")
+```
+
+Next time you need the data to analyze, simply load it with `load("/cloud/project/data/myclean_data.RData")`.
+

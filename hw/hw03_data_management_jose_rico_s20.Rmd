@@ -1,0 +1,102 @@
+---
+title: "Week Three Assignment - Data Preparation"
+author: "Jose Rico"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default
+---
+
+
+```{r, echo=F}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE) #Chunk default settings 
+```
+
+## Project Set-up
+Library necessary packages 
+```{r}
+library(dplyr)
+library(janitor)
+```
+
+## Load in original data 
+Load in your raw data file - with `load` command for the `addhealth4` data
+```{r}
+load("/cloud/project/data/addhealth4.RData")
+```
+
+
+## New data frame with selected variables 
+```{r}
+mydata_raw <- addhealth4 %>% 
+  select(H4ID1, H4ED2, RACE, H4WS5)
+```
+
+
+
+
+## Recoding of variables
+
+### Variable `H4WS5`
+
+```{r}
+mydata_c <- mydata_raw %>% 
+  mutate(race_friends = recode_factor(H4WS5,
+                                "1"="all your race",
+                                "2"="black",
+                                "4"="asian_pacific_islander",
+                                "3"="native_wsaamerican",
+                                "1"="multiple_races",
+                                "6"="other",
+                                .ordered=T))
+```
+
+
+### Variable 2
+
+```{r}
+mydata_c <- mydata_raw %>% 
+  mutate(race_c = recode_factor(RACE,
+                                "5"="white",
+                                "2"="black",
+                                "4"="asian_pacific_islander",
+                                "3"="native_american",
+                                "1"="multiple_races",
+                                "6"="other",
+                                .ordered=T))
+```
+
+### Variable 3
+
+### Variable 4
+
+## Cleaned data frame
+
+**Step 1** : Select only the variables that you want to keep, so you only have the version of the variables that you want in your data frame.
+```{r}
+clean <- mydata_c %>% select(race_c, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, vigorous_activity)
+```
+
+Alternative Approach to Step 1: You can also use `select` to remove variable with the `-variable`
+```{r}
+#clean <- mydata_c %>% select(-RACE, -H4DA11)
+```
+
+**Step 2**: Save the resulting data set to your `data` folder as `datasetname_clean.Rdata` e.g. `addhealth_clean.Rdata`. 
+```{r}
+save(clean, file="/cloud/project/data/myaddhealth_clean.Rdata")
+```
+
+
+
+## Table of variables
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+addhealthvar  |  my_addhealthvar  | description (from addhealth)
+
+
