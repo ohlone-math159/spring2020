@@ -3125,11 +3125,11 @@ slide:not(.current) .plotly.html-widget{
 
 </article></slide><slide class=""><hgroup><h2>Library Command</h2></hgroup><article  id="library-command">
 
-<pre class = 'prettyprint lang-r'>library(tidyverse)
+<pre class = 'prettyprint lang-r'>library(dplyr)
 library(janitor)</pre>
 
 <ul class = 'build'>
-<li>loads in the <code>tidyverse</code> and <code>janitor</code> packages</li>
+<li>loads in the <code>dplyr</code> and <code>janitor</code> packages</li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Getting the data file into the R environment</h2></hgroup><article  id="getting-the-data-file-into-the-r-environment">
@@ -3148,10 +3148,10 @@ library(janitor)</pre>
   select(H4ID1, H4ED2)</pre>
 
 <ul class = 'build'>
-<li>we just selected a single variable <code>H4ID1</code> and placed it into the dataframe <code>mydata_raw</code></li>
+<li>we just selected two variables <code>H4ID1</code> and <code>H4ED2</code> from the <code>addhealth4</code> data frame and placed it into a new dataframe called <code>mydata_raw</code></li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2><code>gimpse</code> the new dataframe</h2></hgroup><article  id="gimpse-the-new-dataframe">
+</article></slide><slide class=""><hgroup><h2><code>glimpse</code> the new dataframe</h2></hgroup><article  id="glimpse-the-new-dataframe">
 
 <pre class = 'prettyprint lang-r'>glimpse(mydata_raw)</pre>
 
@@ -3189,13 +3189,15 @@ library(janitor)</pre>
 
 <pre class = 'prettyprint lang-r'>mydata_c %&gt;% 
   tabyl(health_limit_activity) %&gt;% 
-  adorn_pct_formatting(digits=1)</pre>
+  adorn_pct_formatting(digits=1) %&gt;% 
+  adorn_totals()</pre>
 
 <pre >##  health_limit_activity    n percent
 ##            not limited 4645   90.8%
 ##       limited a little  336    6.6%
 ##          limited a lot  132    2.6%
-##             don&#39;t know    1    0.0%</pre>
+##             don&#39;t know    1    0.0%
+##                  Total 5114       -</pre>
 
 </article></slide><slide class=""><hgroup><h2>Categorical Variable with many levels</h2></hgroup><article  id="categorical-variable-with-many-levels" class="smaller">
 
@@ -3225,14 +3227,16 @@ library(janitor)</pre>
 
 <pre class = 'prettyprint lang-r'>mydata_c %&gt;% 
   tabyl(educ_completed) %&gt;% 
-  adorn_pct_formatting(digits=1)</pre>
+  adorn_pct_formatting(digits=1) %&gt;% 
+  adorn_totals()</pre>
 
 <pre >##  educ_completed    n percent
 ##     not hs grad  399    7.8%
 ##         hs grad 3046   59.6%
 ##       bachelors 1250   24.4%
 ##      adv degree  418    8.2%
-##      don&#39;t know    1    0.0%</pre>
+##      don&#39;t know    1    0.0%
+##           Total 5114       -</pre>
 
 </article></slide><slide class=""><hgroup><h2>Try again - Recode to 5 levels</h2></hgroup><article  id="try-again---recode-to-5-levels">
 
@@ -3258,7 +3262,8 @@ library(janitor)</pre>
 
 <pre class = 'prettyprint lang-r'>mydata_c %&gt;% 
   tabyl(educ_completed_5) %&gt;% 
-  adorn_pct_formatting(digits=1)</pre>
+  adorn_pct_formatting(digits=1) %&gt;% 
+  adorn_totals()</pre>
 
 <pre >##  educ_completed_5    n percent
 ##       not hs grad  399    7.8%
@@ -3266,7 +3271,8 @@ library(janitor)</pre>
 ##           post hs 2211   43.2%
 ##         bachelors 1250   24.4%
 ##        adv degree  418    8.2%
-##        don&#39;t know    1    0.0%</pre>
+##        don&#39;t know    1    0.0%
+##             Total 5114       -</pre>
 
 </article></slide><slide class=""><hgroup><h2>Recode to a Binary Variable (Yes/No)</h2></hgroup><article  id="recode-to-a-binary-variable-yesno">
 
@@ -3292,12 +3298,14 @@ library(janitor)</pre>
 
 <pre class = 'prettyprint lang-r'>mydata_c %&gt;% 
   tabyl(college_deg) %&gt;% 
-  adorn_pct_formatting(digits=1)</pre>
+  adorn_pct_formatting(digits=1) %&gt;% 
+  adorn_totals()</pre>
 
 <pre >##  college_deg    n percent
 ##           no 3445   67.4%
 ##          yes 1668   32.6%
-##   don&#39;t know    1    0.0%</pre></article></slide>
+##   don&#39;t know    1    0.0%
+##        Total 5114       -</pre></article></slide>
 
 
   <slide class="backdrop"></slide>

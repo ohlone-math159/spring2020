@@ -51,6 +51,13 @@ load("/cloud/project/data/addhealth4.RData")
     - As you select your variables put this selection into a new data frame called `mydata`. 
     - (Later you might need to add variable to your selection, which will just require you to modify and run this `Rmd`)
 
+
+```{r}
+addhealth4 %>% 
+  tabyl(RACE, ETHNICITY)
+```
+
+
 ```{r}
 mydata <- addhealth4 %>% 
   select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11, H4ED2 )
@@ -142,7 +149,48 @@ Check the Codebook
 
 This variables has 14 different levels, which could make analysis challenging.  So, one strategy is to collapse the levels to fewer.  **Need to complete for next semester**
 
+## 
 
+```{r}
+sex <- addhealth4 %>% 
+  select(H4RD14, H4RD14T, BIO_SEX4, RACE)
+
+sex %>% 
+  tabyl(H4RD14, H4RD14T)
+```
+
+```{r}
+sex <- sex %>% 
+  mutate(H4RD14C = recode(H4RD14T,
+                          "1"=52,
+                          "2"=12,
+                          "3"=1
+                          )) %>% 
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "6")) %>% 
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "8")) %>% 
+  mutate(yearly_no_sex = round(H4RD14*H4RD14C,0))
+  
+```
+
+```{r}
+sex %>% 
+  filter(yearly_no_sex < 500) %>% 
+  ggplot(aes(x=yearly_no_sex, color=))+
+  geom_histogram(binwidth=10, center=0.5, closed="left")+
+  facet_wrap(~H4RD14T, ncol=1)
+  
+```
+
+```{r}
+sex %>% 
+  filter(yearly_no_sex < 500, H4RD14T=="1") %>% 
+  ggplot(aes(x=yearly_no_sex))+
+  geom_density()+
+  facet_wrap(~RACE, ncol=1)
+  
+```
 
 6. Create your final cleaned data frame.
     - Select only the variables that you want to keep, so you only have the version of the variables that you want in your data frame.

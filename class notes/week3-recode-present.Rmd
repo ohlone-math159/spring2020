@@ -17,11 +17,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Library Command
 
 ```{r, message=FALSE, warning= F}
-library(tidyverse)
+library(dplyr)
 library(janitor)
 ```
 
-  >- loads in the `tidyverse` and `janitor` packages
+  >- loads in the `dplyr` and `janitor` packages
 
 ## Getting the data file into the R environment
 
@@ -43,9 +43,9 @@ mydata_raw <- addhealth4 %>%
   select(H4ID1, H4ED2)
 ```
 
-  >- we just selected a single variable `H4ID1` and placed it into the dataframe `mydata_raw`
+  >- we just selected two variables `H4ID1` and `H4ED2` from the `addhealth4` data frame and placed it into a new dataframe called `mydata_raw`
 
-## `gimpse` the new dataframe
+## `glimpse` the new dataframe
 
 ```{r}
 glimpse(mydata_raw)
@@ -81,7 +81,8 @@ mydata_c %>%
 ```{r}
 mydata_c %>% 
   tabyl(health_limit_activity) %>% 
-  adorn_pct_formatting(digits=1)
+  adorn_pct_formatting(digits=1) %>% 
+  adorn_totals()
 ```
 
 ## Categorical Variable with many levels {.smaller}
@@ -118,7 +119,8 @@ mydata_c <- mydata_raw %>%
 ```{r}
 mydata_c %>% 
   tabyl(educ_completed) %>% 
-  adorn_pct_formatting(digits=1)
+  adorn_pct_formatting(digits=1) %>% 
+  adorn_totals()
 ```
 
 ## Try again - Recode to 5 levels
@@ -149,7 +151,8 @@ mydata_c <- mydata_raw %>%
 ```{r}
 mydata_c %>% 
   tabyl(educ_completed_5) %>% 
-  adorn_pct_formatting(digits=1)
+  adorn_pct_formatting(digits=1) %>% 
+  adorn_totals()
 ```
 
 ## Recode to a Binary Variable (Yes/No)
@@ -180,5 +183,6 @@ mydata_c <- mydata_raw %>%
 ```{r}
 mydata_c %>% 
   tabyl(college_deg) %>% 
-  adorn_pct_formatting(digits=1)
+  adorn_pct_formatting(digits=1) %>% 
+  adorn_totals()
 ```
