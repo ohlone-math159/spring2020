@@ -1,15 +1,11 @@
 ---
 title: "Describing distributions of data"
 output:
-  pdf_document: default
-  word_document:
-    toc: yes
   html_document:
     highlight: tango
-    theme: readable
+    theme: spacelab
     toc: yes
     toc_float: yes
-css: ../css/sandstone.css
 ---
 
 # Assignment Overview
@@ -18,11 +14,12 @@ There are a variety of conventional ways to visualize data - tables, histograms,
 
 # Instructions
 
-* Use the template provided: [[RMD]](hw04_univ_graphing_template.Rmd). 
+* Use the template provided: 
+(hw04_univ_graphing_template.Rmd). 
 * Completely describe 2 categorical and 2 quantitative variables using 
     - A table of summary statistics,
     - An appropriate plot with titles and axes labels, 
-    - A short paragraph description in full complete English sentences. 
+    - A short paragraph description in full complete English sentences.  
 
 ## Guidiance
 
@@ -39,21 +36,19 @@ There are a variety of conventional ways to visualize data - tables, histograms,
     - If yes, are these true outliers or false (due to data management or input error) outliers?
 * Reread your explanation for context grammer, spelling and common sense. 
 
-# Submission
-
-1. Upload the final PDF to `04 Univariate Graphing` folder in Google Drive with the file name: `univ_graphing_userid.pdf` by the due date. 
-
 \newpage 
 
 # Example
 This example uses the `mpg` data set from the `ggplot2` package. 
 ```{r, warning=FALSE, message=FALSE}
 library(sjPlot) # For plotting using the sjp.frq() function
+library(sjlabelled)
 library(ggplot2) # For plotting using ggplot() function
 library(knitr) # To make nice tables
 library(descr) # For plotting using the freq() function
-mpg <- ggplot2::mpg # you would load() your clean data here
-knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE) # options to suppress warnings and messages in subsequent code chunks
+library(janitor)
+library(dplyr)
+mpg <- ggplot2::mpg # you would load() or readRDS() your clean data here
 ```
 
 ## Example of a basic-level answer for a categorical variable
@@ -62,7 +57,11 @@ This example shows a draft style plot, direct computer output showing/copied. Po
 > class
 
 ```{r}
-freq(mpg$class)
+mpg %>%
+  ggplot(aes(class)) + geom_bar()
+
+mpg %>%
+  tabyl(class)
 ```
 
 > theres more suvs than compacts. 2% are 2seaters. there are 5 2seaters 47 cmpact 41 midize 11 minivans 33 pickups 35% subcompacts, 62 suv and 234 total cars. 
@@ -73,18 +72,26 @@ This example has a cleaned up plot, full English sentences, useful text formatti
 > The `class` variable from the `mpg` data set is a catgorical variable that describes the type of vehicle being measured. Some levels of this categorical variable include _compact_, _pickup_ and _suv_. 
 
 ```{r, fig.height=4, fig.align='center'}
-set_theme(base = theme_classic())
-sjp.frq(mpg$class)
+mpg %>%
+  ggplot(aes(class)) +
+    geom_bar() +
+    ggtitle("Class/type of car") +
+    xlab("Class")
+
+mpg %>%
+  tabyl(class) %>%
+  adorn_pct_formatting(digits=1) %>%
+  adorn_totals()
 ```
 
-> Sub compact cars are the most frequently reported type of car, making up over one-quarter (26.5%) of the cars in this data set with n=62 cars represented. The least represented car is a compact car with n=5 (2.1%) records. 
-
-\newpage
+> Sub compact cars are the most frequently reported type of car, making up over one-quarter (26.5%) of the cars in this data set with n=62 cars represented. The least represented car is a compact car with n=5 (2.1%) records.
 
 ## Example of a basic-level answer for a quantiative variable
 No english description provided, no verbal explanation of what information was gained from these plots. 
 ```{r}
-ggplot(mpg, aes(cty)) + geom_histogram()
+mpg %>%
+  ggplot(aes(cty)) + geom_histogram()
+
 summary(mpg$cty)
 ```
 
@@ -93,12 +100,16 @@ This example uses a histogram with overlaid density curve, and a boxplot to unde
 
 > The `cty` variable records the miles per gallon (mpg) achieved during city driving. This is a quantititative numeric variable. 
 
-```{r, fig.height=3, fig.width=4, fig.align='center'}
-ggplot(mpg, aes(x=cty)) + geom_histogram(aes(y=..density..), 
-                                         fill="grey", binwidth = 2) + 
-      geom_density() + xlab("MPG") +
-      ggtitle("City miles per gallon (MPG)") 
+```{r, fig.height=4, fig.align='center'}
+mpg %>%
+  ggplot(aes(x=cty)) + 
+    geom_histogram(aes(y=..density..), fill="grey", binwidth = 2) + 
+      geom_density() + 
+      xlab("MPG") +
+      ggtitle("City miles per gallon (MPG)")
+
 boxplot(mpg$cty)
+
 kable(t(c(summary(mpg$cty), sd=sd(mpg$cty))), digits=1)
 ```
 

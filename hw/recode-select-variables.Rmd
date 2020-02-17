@@ -1,0 +1,107 @@
+---
+title: "Select and Recode Variables"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default
+---
+
+
+```{r, echo=F}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE) #Chunk default settings 
+```
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+```
+
+3.  Load in your data.
+
+Load in your raw data file - with `load` command for the `addhealth4` data
+```{r}
+load("/cloud/project/data/addhealth4.RData")
+```
+
+Select variables
+```{r}
+mydata <- addhealth4 %>% 
+  select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11, H4ED2, H4KK15B, H4RD14, H4RD14T, H4LM19)
+```
+
+Recode variables
+```{r}
+mydata_c <- mydata %>% 
+  mutate(race_c = recode_factor(RACE,
+                                "5"="white",
+                                "2"="black",
+                                "4"="asian_pacific_islander",
+                                "3"="native_american",
+                                "1"="multiple_races",
+                                "6"="other",
+                                .ordered=T)) %>% 
+  mutate(vigorous_activity = recode_factor(H4DA11,
+                                "0"="no",
+                                "1"="yes",
+                                "6"="refused",
+                                "8"="don't know",
+                                .ordered=T)) %>% 
+  mutate(H4RD14C = recode(H4RD14T,
+                          "1"=52,
+                          "2"=12,
+                          "3"=1
+                          )) %>% 
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "6")) %>% 
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "8")) %>% 
+  mutate(yearly_no_sex = round(H4RD14*H4RD14C,0)) %>% 
+    mutate(gender = recode_factor(BIO_SEX4,
+                                  "1" ="male",
+                                  "2"="female")) %>% 
+  mutate(college_deg = recode_factor(H4ED2,
+                             "1"="no",
+                             "2"="no",
+                             "3"="no",
+                             "4"="no",
+                             "5"="no",
+                             "6"="no",
+                             "7"="yes",
+                             "8"="yes",
+                             "9"="yes",
+                             "10"="yes",
+                             "11"="yes",
+                             "12"="yes",
+                             "13"="yes",
+                             "98"="don't know",
+                             .ordered=T)) %>% 
+  mutate(too_tired = recode_factor(H4MH23, 
+                                   "0"="never or rarely",
+                                   "1"="sometimes",
+                                   "2"="alot of the time",
+                                   "3"="most of the time or all of the time",
+                                   "6"="refused")) %>% 
+  mutate(age = iyear4-h4od1y) %>% 
+  mutate(hrs_work_week = H4LM19 )
+    
+  
+```
+
+```{r}
+glimpse(mydata_c)
+```
+
+```{r}
+clean <- mydata_c %>% select(race_c, gender , age, college_deg, vigorous_activity, too_tired, hrs_work_week  )
+```
+
+```{r}
+save(clean, file="/cloud/project/data/demo_addhealth_clean.Rdata")
+```
+

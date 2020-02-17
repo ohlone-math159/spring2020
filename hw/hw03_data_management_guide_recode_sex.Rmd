@@ -34,6 +34,7 @@ You are **not** expected to have completed data management for every one of your
 
 ```{r}
 library(dplyr)
+library(ggplot2)
 library(janitor)
 ```
 
@@ -60,9 +61,15 @@ addhealth4 %>%
 
 ```{r}
 mydata <- addhealth4 %>% 
-  select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11, H4ED2 )
+  select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11, H4ED2, H4KK15B )
 ```
 
+
+```{r}
+mydata %>% 
+  tabyl(H4KK15B, BIO_SEX4) %>% 
+  adorn_percentages("col")
+```
 
 5. Check each variable for necessary adjustments. Complete each of the following steps for each variable.
     - Recode the data as necessary 
@@ -132,7 +139,7 @@ mydata_c <- mydata_c %>%
 Check
 ```{r}
 mydata_c %>% 
-  tabyl(H4DA11, vigorous_activity)
+tabyl(H4DA11, vigorous_activity)
 ```
 
 ```{r}
@@ -220,12 +227,21 @@ Original Variable  |   New Variable  |    Description
 RACE |  race_c  | subject's race
 H4DA11 |vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
 3rd v |  new name |  big long description j
+H43455 | thought_suicide | During the past 12 months, have you ever seriously thought about
+committing suicide?
 
 
 col a |  colb |   col c 
 -----|------|-----
 123 |  numbers |  this is a description
 456 |  2n num  |  this is not a description
+
+
+
+
+
+
+
 
 
 

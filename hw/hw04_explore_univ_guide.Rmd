@@ -1,0 +1,128 @@
+---
+title: "explore-variables"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default
+---
+
+
+```{r set chunk option, echo=F}
+knitr::opts_chunk$set(echo = F, warning=FALSE, message=FALSE, fig.height=4, fig.align='center') #Chunk default settings 
+```
+
+```{r lbrary packages}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(kableExtra)
+```
+
+
+```{r set ggplot2 parameters}
+theme_update(plot.title = element_text(hjust = 0.5))
+```
+
+```{r load data}
+load("/cloud/project/data/demo_addhealth_clean.Rdata")
+```
+
+
+## Table of Variables
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+RACE  |  race_c  | subject's race
+BIO_SEX4 | gender | subject's gender
+--  |  age | subject's age
+H4ED2 | college_deg | Dd you complete college (bachelor's degree)?
+H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
+H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
+H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
+## Examing categorical variable 
+### 1st Categorical `vigorous_activity`
+
+**Numerical Summary Table**  
+
+```{r summary table cat 1}
+dt <- clean %>%
+  filter(vigorous_activity==c("yes","no")) %>% 
+  tabyl(vigorous_activity) %>%
+  adorn_pct_formatting(digits=1) %>%
+  adorn_totals()
+dt %>%
+  kable() %>%
+  kable_styling(full_width = F, position="center")
+```
+
+**Bar Plot - Frequency of Levels**
+
+```{r bar plot cat 1}
+clean %>% 
+  filter(vigorous_activity==c("yes","no")) %>% 
+  ggplot(aes(x=vigorous_activity, y= ..prop.., group=1))+
+  geom_bar(fill="steelblue", width=0.5)+
+  ggtitle("In the past 24 hours, have you participated in vigorous physical activity
+  long enough to work up a sweat, get your heart thumping, or get out of breath?") +
+  xlab("subject's response")
+```
+
+## Examining numerical variable 
+### 1st Numerical `hrs_work_week`
+
+**Numerical Summary Table** 
+
+```{r summarize num 1}
+hours <- clean %>% 
+  filter(hrs_work_week < 121) %>% 
+  summarize(min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = mean(hrs_work_week),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = sd(hrs_work_week))
+
+kable(round(hours,2)) %>% 
+kable_styling(full_width = F, position="center")
+```
+
+
+**Histogram - visualization of the distribution**
+
+```{r hist num 1}
+clean %>%
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(x=hrs_work_week)) + 
+    geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5) + 
+      xlab("hours per week") +
+      ggtitle("How many hours a week (do/did) you usually work at this job?") 
+```
+
+**Boxplot - visualization of 5 number summary**
+
+```{r boxplot num 1}
+clean %>%
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(y=hrs_work_week, x=0)) + 
+    geom_boxplot(color="steelblue", width=0.6) + 
+      ggtitle("How many hours a week (do/did) you usually work at this job?") +
+  coord_flip()
+```
+
+
+
+
+
+
+
+
+
+
+
+
