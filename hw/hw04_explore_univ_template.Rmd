@@ -1,5 +1,5 @@
 ---
-title: "explore-variables"
+title: "HW 4 Explore a Single Variable - Guide"
 output:
   html_document:
     theme: sandstone
@@ -15,13 +15,12 @@ output:
 knitr::opts_chunk$set(echo = F, warning=FALSE, message=FALSE, fig.height=4, fig.align='center') #Chunk default settings 
 ```
 
-```{r lbrary packages}
+```{r library packages}
 library(dplyr)
 library(ggplot2)
 library(janitor)
 library(kableExtra)
 ```
-
 
 ```{r set ggplot2 parameters}
 theme_update(plot.title = element_text(hjust = 0.5))
@@ -32,7 +31,7 @@ load("/cloud/project/data/demo_addhealth_clean.Rdata")
 ```
 
 
-## Table of Variables
+# Table of Variables
 
 Original Variable  |   New Variable  |    Description
 -------------------|-----------------|------------------
@@ -44,18 +43,18 @@ H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigo
 H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
 H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
 
-## Examing categorical variable 
-### 1st Categorical `vigorous_activity`
+# Examing categorical variable 
+## 1st Categorical `vigorous_activity`
 
 **Numerical Summary Table**  
 
 ```{r summary table cat 1}
-dt <- clean %>%
+va <- clean %>%
   #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
   tabyl(vigorous_activity) %>%
   adorn_pct_formatting(digits=1) %>%
   adorn_totals()
-dt %>%
+va %>%
   kable() %>%
   kable_styling(full_width = F, position="center")
 ```
@@ -72,8 +71,16 @@ clean %>%
   xlab("subject's response")
 ```
 
-## Examining numerical variable 
-### 1st Numerical `hrs_work_week`
+**Narrative summary**  
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+The participants in the **addhealth** study were asked, "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?*" **5111** out of **5114** provided a "yes" or "no" response, with approximately **40%** of the participant responding **yes**.  Approximately **2 out of 5** participants have participated in a vigorous activity in the past 24 hours.
+</div>
+
+# Examining numerical variable 
+## 1st Numerical `hrs_work_week`
 
 **Numerical Summary Table** 
 
@@ -89,7 +96,7 @@ hours <- clean %>%
             max = max(hrs_work_week),
             sd = sd(hrs_work_week))
 
-kable(round(hours,2)) %>% 
+kable(round(hours,1)) %>% 
 kable_styling(full_width = F, position="center")
 ```
 
@@ -112,16 +119,24 @@ clean %>%
   filter(hrs_work_week < 121) %>% 
   ggplot(aes(y=hrs_work_week, x=0)) + 
     geom_boxplot(color="steelblue", width=0.6) + 
-      ggtitle("How many hours a week (do/did) you usually work at this job?") +
+      ggtitle("How many hours a week (do/did) you usually work at this job?")+
   coord_flip()
 ```
 
+**Narrative Summary**
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
 
+Participants were asked, in reference to their curren or most recent job (which they work more than 10 hours/week), "*How many hours a week (do/did) you usually work at this job?*"  
 
+* **5023** out of **5114** responded with hours between 10 and 120.  
+  
+* **82** participants were a **legitimate skip** since they have not worked a paying job for at least 10 hours a week, they are not represented here.  
 
-
-
-
+The center of the distribution is best described with the **mode** and **median** of 40 hours/week.   There is considerable overall variation as hours vary from 10 to 120, although the middle 50% of particpants are between 40 and 45 hours, for an interquartile range (**IQR**) of 5 hours.  Weekly work hours is *slightly skewed to the **right*** (since outliers extend, to the right, to 120 hours).  This skew also results in the **mean** being greater than the **median**, which is a typically characteristic of right skewed distributions. 
+</div>
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: "HW 4 Explore a Single Variable Guide"
+title: "HW 4 Explore a Single Variable - Guide"
 output:
   html_document:
     theme: sandstone
