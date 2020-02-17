@@ -49,9 +49,14 @@ H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at th
 
 **Numerical Summary Table**  
 
+```{r}
+summary(clean$vigorous_activity)
+```
+
+
 ```{r summary table cat 1}
 dt <- clean %>%
-  filter(vigorous_activity==c("yes","no")) %>% 
+  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
   tabyl(vigorous_activity) %>%
   adorn_pct_formatting(digits=1) %>%
   adorn_totals()
@@ -64,7 +69,7 @@ dt %>%
 
 ```{r bar plot cat 1}
 clean %>% 
-  filter(vigorous_activity==c("yes","no")) %>% 
+  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
   ggplot(aes(x=vigorous_activity, y= ..prop.., group=1))+
   geom_bar(fill="steelblue", width=0.5)+
   ggtitle("In the past 24 hours, have you participated in vigorous physical activity
@@ -80,7 +85,8 @@ clean %>%
 ```{r summarize num 1}
 hours <- clean %>% 
   filter(hrs_work_week < 121) %>% 
-  summarize(min = min(hrs_work_week),
+  summarize(n = n(),
+            min = min(hrs_work_week),
             q1 = quantile(hrs_work_week, probs=0.25),
             median = median(hrs_work_week),
             mean = mean(hrs_work_week),
