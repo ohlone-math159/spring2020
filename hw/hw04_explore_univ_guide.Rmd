@@ -49,11 +49,6 @@ H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at th
 
 **Numerical Summary Table**  
 
-```{r}
-summary(clean$vigorous_activity)
-```
-
-
 ```{r summary table cat 1}
 dt <- clean %>%
   #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
