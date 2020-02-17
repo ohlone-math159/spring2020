@@ -72,10 +72,7 @@ clean %>%
 ```
 
 **Narrative summary**  
-<style>
-div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
-</style>
-<div class = "blue">
+<div id = "narrative">
 The participants in the **addhealth** study were asked, "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?*" **5111** out of **5114** provided a "yes" or "no" response, with approximately **40%** of the participant responding **yes**.  Approximately **2 out of 5** participants have participated in a vigorous activity in the past 24 hours.
 </div>
 
@@ -124,10 +121,7 @@ clean %>%
 ```
 
 **Narrative Summary**
-<style>
-div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
-</style>
-<div class = "blue">
+<div id = "narrative">
 
 Participants were asked, in reference to their curren or most recent job (which they work more than 10 hours/week), "*How many hours a week (do/did) you usually work at this job?*"  
 

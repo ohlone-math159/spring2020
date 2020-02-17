@@ -17,6 +17,26 @@ h4 {
   color: #5A6056;
 }
 
+div#note { 
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: rgba(76, 114, 29, 0.8);
+    border:1px solid rgba(76, 114, 29, 0.2);
+    padding: 10px 10px;
+    background: rgba(76, 114, 29, 0.1);
+    border-radius: 5px;
+}
+
+div#narrative { 
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: "black"
+    border:1px solid rgba(76, 114, 29, 0.2);
+    padding: 10px 10px;
+    background: #e6f0ff;
+    border-radius: 5px;
+}
+
 <style>
   .col2 {
     columns: 2 200px;         /* number of columns and width in pixels*/
@@ -29,3 +49,5 @@ h4 {
     -moz-columns: 3 100px;
   }
 </style>
+
+
