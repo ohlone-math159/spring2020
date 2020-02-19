@@ -1,0 +1,144 @@
+---
+title: "HW 4 Explore a Single Variable - Guide"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default
+---
+
+
+```{r set chunk option, echo=F}
+knitr::opts_chunk$set(echo = T, warning=FALSE, message=FALSE, fig.height=4, fig.align='center') #Chunk default settings 
+```
+
+```{r library packages}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(kableExtra)
+```
+
+```{r set ggplot2 parameters}
+theme_update(plot.title = element_text(hjust = 0.5))
+```
+
+```{r load data}
+load("/cloud/project/data/demo_addhealth_clean.Rdata")
+
+```
+
+
+# Table of Variables
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+RACE  |  race_c  | subject's race
+BIO_SEX4 | gender | subject's gender
+--  |  age | subject's age
+H4ED2 | college_deg | Dd you complete college (bachelor's degree)?
+H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
+H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
+H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
+# Examing categorical variable 
+## 1st Categorical `vigorous_activity`
+
+**Numerical Summary Table**  
+
+```{r summary table cat 1}
+clean %>%
+  tabyl(vigorous_activity) %>%
+  adorn_pct_formatting(digits=1) %>%
+  adorn_totals()%>%
+  kable() %>%
+  kable_styling(full_width = F, position="center")
+```
+, y= ..prop.., group=1
+fill="steelblue", width=0.5)+
+  ggtitle("In the past 24 hours, have you participated in vigorous physical activity
+  long enough to work up a sweat, get your heart thumping, or get out of breath?") +
+  
+**Bar Plot - Frequency of Levels**
+
+```{r bar plot cat 1}
+clean %>% 
+  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+  ggplot(aes(x=vigorous_activity, y= ..prop.., group=1)) +
+    geom_bar(fill="steelblue", width=0.5) +
+      ggtitle("In the past 24 hours, have you participated in vigorous physical activity long 
+enough to work up a sweat, get your heart thumping, or get out of breath?") +
+      xlab("subject's response")
+  
+```
+
+**Narrative summary**  
+<div id = "narrative">
+The participants in the **addhealth** study were asked, "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?*" **5111** out of **5114** provided a "yes" or "no" response, with approximately **40%** of the participant responding **yes**.  Approximately **2 out of 5** participants have participated in a vigorous activity in the past 24 hours.
+</div>
+
+# Examining numerical variable 
+## 1st Numerical `hrs_work_week`
+
+**Numerical Summary Table** 
+
+```{r summarize num 1}
+hours <- clean %>% 
+  filter(hrs_work_week < 121) %>% 
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = mean(hrs_work_week),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = sd(hrs_work_week))
+
+kable(round(hours,1)) %>% 
+kable_styling(full_width = F, position="center")
+```
+
+
+**Histogram - visualization of the distribution**
+
+```{r hist num 1}
+clean %>%
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(x=hrs_work_week)) + 
+    geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5) + 
+      xlab("hours per week") +
+      ggtitle("How many hours a week (do/did) you usually work at this job?") 
+```
+
+**Boxplot - visualization of 5 number summary**
+
+```{r boxplot num 1}
+clean %>%
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(y=hrs_work_week, x=0)) + 
+    geom_boxplot(color="steelblue", width=0.6) + 
+      ggtitle("How many hours a week (do/did) you usually work at this job?")+
+  coord_flip()
+```
+
+
+
+**Narrative Summary**
+<div id = "narrative">
+
+Participants were asked, in reference to their curren or most recent job (which they work more than 10 hours/week), "*How many hours a week (do/did) you usually work at this job?*"  
+
+* **5023** out of **5114** responded with hours between 10 and 120.  
+  
+* **82** participants were a **legitimate skip** since they have not worked a paying job for at least 10 hours a week, they are not represented here.  
+
+The center of the distribution is best described with the **mode** and **median** of 40 hours/week.   There is considerable overall variation as hours vary from 10 to 120, although the middle 50% of particpants are between 40 and 45 hours, for an interquartile range (**IQR**) of 5 hours.  Weekly work hours is *slightly skewed to the **right*** (since outliers extend, to the right, to 120 hours).  This skew also results in the **mean** being greater than the **median**, which is a typically characteristic of right skewed distributions. 
+</div>
+
+
+
+
+

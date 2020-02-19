@@ -1,0 +1,226 @@
+---
+title: "HW 4 Explore a Single Variable - Guide"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: /cloud/project/css/sandstone.css
+  pdf_document: default
+---
+
+
+```{r set chunk option, echo=F}
+knitr::opts_chunk$set(echo = T, warning=FALSE, message=FALSE, fig.height=4, fig.align='center') #Chunk default settings 
+```
+
+# Assignment Overview
+
+There are a variety of conventional ways to visualize data - tables, histograms, bar graphs, etc. The purpose is always to examine the distribution of variables related to your research question. You will create a visualization along with table of summary statistics (for quantitative variables) or frequency and proportion table (for categorical), and then a summary paragraph that brings it all together. 
+
+# Instructions
+
+* Use the template provided `hw04_explore_univ_template.Rmd` 
+* Completely describe 2 categorical and 2 numerical variables using 
+    - A table of summary statistics,
+    - An appropriate plot with titles and axes labels, 
+    - A short paragraph description in full complete English sentences.  
+
+## Guidiance for numerical variables
+
+* What is the trend in the data? What exactly does the chart show? (Use the chart title to help you answer this question)
+* Describe the shape:
+    - Symmetry/Skewness - Is it symmetric, skewed right, or skewed left?
+    - Modality - Is it uniform, unimodal, or bimodal?             
+* Describe the spread:
+    - Variability - What is the approximate range of the data (x-axis)?
+    - Does the variable have a lot of variability in the data ?
+* Describe the center: What is the mean/median/midpoint of the data? (Pick one or two). Don't 
+* Describe the outliers (note: there may not be any for every graph):
+    - Are there any outliers for the variable?
+    - If yes, are these true outliers or false (due to data management or input error) outliers?
+* Reread your explanation for context grammer, spelling and common sense. 
+
+## Introduction to **The Grammar of Graphics**  
+
+In this problem set we will use the `ggplot2` package to generate graphics. The "The Grammar of Graphics," is the theoretical basis for the `ggplot2` package. Much like how we construct sentences in any language by using a linguistic grammar (nouns, verbs, etc.), the grammar of graphics allows us to specify the components of a statistical graphic.
+
+In short, the grammar tells us that:
+
+> A statistical graphic is a `mapping` of `data` variables to `aes`thetic attributes of `geom`etric objects.
+
+We can break a graphic into the following three **essential** components:
+
+- `data`: the data-set comprised of variables that we plot
+- `geom`: this refers to our type of `geom`etric objects we see in our plot (points, lines, bars, etc.)
+- `aes`: aesthetic attributes of the geometric object that we can perceive on a graphic. For example, x/y position, color, shape, and size. Each assigned aesthetic attribute can be mapped to a variable in our data-set.
+
+
+## Library necessary packages
+```{r library packages}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(kableExtra)
+```
+
+## Set `ggplot2` parameters (centers plot titles)
+```{r set ggplot2 parameters}
+theme_update(plot.title = element_text(hjust = 0.5))
+```
+
+## Load data frame from HW 3 - Data Management
+```{r load data}
+load("/cloud/project/data/demo_addhealth_clean.Rdata")
+```
+
+
+# Table of Variables
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+RACE  |  race_c  | subject's race
+BIO_SEX4 | gender | subject's gender
+--  |  age | subject's age
+H4ED2 | college_deg | Dd you complete college (bachelor's degree)?
+H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
+H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
+H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
+# Examing categorical variable 
+## 1st Categorical `vigorous_activity`
+
+**Numerical Summary Table**  
+
+<div id="note"> 
+To create a table that has a nice output for `html`, we have a 2 step process.  
+
+1. use `tabyl` to create the intial table
+
+2. use `kable` to provide styling
+</div>
+
+```{r summary table cat 1}
+va <- clean %>%
+  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+  tabyl(vigorous_activity) %>%
+  adorn_pct_formatting(digits=1) %>%
+  adorn_totals()
+va %>%
+  kable() %>%
+  kable_styling(full_width = F, position="center")
+```
+
+**Bar Plot - Frequency/Proportion of Levels**
+
+<div id="note"> 
+The bar plot below has some modification to default `geom_bar` bar plot.  The default setting are to display the **counts** for each level.  By inserting the `aes`thetic `y=..prop..` the bar plot displays the **proportion** for each level to the the whole (i.e., percents add up to 1.0 or 100%).  Also note that the additional `aes` argument of  `group=1` is also needed when plotting a single categorical variable.
+</div>
+
+```{r bar plot cat 1}
+clean %>% 
+  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+  ggplot(aes(x=vigorous_activity, y= ..prop.., group=1))+
+  geom_bar(fill="steelblue", width=0.5)+
+  ggtitle("In the past 24 hours, have you participated in vigorous physical activity
+  long enough to work up a sweat, get your heart thumping, or get out of breath?") +
+  xlab("subject's response")
+```
+
+**Narrative summary**  
+<div id="narrative">
+The participant in the **addhealth** study were asked, "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?*" **5111** out of **5114** provided a "yes" or "no" response, with approximately **40%** of the participant responding **yes**.  Approximately **2 out of 5** participants have participated in a vigorous activity in the past 24 hours.
+</div>
+
+# Examining numerical variable 
+## 1st Numerical `hrs_work_week`
+
+**Numerical Summary Table** 
+
+```{r summarize num 1}
+hours <- clean %>% 
+  filter(hrs_work_week < 121) %>% 
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = mean(hrs_work_week),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = sd(hrs_work_week))
+
+kable(round(hours,1)) %>% 
+kable_styling(full_width = F, position="center")
+```
+
+
+**Histogram - visualization of the distribution**
+
+<div id="note">
+Histograms are useful plots for showing how many elements of a **single numerical** variable fall in specified bins. This is a very useful way to get a sense of the **distribution** of your data. Histograms are often one of the first steps in exploring data visually. A few things to note here:
+
+- We needed to filter our data, since `hrs_work_weeks` has values of 996-998 which don't mean hours (996 = refused,...)
+- There is only one variable being mapped in `aes()`: the single numerical variable `hrs_work_week`. You don't need to compute the `y`-`aes`thetic: R calculates it automatically.
+- We set the geometric object as `geom_histogram()`
+- The `aes`thetic argument `y=..density..` converts the y-axis to **percent** as opposed to **counts**
+- The arguments `color` defines the border of each bar, while `fill` defines the actual fill color inside the bar
+- We can control the binwidth with `binwidth=` argument
+
+
+(Note that none of these arguments went inside the `aes`thetic `mapping` argument as they do not specifically represent mappings of variables.)
+</div>
+
+```{r hist num 1}
+clean %>%
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(x=hrs_work_week)) + 
+    geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5) + 
+      xlab("hours per week") +
+      ggtitle("How many hours a week (do/did) you usually work at this job?") 
+```
+
+**Boxplot - visualization of 5 number summary**
+
+<div id="note"> 
+While histograms can help to show the distribution of data, boxplots have much more flexibility, and can provide even more information in a single graph. The y `aes`thetic is the numeric variable you want to include in the boxplot, and the x `aes`thetic is a grouping variable.  Note that the `color` argument is not necessary, but sets a color for the outline of the boxplot. 
+</div>
+
+```{r boxplot num 1}
+clean %>%
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(y=hrs_work_week, x=0)) + 
+    geom_boxplot(color="steelblue")+ 
+      ggtitle("How many hours a week (do/did) you usually work at this job?")+
+  coord_flip()
+```
+
+<div id="note">  
+
+For review, these are the different parts of the boxplot: 
+
+- The bottom of the "box" portion represents the 25th percentile (1st quartile)
+- The horizontal line in the "box" shows the median (50th percentile, 2nd quartile)
+- The top of the "box" represents the 75th percentile (3rd quartile)
+- The height of each "box", i.e. the value of the 3rd quartile minus the value of the 1st quartile, is called the interquartile range (IQR). It is a measure of spread of the middle 50% of values. Longer boxes indicating more variability.
+- The "whiskers" extending out from the bottoms and tops of the boxes represent points less than the 25th percentile and greater than the 75th percentiles respectively. They extend out **no more than** 1.5 x IQR units away from either end of the boxes. The length of these whiskers show how the data outside the middle 50% of values vary. Longer whiskers indicate more variability.
+- The dots represent values falling outside the whiskers or outliers. The definition of an outlier is somewhat arbitrary and not absolute. In this case, they are defined by the length of the whiskers, which are no more than 1.5 x IQR units long.
+
+</div>
+
+**Narrative Summary**
+<div id="narrative">
+
+Participants were asked, in reference to their curren or most recent job (which they work more than 10 hours/week), "*How many hours a week (do/did) you usually work at this job?*"  
+
+* **5023** out of **5114** responded with hours between 10 and 120.  
+  
+* **82** participants were a **legitimate skip** since they have not worked a paying job for at least 10 hours a week, they are not represented here.  
+
+The center of the distribution is best described with the **mode** and **median** of 40 hours/week.   There is considerable overall variation as hours vary from 10 to 120, although the middle 50% of particpants are between 40 and 45 hours, for an interquartile range (IQR) of 5 hours.  Weekly work hours is *slightly skewed to the **right*** (since outliers extend, to the right, to 120 hours).  This skew also results in the **mean** being greater than the **median**, which is a typically characteristic of right skewed distributions. 
+</div>
+
+
+
+
+

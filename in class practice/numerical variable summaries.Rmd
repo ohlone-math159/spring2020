@@ -1,0 +1,106 @@
+---
+title: "numerical_variables"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, message=F, warning=F)
+```
+
+```{r}
+library(tidyverse)
+library(kableExtra)
+library(janitor)
+```
+
+```{r}
+natl2017_sample_4k <- readRDS("/cloud/project/data/natl2017_sample_4k.rds")
+```
+
+Variables of Interest
+mager wtgain bmi dbwt combgest
+
+```{r}
+hist(natl2017_sample_4k$combgest)
+```
+
+
+```{r}
+
+natl2017_sample_4k %>% 
+  filter(combgest < 52) %>% 
+  ggplot(aes(combgest)) +
+    geom_histogram(aes(y=..density..),
+                   binwidth = 1, 
+                   color="white", 
+                   fill="darkgoldenrod",
+                   boundary=0)
+
+```
+
+
+```{r}
+natl2017_sample_4k %>% 
+  filter(combgest < 52) %>% 
+  ggplot(aes(combgest)) +
+    geom_density(adjust=2,
+                 color="white", 
+                   fill="skyblue")
+```
+
+
+```{r}
+natl2017_sample_4k %>% 
+  filter(combgest < 52) %>% 
+  ggplot(aes(y=combgest, x=0)) +
+    geom_violin(adjust=2,
+                draw_quantiles=c(0.25,0.5,.75),
+                color="steelblue",
+                fill="skyblue")+
+    coord_flip()
+```
+
+```{r}
+natl2017_sample_4k %>% 
+  filter(combgest < 52) %>% 
+  ggplot(aes(y=combgest)) +
+    geom_boxplot(color="steelblue",
+                fill="skyblue")+
+    coord_flip()
+```
+
+```{r}
+natl2017_sample_4k %>% 
+  filter(combgest < 52) %>% 
+  ggplot(aes(x=combgest, y=0)) +
+    geom_jitter(color="steelblue",
+                alpha=0.2,
+                size=0.5)
+```
+
+
+```{r}
+natl2017_sample_4k %>% 
+  filter(combgest < 52) %>% 
+  ggplot(aes(y=combgest, x=0)) +
+    geom_boxplot(width=0.5,
+                 outlier.shape = NA)+
+    geom_jitter(alpha=0.2, color="gray1", size=0.5)+
+    coord_flip()
+```
+
+
+```{r}
+natl2017_sample_4k %>% 
+  filter(combgest < 52) %>% 
+  ggplot(aes(y=combgest, x=0)) +
+    geom_violin(adjust=2,
+                draw_quantiles=c(0.25,0.5,.75),
+                color="steelblue")+
+    geom_jitter(color="steelblue",
+                alpha=0.2,
+                size=0.5,)+
+    coord_flip()
+```
+```
+
