@@ -16,6 +16,7 @@ library(ggplot2)
 library(janitor)
 library(kableExtra)
 library(ggmosaic)
+library(scales)
 ```
 
 ## Set `ggplot2` parameters (centers plot titles)
@@ -64,12 +65,17 @@ clean %>%
 
 ## Create Bar Plot
 ```{r}
-clean %>% 
-  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
-  ggplot(aes(x=vigorous_activity, y= ..prop.., group=1))+
-  geom_bar(fill="steelblue", width=0.5)+
-  ggtitle("In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?") +
-  xlab("subject's response")
+clean %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(college_deg %in% c("yes","no")) %>% 
+  droplevels() %>% 
+  ggplot(aes(x=college_deg, fill=vigorous_activity))+
+  geom_bar( )+  # can add position="fill" 
+  ggtitle("In the past 24 hours, have you participated in vigorous physical activity long \nenough to work up a sweat, get your heart thumping, or get out of breath?") +
+  xlab("college degree")+
+  #scale_y_continuous(labels=percent) +
+  theme(axis.title.y=element_blank())
 ```
 
 
