@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F)
 ```
 
 Note: you will need to run the following in your console.  ##  devtools::install_github("haleyjeppson/ggmosaic")  ##
@@ -36,17 +36,19 @@ Original Variable  |   New Variable  |    Description
 RACE  |  race_c  | subject's race
 BIO_SEX4 | gender | subject's gender
 --  |  age | subject's age
-H4ED2 | college_deg | Dd you complete college (bachelor's degree)?
+H4ED2 | college_deg | Did you complete college (bachelor's degree)?
+H4ED2 | educ_completed_5 | Highest level of education completed (5 levels)
 H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
 H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
 H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
 
 
 # Association between categorical variables
 
 ## Create contingency (two-way) table
 ```{r summary table cat-cat}
-clean %>%
+demo %>%
   filter(vigorous_activity %in% c("yes","no"))  %>% 
   droplevels() %>% 
   filter(college_deg %in% c("yes","no")) %>% 
@@ -57,15 +59,14 @@ clean %>%
   adorn_pct_formatting(digits=2) %>% 
   adorn_ns() %>% 
   kable() %>%
-  kable_styling(full_width = F, position="center") %>% 
+  kable_styling(full_width = F, position="left") %>% 
   add_header_above(c("college degree"=4))
   
 ```
 
-
 ## Create Bar Plot
 ```{r}
-clean %>%
+demo %>%
   filter(vigorous_activity %in% c("yes","no"))  %>% 
   droplevels() %>% 
   filter(college_deg %in% c("yes","no")) %>% 
@@ -78,10 +79,9 @@ clean %>%
   theme(axis.title.y=element_blank())
 ```
 
-
 ## Create Mosaic Plot
 ```{r}
-clean %>%
+demo %>%
   filter(vigorous_activity %in% c("yes","no"))  %>% 
     droplevels() %>% 
   filter(college_deg %in% c("yes","no")) %>% 
@@ -91,19 +91,189 @@ clean %>%
     ggtitle("Engaging in a Vigorous Activity (24h) comparison with College Degree ") 
 ```
 
+## Narrative Summary
+<div id="narrative">
+The participant in the **addhealth** study were asked, "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?*"  Their responses were broken down with respect to if they were a college graduate or not.  The analysis shows response to this question was not very different (4% absolute difference in percentages) for college graduates (**37.5%**) vs non-college graduates (**41.5%**). I wonder how this would look if they education level was further broken down. 
+</div>
 
 
 
 
+## Analysis with Education Level broken in 5 levels
+
+## Create contingency (two-way) table
+```{r summary table cat-cat 2}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!educ_completed_5 =="don't know") %>% 
+  droplevels() %>% 
+  tabyl(vigorous_activity, educ_completed_5) %>%
+  adorn_totals(c("row","col")) %>% 
+  adorn_percentages("col") %>% 
+  adorn_pct_formatting(digits=2) %>% 
+  adorn_ns() %>% 
+  kable() %>%
+  kable_styling(full_width = F, position="center") %>% 
+  add_header_above(c("college degree"=7))
+  
+```
 
 
+## Create Bar Plot
+```{r}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!educ_completed_5 =="don't know") %>% 
+  droplevels() %>% 
+  ggplot(aes(x=educ_completed_5, fill=vigorous_activity))+
+  geom_bar( )+  # can add position="fill" 
+  ggtitle("In the past 24 hours, have you participated in vigorous physical activity long \nenough to work up a sweat, get your heart thumping, or get out of breath?") +
+  xlab("college degree")+
+  #scale_y_continuous(labels=percent) +
+  theme(axis.title.y=element_blank())
+```
 
 
+## Create Mosaic Plot
+```{r}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!educ_completed_5 =="don't know") %>% 
+  droplevels() %>% 
+  ggplot() +
+    geom_mosaic(aes( x = product(vigorous_activity, educ_completed_5), fill=vigorous_activity), na.rm=TRUE)+
+    ggtitle("Engaging in a Vigorous Activity (24h) comparison with Education Level ") 
+```
+
+## Narrative Summary
+
+<div id="narrative">
+Looking closer at the relationship between vigorous activity and education level, the percent of those who engaged in vigorous activity is decreasing as education level increase, showing a potential association.
+</div>
 
 
+# Association between numerical and categorical variable
+
+```{r}
+demo %>% 
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  group_by(vigorous_activity) %>% 
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = mean(hrs_work_week),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = sd(hrs_work_week)) %>% 
+  kable() %>% 
+    kable_styling(full_width = F, 
+                  position="center")  %>% 
+      add_header_above(c("hours worked summary statistics "= 9))
+```
+
+```{r}
+demo %>% 
+  filter(college_deg %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  group_by(college_deg) %>% 
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = mean(hrs_work_week),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = sd(hrs_work_week)) %>% 
+  kable() %>% 
+    kable_styling(full_width = F, 
+                  position="center")  %>% 
+      add_header_above(c("hours worked summary statistics "= 9))
+```
+
+```{r}
+demo %>% 
+  filter(!educ_completed_5 =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  group_by(educ_completed_5) %>% 
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = mean(hrs_work_week),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = sd(hrs_work_week)) %>% 
+  kable() %>% 
+    kable_styling(full_width = F, 
+                  position="center")   %>% 
+      add_header_above(c("hours worked summary statistics "= 9))
+```
+
+## Faceted Histogram
+
+```{r}
+demo %>% 
+  filter(!educ_completed_5 =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(hrs_work_week))+
+  geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5)+
+    facet_wrap(~educ_completed_5, ncol=1)
+```
+
+Probably a better way to compare distributions is with boxplots
+
+```{r}
+demo %>% 
+  filter(!educ_completed_5 =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(y=hrs_work_week, x=educ_completed_5))+
+  geom_boxplot(aes(fill=educ_completed_5))+  # potentially add , outlier.shape = NA
+  coord_flip()  # might be nice to re-scale axis 
+  
+```
+
+## Violin Plots
+```{r}
+demo %>% 
+  filter(!educ_completed_5 =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(y=hrs_work_week, x=educ_completed_5))+
+  geom_violin(aes(fill=educ_completed_5), adjust=2)+  # potentially add , outlier.shape = NA
+  coord_flip()  # might be nice to re-scale axis 
+  
+```
+
+## Assess binary college degree
+```{r}
+demo %>% 
+  filter(!college_deg =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(hrs_work_week))+
+  geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5)+
+    facet_wrap(~college_deg, ncol=1)
+```
 
 
-
-
+```{r}
+demo %>% 
+  filter(!college_deg =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(y=hrs_work_week, x=college_deg))+
+  geom_boxplot(aes(fill=college_deg))+  # potentially add , outlier.shape = NA
+  coord_flip()  # might be nice to re-scale axis 
+```
 
 
