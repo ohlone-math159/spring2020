@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F, message=F, warning=F)
+knitr::opts_chunk$set(echo = T, message=F, warning=F)
 ```
 
 ```{r}
@@ -17,23 +17,56 @@ library(janitor)
 natl2017_sample_4k <- readRDS("/cloud/project/data/natl2017_sample_4k.rds")
 ```
 
+**2017 USA Birth Data**
+
 Variables of Interest
-mager wtgain bmi dbwt combgest
+
+| variable | description |
+|---------|------------|
+| mager | mother's age |
+|wtgain | mother weight gain |
+| bmi  | Mother's Body Mass Index |
+| dbwt | baby's birthweight |
+|combgest | length of pregnancy |
+
 
 ```{r}
-hist(natl2017_sample_4k$combgest)
+summary(natl2017_sample_4k$mager)
+```
+
+
+Numerical Summary
+```{r}
+natl2017_sample_4k %>% 
+  filter(mager < 52) %>% 
+    summarize(n = n(),
+            min = min(mager),
+            q1 = quantile(mager, probs=0.25),
+            median = median(mager),
+            mean = mean(mager),
+            q3 = quantile(mager, probs=0.75),
+            max = max(mager),
+            sd = sd(mager)) %>% 
+    kable() %>% 
+            kable_styling(full_width = F, position="left")
+```
+
+
+
+```{r}
+hist(natl2017_sample_4k$mager)
 ```
 
 
 ```{r}
 
 natl2017_sample_4k %>% 
-  filter(combgest < 52) %>% 
-  ggplot(aes(combgest)) +
+  filter(mager < 52) %>% 
+  ggplot(aes(mager)) +
     geom_histogram(aes(y=..density..),
-                   binwidth = 1, 
+                   binwidth = 10, 
                    color="white", 
-                   fill="darkgoldenrod",
+                   fill="skyblue",
                    boundary=0)
 
 ```
@@ -41,9 +74,9 @@ natl2017_sample_4k %>%
 
 ```{r}
 natl2017_sample_4k %>% 
-  filter(combgest < 52) %>% 
-  ggplot(aes(combgest)) +
-    geom_density(adjust=2,
+  filter(mager < 52) %>% 
+  ggplot(aes(mager)) +
+    geom_density(adjust=1,
                  color="white", 
                    fill="skyblue")
 ```
@@ -51,8 +84,8 @@ natl2017_sample_4k %>%
 
 ```{r}
 natl2017_sample_4k %>% 
-  filter(combgest < 52) %>% 
-  ggplot(aes(y=combgest, x=0)) +
+  filter(mager < 52) %>% 
+  ggplot(aes(y=mager, x=0)) +
     geom_violin(adjust=2,
                 draw_quantiles=c(0.25,0.5,.75),
                 color="steelblue",
@@ -62,8 +95,8 @@ natl2017_sample_4k %>%
 
 ```{r}
 natl2017_sample_4k %>% 
-  filter(combgest < 52) %>% 
-  ggplot(aes(y=combgest)) +
+  filter(mager < 52) %>% 
+  ggplot(aes(y=mager)) +
     geom_boxplot(color="steelblue",
                 fill="skyblue")+
     coord_flip()
@@ -71,9 +104,9 @@ natl2017_sample_4k %>%
 
 ```{r}
 natl2017_sample_4k %>% 
-  filter(combgest < 52) %>% 
-  ggplot(aes(x=combgest, y=0)) +
-    geom_jitter(color="steelblue",
+  filter(mager < 52) %>% 
+  ggplot(aes(x=mager, y=0)) +
+    geom_jitter(color="skyblue",
                 alpha=0.2,
                 size=0.5)
 ```
@@ -85,7 +118,7 @@ natl2017_sample_4k %>%
   ggplot(aes(y=combgest, x=0)) +
     geom_boxplot(width=0.5,
                  outlier.shape = NA)+
-    geom_jitter(alpha=0.2, color="gray1", size=0.5)+
+    geom_jitter(alpha=0.2, color="steelblue", size=0.5)+
     coord_flip()
 ```
 
@@ -100,7 +133,32 @@ natl2017_sample_4k %>%
     geom_jitter(color="steelblue",
                 alpha=0.2,
                 size=0.5,)+
-    coord_flip()
+    coord_flip()+
+  scale_y_continuous(limits = c(20,50))
 ```
+
+```{r}
+d1 <- data.frame(val=rnorm(4000,39,1.5))
+ggplot(d1, aes(x=0, y=val)) +
+  geom_violin(adjust=1,
+                draw_quantiles=c(0.25,0.5,.75),
+                color="steelblue")+
+    geom_jitter(color="steelblue",
+                alpha=0.2,
+                size=0.5)+
+  coord_flip()+
+  scale_y_continuous(limits = c(20,50))
 ```
+
+```{r}
+ggplot(d1, aes(x=val)) +
+    geom_histogram(aes(y=..density..),
+                   binwidth = 1, 
+                   color="white", 
+                   fill="skyblue",
+                   boundary=0)+
+  scale_x_continuous(limits = c(20,50))
+
+```
+
 

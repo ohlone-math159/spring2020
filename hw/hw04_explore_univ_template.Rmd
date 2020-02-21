@@ -20,6 +20,7 @@ library(dplyr)
 library(ggplot2)
 library(janitor)
 library(kableExtra)
+library(scales)
 ```
 
 ```{r set ggplot2 parameters}
@@ -28,6 +29,8 @@ theme_update(plot.title = element_text(hjust = 0.5))
 
 ```{r load data}
 load("/cloud/project/data/demo_addhealth_clean.Rdata")
+demo <- clean
+load("/cloud/project/data/myaddhealth_clean.Rdata")
 ```
 
 
@@ -49,26 +52,57 @@ H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at th
 **Numerical Summary Table**  
 
 ```{r summary table cat 1}
-va <- clean %>%
+demo %>%
   #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
   tabyl(vigorous_activity) %>%
-  adorn_pct_formatting(digits=1) %>%
-  adorn_totals()
-va %>%
+    adorn_pct_formatting(digits=1) %>%
+    adorn_totals() %>% 
   kable() %>%
-  kable_styling(full_width = F, position="center")
+    kable_styling(full_width = F, 
+                  position="center")
 ```
 
 **Bar Plot - Frequency of Levels**
 
 ```{r bar plot cat 1}
-clean %>% 
+demo %>% 
   #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
   ggplot(aes(x=vigorous_activity, y= ..prop.., group=1))+
   geom_bar(fill="steelblue", width=0.5)+
-  ggtitle("In the past 24 hours, have you participated in vigorous physical activity
-  long enough to work up a sweat, get your heart thumping, or get out of breath?") +
-  xlab("subject's response")
+  ggtitle("In the past 24 hours, have you participated in vigorous physical activity long \nenough to work up a sweat, get your heart thumping, or get out of breath?") +
+  aes(stringr::str_wrap(vigorous_activity, 4)) +
+  scale_y_continuous(labels=percent) +
+  xlab("subject's response") 
+```
+
+**Narrative summary**  
+<div id = "narrative">
+The participants in the **addhealth** study were asked, "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?*" **5111** out of **5114** provided a "yes" or "no" response, with approximately **40%** of the participant responding **yes**.  Approximately **2 out of 5** participants have participated in a vigorous activity in the past 24 hours.
+</div>
+
+## 2nd Categorical Variable
+```{r summary table cat 1}
+demo %>%
+  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+  tabyl(vigorous_activity) %>%
+    adorn_pct_formatting(digits=1) %>%
+    adorn_totals() %>% 
+  kable() %>%
+    kable_styling(full_width = F, 
+                  position="center")
+```
+
+**Bar Plot - Frequency of Levels**
+
+```{r bar plot cat 1}
+demo %>% 
+  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+  ggplot(aes(x=vigorous_activity, y= ..prop.., group=1))+
+  geom_bar(fill="steelblue", width=0.5)+
+  ggtitle("In the past 24 hours, have you participated in vigorous physical activity long \nenough to work up a sweat, get your heart thumping, or get out of breath?") +
+  aes(stringr::str_wrap(vigorous_activity, 4)) +
+  scale_y_continuous(labels=percent) +
+  xlab("subject's response") 
 ```
 
 **Narrative summary**  
@@ -77,34 +111,37 @@ The participants in the **addhealth** study were asked, "*In the past 24 hours, 
 </div>
 
 # Examining numerical variable 
-## 1st Numerical `hrs_work_week`
+## 1st Numerical `fast_food`
 
 **Numerical Summary Table** 
 
 ```{r summarize num 1}
-hours <- clean %>% 
-  filter(hrs_work_week < 121) %>% 
+demo %>% 
+  filter(fast_food < 121) %>% 
   summarize(n = n(),
-            min = min(hrs_work_week),
-            q1 = quantile(hrs_work_week, probs=0.25),
-            median = median(hrs_work_week),
-            mean = mean(hrs_work_week),
-            q3 = quantile(hrs_work_week, probs=0.75),
-            max = max(hrs_work_week),
-            sd = sd(hrs_work_week))
-
-kable(round(hours,1)) %>% 
-kable_styling(full_width = F, position="center")
+            min = min(fast_food),
+            q1 = quantile(fast_food, probs=0.25),
+            median = median(fast_food),
+            mean = mean(fast_food),
+            q3 = quantile(fast_food, probs=0.75),
+            max = max(fast_food),
+            sd = sd(fast_food)) %>% 
+  kable() %>% 
+    kable_styling(full_width = F, 
+                  position="center")
 ```
 
 
 **Histogram - visualization of the distribution**
 
 ```{r hist num 1}
-clean %>%
-  filter(hrs_work_week < 121) %>% 
-  ggplot(aes(x=hrs_work_week)) + 
-    geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5) + 
+demo %>%
+  filter(fast_food < 121) %>% 
+  ggplot(aes(x=fast_food)) + 
+    geom_histogram(aes(y=..density..), 
+                   color="white", 
+                   fill="steelblue", 
+                   binwidth = 5) + 
       xlab("hours per week") +
       ggtitle("How many hours a week (do/did) you usually work at this job?") 
 ```
@@ -112,11 +149,12 @@ clean %>%
 **Boxplot - visualization of 5 number summary**
 
 ```{r boxplot num 1}
-clean %>%
-  filter(hrs_work_week < 121) %>% 
-  ggplot(aes(y=hrs_work_week, x=0)) + 
-    geom_boxplot(color="steelblue", width=0.6) + 
-      ggtitle("How many hours a week (do/did) you usually work at this job?")+
+demo %>%
+  filter(fast_food < 121) %>% 
+  ggplot(aes(y=fast_food, x=0)) + 
+    geom_boxplot(color="steelblue", 
+                 width=0.6) + 
+      ggtitle("How many hours a week (do/did) you usually work at this job?") +
   coord_flip()
 ```
 

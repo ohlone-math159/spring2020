@@ -1,0 +1,103 @@
+---
+title: "hw05_explore_relationships"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Note: you will need to run the following in your console.  ##  devtools::install_github("haleyjeppson/ggmosaic")  ##
+
+
+```{r library packages}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(kableExtra)
+library(ggmosaic)
+```
+
+## Set `ggplot2` parameters (centers plot titles)
+```{r set ggplot2 parameters}
+theme_update(plot.title = element_text(hjust = 0.5))
+```
+
+## Load data frame from HW 3 - Data Management
+```{r load data}
+load("/cloud/project/data/demo_addhealth_clean.Rdata")
+```
+
+# Table of Variables
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+RACE  |  race_c  | subject's race
+BIO_SEX4 | gender | subject's gender
+--  |  age | subject's age
+H4ED2 | college_deg | Dd you complete college (bachelor's degree)?
+H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
+H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
+H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
+
+# Association between categorical variables
+
+## Create contingency (two-way) table
+```{r summary table cat-cat}
+clean %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(college_deg %in% c("yes","no")) %>% 
+  droplevels() %>% 
+  tabyl(vigorous_activity, college_deg) %>%
+  adorn_totals(c("row","col")) %>% 
+  adorn_percentages("col") %>% 
+  adorn_pct_formatting(digits=2) %>% 
+  adorn_ns() %>% 
+  kable() %>%
+  kable_styling(full_width = F, position="center") %>% 
+  add_header_above(c("college degree"=4))
+  
+```
+
+
+## Create Bar Plot
+```{r}
+clean %>% 
+  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+  ggplot(aes(x=vigorous_activity, y= ..prop.., group=1))+
+  geom_bar(fill="steelblue", width=0.5)+
+  ggtitle("In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?") +
+  xlab("subject's response")
+```
+
+
+## Create Mosaic Plot
+```{r}
+clean %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+    droplevels() %>% 
+  filter(college_deg %in% c("yes","no")) %>% 
+    droplevels() %>% 
+  ggplot() +
+    geom_mosaic(aes( x = product(vigorous_activity, college_deg), fill=vigorous_activity), na.rm=TRUE)+
+    ggtitle("Engaging in a Vigorous Activity (24h) comparison with College Degree ") 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

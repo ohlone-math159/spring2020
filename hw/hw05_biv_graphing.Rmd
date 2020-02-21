@@ -86,7 +86,7 @@ kable(prop.table(table(nc$habit, nc$premie), margin=1)*100, digits=1)
 ```
 
 ```{r}
-sjp.xtab(x=nc$habit, grp=nc$premie, show.total=FALSE, margin='row')
+#sjp.xtab(x=nc$habit, grp=nc$premie, show.total=FALSE, margin='row')
 ```
 
 Contrary to what I was expecting, there is equal proportion of prematurely born babies to non-smokers (133/739, 15.2%) compared to babies born to smokers (19/107, 15.1%). There is no association between the smoking status of the mother and the likelihood of the baby being born prematurely. 

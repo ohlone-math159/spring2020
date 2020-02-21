@@ -139,19 +139,18 @@ The participant in the **addhealth** study were asked, "*In the past 24 hours, h
 **Numerical Summary Table** 
 
 ```{r summarize num 1}
-hours <- clean %>% 
+clean %>% 
   filter(hrs_work_week < 121) %>% 
-  summarize(n = n(),
+    summarize(n = n(),
             min = min(hrs_work_week),
             q1 = quantile(hrs_work_week, probs=0.25),
             median = median(hrs_work_week),
             mean = mean(hrs_work_week),
             q3 = quantile(hrs_work_week, probs=0.75),
             max = max(hrs_work_week),
-            sd = sd(hrs_work_week))
-
-kable(round(hours,1)) %>% 
-kable_styling(full_width = F, position="center")
+            sd = sd(hrs_work_week)) %>% 
+    kable() %>% 
+    kable_styling(full_width = F, position="center")
 ```
 
 
@@ -175,7 +174,10 @@ Histograms are useful plots for showing how many elements of a **single numerica
 clean %>%
   filter(hrs_work_week < 121) %>% 
   ggplot(aes(x=hrs_work_week)) + 
-    geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5) + 
+    geom_histogram(aes(y=..density..), 
+                   color="white", 
+                   fill="steelblue", 
+                   binwidth = 5) + 
       xlab("hours per week") +
       ggtitle("How many hours a week (do/did) you usually work at this job?") 
 ```
