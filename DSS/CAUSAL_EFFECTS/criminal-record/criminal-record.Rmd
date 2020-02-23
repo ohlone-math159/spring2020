@@ -121,10 +121,10 @@ audit %>%
 
 ```{r}
 audit_mut %>% 
-  tabyl(callback_c, crimrec_c, black_c ) %>% 
-  adorn_totals(c("row","col")) %>% 
-  adorn_percentages("col") %>% 
-  adorn_pct_formatting(digits=2) %>% 
+  tabyl(crimrec_c, callback_c , black_c ) %>% 
+  adorn_totals(c("row")) %>% 
+  adorn_percentages("row") %>% 
+  adorn_pct_formatting(digits=0) %>% 
   adorn_ns() 
 
 ```

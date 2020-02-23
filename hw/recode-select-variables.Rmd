@@ -47,8 +47,8 @@ mydata_c <- mydata %>%
                                 "6"="other",
                                 .ordered=T)) %>% 
   mutate(vigorous_activity = recode_factor(H4DA11,
-                                "0"="no",
-                                "1"="yes",
+                                 "1"="yes",
+                                 "0"="no",
                                 "6"="refused",
                                 "8"="don't know",
                                 .ordered=T)) %>% 
@@ -64,7 +64,8 @@ mydata_c <- mydata %>%
   mutate(yearly_no_sex = round(H4RD14*H4RD14C,0)) %>% 
     mutate(gender = recode_factor(BIO_SEX4,
                                   "1" ="male",
-                                  "2"="female")) %>% 
+                                  "2"="female",
+                                  .ordered=T)) %>%  
   mutate(college_deg = recode_factor(H4ED2,
                              "1"="no",
                              "2"="no",
@@ -88,20 +89,37 @@ mydata_c <- mydata %>%
                                    "3"="most of the time or all of the time",
                                    "6"="refused")) %>% 
   mutate(age = iyear4-h4od1y) %>% 
-  mutate(hrs_work_week = H4LM19 )
-    
-  
+  mutate(hrs_work_week = H4LM19 ) %>% 
+  mutate(education = recode_factor(H4ED2,
+                             "1"="not hs grad",
+                             "2"="not hs grad",
+                             "3"="hs grad",
+                             "4"="post hs",
+                             "5"="post hs",
+                             "6"="post hs",
+                             "7"="bachelors",
+                             "8"="bachelors",
+                             "9"="adv degree",
+                             "10"="adv degree",
+                             "11"="adv degree",
+                             "12"="bachelors",
+                             "13"="adv degree",
+                             "98"="don't know",
+                             .ordered=T))
+                              
 ```
+    
+
 
 ```{r}
 glimpse(mydata_c)
 ```
 
 ```{r}
-clean <- mydata_c %>% select(race_c, gender , age, college_deg, vigorous_activity, too_tired, hrs_work_week  )
+demo <- mydata_c %>% select(race_c, gender , age, college_deg, vigorous_activity, too_tired, hrs_work_week, education  )
 ```
 
 ```{r}
-save(clean, file="/cloud/project/data/demo_addhealth_clean.Rdata")
+save(demo, file="/cloud/project/data/demo_addhealth_clean.Rdata")
 ```
 

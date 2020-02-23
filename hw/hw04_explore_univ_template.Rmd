@@ -81,7 +81,7 @@ The participants in the **addhealth** study were asked, "*In the past 24 hours, 
 </div>
 
 ## 2nd Categorical Variable
-```{r summary table cat 1}
+```{r summary table cat 2}
 demo %>%
   #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
   tabyl(vigorous_activity) %>%
@@ -94,7 +94,7 @@ demo %>%
 
 **Bar Plot - Frequency of Levels**
 
-```{r bar plot cat 1}
+```{r bar plot cat 2}
 demo %>% 
   #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
   ggplot(aes(x=vigorous_activity, y= ..prop.., group=1))+

@@ -1,0 +1,345 @@
+---
+title: "hw05_explore_relationships_sample_report"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: /cloud/project/css/sandstone.css
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, messages=F, warnings=F)
+```
+
+```{r library packages, results='hide', message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(purrr)
+library(kableExtra)
+library(ggmosaic)  ###Note: you will need to run the following in your console.###  ###devtools::install_github("haleyjeppson/ggmosaic")###
+library(scales)
+```
+
+```{r set ggplot2 parameters, echo=F}
+theme_update(plot.title = element_text(hjust = 0.5))
+```
+
+```{r load data}
+load("/cloud/project/data/demo_addhealth_clean.Rdata")
+```
+# 
+
+# Variables of Interest
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+BIO_SEX4 | gender | subject's gender
+H4ED2 | education | Highest level of education completed (5 levels)
+H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
+H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
+# Association between categorical variables
+
+## Analysis of  Vigorous Activity across Gender and Education Attainment
+
+### Contingency (two-way) table
+
+<div style="float: left; width: 50%;">
+```{r table sweat-educ}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>%
+  droplevels() %>% 
+  tabyl( education, vigorous_activity) %>%
+  adorn_totals(c("row")) %>% 
+  adorn_percentages("row") %>% 
+  adorn_pct_formatting(digits=0) %>% 
+  kable() %>%
+  kable_styling(full_width = F, 
+                position="left") %>% 
+  add_header_above(c("In the past 24 hours, have you participated in \nvigorous physical activity long enough to work \nup a sweat, get your heart thumping,\n or get out of breath?, "=3))
+  
+```
+
+```{r table educ - sweat - male} 
+demo %>% 
+  filter(gender =="male") %>% 
+  droplevels() %>% 
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  tabyl(education, vigorous_activity) %>% 
+  adorn_totals(c("row")) %>% 
+  adorn_percentages("row") %>% 
+  adorn_pct_formatting(digits=0) %>% 
+  #adorn_ns()  
+  kable() %>%
+  kable_styling(full_width = F, 
+                position="left") %>% 
+  add_header_above(c("In the past 24 hours, have you participated in \nvigorous physical activity long enough to work \nup a sweat, get your heart thumping,\n or get out of breath? \n(males responses only) "=3))
+
+```
+</div>
+
+<div style="float: right; width: 50%;">
+```{r table sweat -gender}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  #filter(!education =="don't know") %>% 
+  #droplevels() %>% 
+  tabyl(gender, vigorous_activity) %>% 
+  adorn_totals(c("row")) %>% 
+  adorn_percentages("row") %>% 
+  adorn_pct_formatting(digits=0) %>% 
+  #adorn_ns()  
+  kable() %>%
+  kable_styling(full_width = F, 
+                position="left") %>% 
+  add_header_above(c("In the past 24 hours, have you participated in \nvigorous physical activity long enough to work \nup a sweat, get your heart thumping,\n or get out of breath?, "=3))
+  
+```
+\vspace{8}
+```{r table sweat - educ - female}
+demo %>% 
+  filter(gender =="female") %>% 
+  droplevels() %>% 
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  tabyl(education, vigorous_activity) %>% 
+  adorn_totals(c("row")) %>% 
+  adorn_percentages("row") %>% 
+  adorn_pct_formatting(digits=0) %>% 
+  #adorn_ns()  
+  kable() %>%
+  kable_styling(full_width = F, 
+                position="left") %>% 
+  add_header_above(c("In the past 24 hours, have you participated in \nvigorous physical activity long enough to work \nup a sweat, get your heart thumping,\n or get out of breath? \n(females responses only) "=3))
+
+```
+</div>
+
+
+Cant get this to work 3 way table with tabyl
+
+Error in class(dat[[1]]) <- new_class : adding class "factor" to an invalid object
+```{r, eval =F}
+demo %>%
+#  filter(vigorous_activity %in% c("yes","no"))  %>% 
+#  droplevels() %>% 
+#  filter(!education =="don't know") %>% 
+ # droplevels() %>% 
+  tabyl(education, vigorous_activity, gender)
+```
+
+```{r}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  tabyl(race_c, vigorous_activity) %>% 
+  adorn_totals(c("row")) %>% 
+  adorn_percentages("row") %>% 
+  adorn_pct_formatting(digits=0) %>% 
+  #adorn_ns()  
+  kable() %>%
+  kable_styling(full_width = F, 
+                position="left") %>% 
+  add_header_above(c("In the past 24 hours, have you participated in \nvigorous physical activity long enough to work \nup a sweat, get your heart thumping,\n or get out of breath?"=3))
+```
+
+
+
+Bar Plot
+```{r}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  ggplot(aes(x=education, fill=vigorous_activity, group=vigorous_activity)) +
+  geom_bar(position = position_fill(reverse = TRUE), width=.9) +
+  facet_wrap(~gender, ncol=1) +
+  ggtitle("Engaging in a Vigorous Activity (24h) comparison with Education Level ") +
+  scale_y_continuous(labels=percent) +
+  coord_flip()
+```
+
+
+
+### Mosaic Plot (bar plot is better here)
+```{r mosiac plot cat-cat 1}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  ggplot() +
+    geom_mosaic(aes( x = product( vigorous_activity ,education), 
+                     fill=vigorous_activity), 
+                na.rm=TRUE)+
+    ggtitle("Engaging in a Vigorous Activity (24h) comparison with Education Level ") +
+  coord_flip()+
+  facet_wrap(~gender, ncol=1)
+```
+
+### Narrative Summary
+
+<div id="narrative">
+The percent of those who engaging in vigorous activity in the past 24 hours is decreasing as education level increase, showing a potential association.  Is this trend also observed for both genders?
+</div>
+
+
+
+### Follow Up on Gender and Race 
+
+Let's first look at just vigorous_activity and gender
+```{r mosiac sweat and gender}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>%
+  ggplot() +
+    geom_mosaic(aes( x = product(vigorous_activity, gender), 
+                     fill=vigorous_activity), 
+                na.rm=TRUE)+
+    ggtitle("Engaging in a Vigorous Activity (24h) comparison with Gender ") 
+```
+
+
+```{r mosiac plot cat-cat 2 - male}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>%
+  filter(gender == "male") %>% 
+  ggplot() +
+    geom_mosaic(aes( x = product(vigorous_activity, education), 
+                     fill=vigorous_activity), 
+                na.rm=TRUE)+
+    ggtitle("Engaging in a Vigorous Activity (24h) comparison with Education Level ") 
+```
+
+```{r bar plot cat-cat 2 - male}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>%
+  filter(gender == "male") %>% 
+  ggplot() +
+    geom_mosaic(aes( x = product(vigorous_activity, education), 
+                     fill=vigorous_activity), 
+                na.rm=TRUE)+
+    ggtitle("Engaging in a Vigorous Activity (24h) comparison with Education Level ") 
+```
+
+
+```{r mosiac sweat - ed}
+demo %>%
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>%
+  filter(gender == "female") %>% 
+  ggplot() +
+    geom_mosaic(aes( x = product(vigorous_activity, education), 
+                     fill=vigorous_activity), 
+                na.rm=TRUE)+
+    ggtitle("Engaging in a Vigorous Activity (24h) comparison with Education Level ") 
+```
+
+### wondering about education level and gender
+
+```{r mosiac ed - gender}
+demo %>%
+  filter(!education =="don't know") %>% 
+  droplevels() %>%
+  ggplot() +
+    geom_mosaic(aes( x = product(education, gender), 
+                     fill=education), 
+                na.rm=TRUE)+
+    ggtitle("Education level by Gender ") 
+```
+
+# Association between numerical and categorical variables
+
+## Analysis of Relationship between Educational Level anfd Usual Hours Worked Per Week 
+
+### Summary Statistics 
+```{r summary table num-cat 1}
+demo %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  group_by(education) %>% 
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = mean(hrs_work_week),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = sd(hrs_work_week)) %>% 
+  kable() %>% 
+    kable_styling(full_width = F, 
+                  position="left")   %>% 
+      add_header_above(c("hours worked summary statistics "= 9))
+```
+
+### Faceted Histogram
+
+```{r}
+demo %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(hrs_work_week))+
+  geom_histogram(aes(y=..density.., 
+                     fill=education), 
+                 color="white", 
+                 binwidth = 5)+
+    facet_wrap(~education, 
+               ncol=1)
+```
+
+### Boxplots
+Probably a better way to compare distributions is with boxplots
+
+```{r}
+demo %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(y=hrs_work_week, x=education))+
+    geom_boxplot(aes(fill=education))+  # potentially add , outlier.shape = NA
+    coord_flip()  # might be nice to re-scale axis 
+  
+```
+
+### Violin Plots
+```{r}
+demo %>% 
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  ggplot(aes(y=hrs_work_week, x=education)) +
+    geom_violin(aes(fill=education), adjust=2) +  # potentially add , outlier.shape = NA
+    coord_flip()  # might be nice to re-scale axis 
+  
+```
+
+
+
+
+
+
