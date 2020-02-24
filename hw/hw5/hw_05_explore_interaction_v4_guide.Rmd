@@ -48,22 +48,57 @@ H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at th
 ## Vigorous Activity Proportion by Education Attainment
 
 ### Two-way table
-A two way table
+A two way table displays a categorical variable broken down by another categorical variable.  In this example `vigorous_activity` (response variable) is broken down by `education` (explanatory variable).  Which means we are assessing if the proportion of participation in a vigorous activity varies across educational levels.  We will use the `tabyl` function that you are already familiar with.  When using `tably` with 2 variables, the first input is typically the **explanatory** variable and the second input is the **response** variable.  Note how the levels for `vigorous_activity` don't have any reference (yes to what, one may ask).  To provide more details you can add a header above your table's columns.
 
 ```{r table sweat/educ}
 demo %>%
-  filter(vigorous_activity %in% c("yes","no"))  %>% 
-  droplevels() %>% 
-  filter(!education =="don't know") %>%
-  droplevels() %>% 
+  
   tabyl( education, vigorous_activity) %>%
-  adorn_totals(c("row")) %>% 
-  adorn_percentages("row") %>% 
-  adorn_pct_formatting(digits=0) %>% 
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+  
+  kable() %>%
+    kable_styling(full_width = T, 
+                position="left")
+```
+#### Adding header above response variable's levels
+The argument `add_header_above()` will print a header above your columns, but you will need to specify the number of columns, in this case there are **6**.  The c("","vigorous_activity"=5) says leave the first column blank (since it already has a header of education) and place the header `vigorous_activity` above the remaining 5 columns of yes, no, refused, don't know and NA_.
+
+```{r table sweat/educ w.header}
+demo %>%
+  
+  tabyl( education, vigorous_activity) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+  
   kable(booktabs = TRUE) %>%
-  kable_styling(full_width = T, 
+    kable_styling(full_width = T, 
                 position="left") %>% 
-  add_header_above(c("","vigorous activity"=2))
+    add_header_above(c("","vigorous activity"=5))
+```
+
+#### Filtering observations
+After you have created the basic table you might want to `filter` by your categorical variable's levels to improve the readability of the table.  `vigorous_activity` has unncessary levels of **don't know** and **refused**, so I removed them by filtering for just the levels of **yes** and **no** using `filter(vigorous_activity %in% c("yes","no"))` the `%in%` operator along with `c()` function allow you to filter for a list of desired levels.  `filter(!vigorous_activity %in% c("don't know","refused"))` would also have worked, although you would have to add a second filter of `filter(!is.na(vigorous_activity))`  (*You will probably find it easier to filter the levels that you want, although it might take more typing of levels.*)
+
+```{r table sweat/educ w.filter}
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no")) %>% 
+  droplevels() %>% 
+  filter(education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>%
+  droplevels() %>% 
+  
+  tabyl( education, vigorous_activity) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(full_width = T, 
+                position="left") %>% 
+    add_header_above(c("","vigorous activity"=2))
 ```
 
 ```{r bar graph sweat/educ}
