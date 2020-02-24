@@ -43,7 +43,7 @@ H4ED2 | education | Highest level of education completed (5 levels)
 H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
 H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
 
-# Part I : Association between two categorical variables
+# Part One : Relationship between two categorical variables
 
 ## Vigorous Activity Proportion by Education Attainment
 
@@ -161,7 +161,7 @@ demo %>%
     coord_flip()
 ```
 
-# Adding in a third categorical variable to the analysis
+# Part Two : Grouping by a third categorical variable
 Often you will want to see the relationship between two categorical variables when your observations are grouped by a third variables and then tabulated separately.  For this example, we are grouping the observations by `gender` and then creating a two-way table for each gender.  This is to see if the trends between `vigorous_activity` and `education` hold across `gender`s.  In order to do this, 2 two-way tables are constructed, one for each level of third categorical variable (in this case 2 levels, **male** and **female**).   An additional filter command will allow one to create tables for each level of the third categorical variable.  Since our third variable is `gender` we will insert `filter(gender == "male")` to filter out all observations where gender is male.
 
 ## Constructing Tables
@@ -238,7 +238,7 @@ When looking at the all `addhealth4`observations, the percent of those who engag
 </div>
 
 
-# Association between numerical and categorical variables
+# Part Three: Relationship between numerical and categorical variables
 
 ## Analysis of Relationship between Educational Level anfd Usual Hours Worked Per Week 
 

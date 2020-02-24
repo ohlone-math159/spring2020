@@ -2169,7 +2169,7 @@ Total
 </div>
 <div id="bar-graph-to-accompany-table" class="section level2">
 <h2>Bar Graph to accompany table</h2>
-<p>Having a graphic accompany your two way table will add a visual aspect to yout analysis. Since our variables are <strong>both categorical</strong> we will use <code>geom_bar</code> to construct a bar graph. There are many options for a type of bar graph. For more details on options see <a href="https://cengel.github.io/R-data-wrangling/data-visualization-with-ggplot2.html#barplot">R for Data Wrangling : Barplot</a>. For a bar graph with 2 categorical variables, the <strong>explanatory</strong> variables is the <code>x</code> variable, while the **response* variable is used to <code>fill</code> in the bars. In order to match the order in my table, I usd the argument <code>position = position_fill(reverse = TRUE)</code> in the <code>geom_bar</code> layer. The <code>scale_y_continuous(labels=percent)</code> argument changes the scaling of my measurement axis (Note: It is initially the y-axis, but after <code>coord_flip()</code> it becomes the x-axis).</p>
+<p>Having a graphic accompany your two way table will add a visual aspect to yout analysis. Since our variables are <strong>both categorical</strong> we will use <code>geom_bar</code> to construct a bar graph. There are many options for a type of bar graph. For more details on options see <a href="https://cengel.github.io/R-data-wrangling/data-visualization-with-ggplot2.html#barplot">R for Data Wrangling : Barplot</a>. For a bar graph with 2 categorical variables, the <strong>explanatory</strong> variables is the <code>x</code> variable, while the **response* variable is used to <code>fill</code> in the bars. In order to match the Yes/No order in my table, I usd the argument <code>position = position_fill(reverse = TRUE)</code> in the <code>geom_bar</code> layer. The <code>scale_y_continuous(labels=percent)</code> argument changes the scaling of my measurement axis (Note: It is initially the y-axis, but after <code>coord_flip()</code> it becomes the x-axis).</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">demo <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb18-2" title="2"><span class="st">  </span></a>
 <a class="sourceLine" id="cb18-3" title="3"><span class="st">  </span><span class="kw">filter</span>(vigorous_activity <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>) <span class="op">&amp;</span></a>
@@ -2177,7 +2177,7 @@ Total
 <a class="sourceLine" id="cb18-5" title="5"><span class="st">  </span><span class="kw">droplevels</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb18-6" title="6"><span class="st">  </span></a>
 <a class="sourceLine" id="cb18-7" title="7"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>education, <span class="dt">fill=</span>vigorous_activity)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb18-8" title="8"><span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="kw">position_fill</span>(<span class="dt">reverse =</span> <span class="ot">TRUE</span>), <span class="dt">width=</span>.<span class="dv">6</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-8" title="8"><span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="kw">position_fill</span>(<span class="dt">reverse =</span> T), <span class="dt">width=</span>.<span class="dv">6</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb18-9" title="9"><span class="st">  </span></a>
 <a class="sourceLine" id="cb18-10" title="10"><span class="st">    </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Dark2&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb18-11" title="11"><span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels=</span>percent) <span class="op">+</span></a>
@@ -2271,7 +2271,7 @@ Total
 <a class="sourceLine" id="cb20-4" title="4"><span class="st">  </span><span class="kw">droplevels</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb20-5" title="5"><span class="st">  </span></a>
 <a class="sourceLine" id="cb20-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>gender, <span class="dt">fill=</span>vigorous_activity)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb20-7" title="7"><span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="kw">position_fill</span>(<span class="dt">reverse =</span> <span class="ot">TRUE</span>), <span class="dt">width=</span>.<span class="dv">6</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-7" title="7"><span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="kw">position_fill</span>(<span class="dt">reverse =</span> T), <span class="dt">width=</span>.<span class="dv">6</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb20-8" title="8"><span class="st">  </span></a>
 <a class="sourceLine" id="cb20-9" title="9"><span class="st">    </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette=</span><span class="st">&quot;Dark2&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb20-10" title="10"><span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels=</span>percent) <span class="op">+</span></a>
@@ -2542,23 +2542,28 @@ Total
 <div id="summary-statistics" class="section level3">
 <h3>Summary Statistics</h3>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">demo <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-2" title="2"><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>education <span class="op">==</span><span class="st">&quot;don&#39;t know&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-3" title="3"><span class="st">  </span><span class="kw">droplevels</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-4" title="4"><span class="st">  </span><span class="kw">filter</span>(hrs_work_week <span class="op">&lt;</span><span class="st"> </span><span class="dv">121</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-5" title="5"><span class="st">  </span><span class="kw">group_by</span>(education) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-6" title="6"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">n =</span> <span class="kw">n</span>(),</a>
-<a class="sourceLine" id="cb24-7" title="7">            <span class="dt">min =</span> <span class="kw">min</span>(hrs_work_week),</a>
-<a class="sourceLine" id="cb24-8" title="8">            <span class="dt">q1 =</span> <span class="kw">quantile</span>(hrs_work_week, <span class="dt">probs=</span><span class="fl">0.25</span>),</a>
-<a class="sourceLine" id="cb24-9" title="9">            <span class="dt">median =</span> <span class="kw">median</span>(hrs_work_week),</a>
-<a class="sourceLine" id="cb24-10" title="10">            <span class="dt">mean =</span> <span class="kw">mean</span>(hrs_work_week),</a>
-<a class="sourceLine" id="cb24-11" title="11">            <span class="dt">q3 =</span> <span class="kw">quantile</span>(hrs_work_week, <span class="dt">probs=</span><span class="fl">0.75</span>),</a>
-<a class="sourceLine" id="cb24-12" title="12">            <span class="dt">max =</span> <span class="kw">max</span>(hrs_work_week),</a>
-<a class="sourceLine" id="cb24-13" title="13">            <span class="dt">sd =</span> <span class="kw">sd</span>(hrs_work_week)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-14" title="14"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-15" title="15"><span class="st">    </span><span class="kw">kable_styling</span>(<span class="dt">full_width =</span> T, </a>
-<a class="sourceLine" id="cb24-16" title="16">                  <span class="dt">position=</span><span class="st">&quot;left&quot;</span>)   <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-17" title="17"><span class="st">      </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot;hours worked summary statistics &quot;</span>=<span class="st"> </span><span class="dv">9</span>))</a></code></pre></div>
-<table class="table" style>
+<a class="sourceLine" id="cb24-2" title="2"><span class="st">  </span></a>
+<a class="sourceLine" id="cb24-3" title="3"><span class="st">  </span><span class="kw">filter</span>(hrs_work_week <span class="op">&lt;</span><span class="st"> </span><span class="dv">121</span> <span class="op">&amp;</span></a>
+<a class="sourceLine" id="cb24-4" title="4"><span class="st">         </span>education <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not hs grad&quot;</span>, <span class="st">&quot;hs grad&quot;</span>, <span class="st">&quot;post hs&quot;</span>, <span class="st">&quot;bachelors&quot;</span>, <span class="st">&quot;adv degree&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-5" title="5"><span class="st">  </span><span class="kw">droplevels</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-6" title="6"><span class="st">  </span></a>
+<a class="sourceLine" id="cb24-7" title="7"><span class="st">  </span><span class="kw">group_by</span>(education) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb24-8" title="8"><span class="st">  </span></a>
+<a class="sourceLine" id="cb24-9" title="9"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">n =</span> <span class="kw">n</span>(),</a>
+<a class="sourceLine" id="cb24-10" title="10">            <span class="dt">min =</span> <span class="kw">min</span>(hrs_work_week),</a>
+<a class="sourceLine" id="cb24-11" title="11">            <span class="dt">q1 =</span> <span class="kw">quantile</span>(hrs_work_week, <span class="dt">probs=</span><span class="fl">0.25</span>),</a>
+<a class="sourceLine" id="cb24-12" title="12">            <span class="dt">median =</span> <span class="kw">median</span>(hrs_work_week),</a>
+<a class="sourceLine" id="cb24-13" title="13">            <span class="dt">mean =</span> <span class="kw">round</span>(<span class="kw">mean</span>(hrs_work_week),<span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb24-14" title="14">            <span class="dt">q3 =</span> <span class="kw">quantile</span>(hrs_work_week, <span class="dt">probs=</span><span class="fl">0.75</span>),</a>
+<a class="sourceLine" id="cb24-15" title="15">            <span class="dt">max =</span> <span class="kw">max</span>(hrs_work_week),</a>
+<a class="sourceLine" id="cb24-16" title="16">            <span class="dt">sd =</span> <span class="kw">round</span>(<span class="kw">sd</span>(hrs_work_week),<span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-17" title="17"><span class="st">  </span></a>
+<a class="sourceLine" id="cb24-18" title="18"><span class="st">  </span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-19" title="19"><span class="st">    </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>,</a>
+<a class="sourceLine" id="cb24-20" title="20">                  <span class="dt">full_width =</span> T, </a>
+<a class="sourceLine" id="cb24-21" title="21">                  <span class="dt">position=</span><span class="st">&quot;left&quot;</span>)   <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-22" title="22"><span class="st">    </span><span class="kw">add_header_above</span>(<span class="kw">c</span>(<span class="st">&quot;hours worked summary statistics &quot;</span>=<span class="st"> </span><span class="dv">9</span>))</a></code></pre></div>
+<table class="table table-striped" style>
 <thead>
 <tr>
 <th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="9">
@@ -2615,7 +2620,7 @@ not hs grad
 40
 </td>
 <td style="text-align:right;">
-40.67200
+40.7
 </td>
 <td style="text-align:right;">
 45
@@ -2624,7 +2629,7 @@ not hs grad
 90
 </td>
 <td style="text-align:right;">
-12.69813
+12.7
 </td>
 </tr>
 <tr>
@@ -2644,7 +2649,7 @@ hs grad
 40
 </td>
 <td style="text-align:right;">
-41.10807
+41.1
 </td>
 <td style="text-align:right;">
 45
@@ -2653,7 +2658,7 @@ hs grad
 120
 </td>
 <td style="text-align:right;">
-11.09119
+11.1
 </td>
 </tr>
 <tr>
@@ -2673,7 +2678,7 @@ post hs
 40
 </td>
 <td style="text-align:right;">
-40.47549
+40.5
 </td>
 <td style="text-align:right;">
 45
@@ -2682,7 +2687,7 @@ post hs
 120
 </td>
 <td style="text-align:right;">
-11.58052
+11.6
 </td>
 </tr>
 <tr>
@@ -2702,7 +2707,7 @@ bachelors
 40
 </td>
 <td style="text-align:right;">
-41.86918
+41.9
 </td>
 <td style="text-align:right;">
 45
@@ -2711,7 +2716,7 @@ bachelors
 106
 </td>
 <td style="text-align:right;">
-10.82581
+10.8
 </td>
 </tr>
 <tr>
@@ -2731,7 +2736,7 @@ adv degree
 40
 </td>
 <td style="text-align:right;">
-43.48551
+43.5
 </td>
 <td style="text-align:right;">
 50
@@ -2740,7 +2745,7 @@ adv degree
 80
 </td>
 <td style="text-align:right;">
-11.19056
+11.2
 </td>
 </tr>
 </tbody>
@@ -2779,7 +2784,7 @@ adv degree
 </div>
 <div id="faceted-density-plot" class="section level3">
 <h3>Faceted Density Plot</h3>
-<p>Density plot is a <strong>computed</strong> smoothed version of the histogram (note: the <code>adjust</code> argument changes how the smoothing calculation). This is a useful alternative to the histogram for continuous data that comes from an underlying smooth distribution. Also note how the <code>aes</code>thetics and structure are similar to the histogram.</p>
+<p>Density plot is a <strong>computed</strong> smoothed version of the histogram (note: the <code>adjust</code> argument changes how the smoothing is calculated). This is a useful alternative to the histogram for continuous data that comes from an underlying smooth distribution. Also note how the <code>aes</code>thetics and structure are similar to the histogram.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">demo <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb26-2" title="2"><span class="st">  </span></a>
 <a class="sourceLine" id="cb26-3" title="3"><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>education <span class="op">==</span><span class="st">&quot;don&#39;t know&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
