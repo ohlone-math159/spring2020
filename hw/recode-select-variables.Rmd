@@ -87,7 +87,8 @@ mydata_c <- mydata %>%
                                    "1"="sometimes",
                                    "2"="alot of the time",
                                    "3"="most of the time or all of the time",
-                                   "6"="refused")) %>% 
+                                   "6"="refused",
+                                   .ordered=T)) %>% 
   mutate(age = iyear4-h4od1y) %>% 
   mutate(hrs_work_week = H4LM19 ) %>% 
   mutate(education = recode_factor(H4ED2,

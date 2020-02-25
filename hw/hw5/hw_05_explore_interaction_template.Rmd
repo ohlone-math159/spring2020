@@ -1,12 +1,13 @@
 ---
-title: "hw05_explore_relationships_sample_report"
+title: "HW05 Exploring Relationships Sample Report"
+author: "your name"
 output:
   html_document:
     theme: sandstone
     highlight: tango
     toc: yes
     toc_float: yes
-    #css: ~/R/spring2020/data/sandstone.css
+    css: /cloud/project/css/sandstone.css
     tables: yes
   pdf_document: default
 ---
@@ -15,7 +16,7 @@ output:
 knitr::opts_chunk$set(echo = F, messages=F, warnings=F)
 ```
 
-```{r library packages, results='hide', warnings=F, message=FALSE}
+```{r library packages, echo=F, results='hide', warnings=F, message=FALSE}
 library(dplyr)
 library(ggplot2)
 library(janitor)
@@ -29,8 +30,8 @@ library(scales)
 theme_update(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r load data}
-load("~/R/spring2020/data/demo_addhealth_clean.Rdata")
+```{r load demo data, echo=F}
+load("/cloud/project/data/demo_addhealth_clean.Rdata")
 ```
  
 
@@ -217,12 +218,12 @@ demo %>%
 
 ### Visualization (Use the best option)
 
-```{r histogram hours/educ, eval = F}
+```{r histogram hours/educ, eval = T}
 demo %>% 
   
-  filter(!education =="don't know") %>% 
+  filter(hrs_work_week < 121 &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
-  filter(hrs_work_week < 121) %>% 
   
   ggplot(aes(hrs_work_week))+
   
@@ -241,9 +242,9 @@ demo %>%
 ```{r density plot hours/educ, eval=F}
 demo %>% 
   
-  filter(!education =="don't know") %>% 
+  filter(hrs_work_week < 121 &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
-  filter(hrs_work_week < 121) %>% 
   
   ggplot(aes(hrs_work_week)) +
   
@@ -262,9 +263,9 @@ demo %>%
 ```{r boxplot hours/educ, eval=T}
 demo %>% 
   
-  filter(!education =="don't know") %>% 
-  droplevels() %>% 
-  filter(hrs_work_week < 121) %>% 
+  filter(hrs_work_week < 121 &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>%  
   
   ggplot(aes(y=hrs_work_week, x=education))+
   
@@ -279,9 +280,9 @@ demo %>%
 ```{r violin plot hours/educ, eval=F}
 demo %>% 
   
-  filter(!education =="don't know") %>% 
+  filter(hrs_work_week < 121 &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
-  filter(hrs_work_week < 121) %>% 
   
   ggplot(aes(y=hrs_work_week, x=education)) +
   
@@ -298,9 +299,9 @@ demo %>%
 ```{r density curves same plot hours/educ, eval=F}
 demo %>% 
   
-  filter(!education =="don't know") %>% 
+  filter(hrs_work_week < 121 &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
-  filter(hrs_work_week < 121) %>% 
   
   ggplot(aes(x=hrs_work_week, color=education)) +
   
@@ -311,6 +312,140 @@ demo %>%
     scale_fill_brewer(palette="Dark2") 
 ```
 
+### Narrative Summary
 
+<div id="narrative">
+When looking at the all `addhealth4`observations, the *percent of those who engaging in vigorous activity in the past 24 hours decreases as education level increases*, showing a potential association.  When comparing vigorous activity with gender, **49% of men** responsed with **yes**, compared to **33% for women**, for difference in sample proportions of **16%**.  The relationship between vigorous activiy and education level was different for men and women. The earlier trend of vigorous activity decreasing and education level increases is observed for men, but for women the trends is not observed.
+</div>
 
+# Part Four : Group by a Second Categorical Variable 
+We will be adding `gender` into the examination of hours work and education level.  So, first we will examine the relationship between hours worked and gender, then we will assess how hours worked by education level changes when we group by a second categorical variable of gender.
 
+## Hours worked broken down by Gender 
+
+### Numerical Summary
+Same commands as earlier for hours/education, except now we will `group_by(gender)`.
+```{r summary table hours/gender}
+demo %>% 
+  
+  filter(hrs_work_week < 121) %>%  
+  droplevels() %>% 
+  
+  group_by(gender) %>%
+  
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = round(mean(hrs_work_week),1),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = round(sd(hrs_work_week),1)) %>% 
+  
+  kable() %>% 
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left")   %>% 
+    add_header_above(c("hours worked summary statistics "= 9))
+```
+
+### Visualization - Faceted Histogram
+
+```{r histogram hours/gender}
+demo %>% 
+  
+  filter(hrs_work_week < 121) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(hrs_work_week))+
+  
+    geom_histogram(aes(y=..density..,
+                       fill=gender), 
+                   color="white", 
+                   binwidth = 5) +
+  
+      scale_fill_brewer(palette="Dark2") +
+  
+    facet_wrap(~ gender, 
+               ncol=1,
+               as.table = FALSE)  ## reverses the order of the levels to match boxplots
+```
+
+## Examine Hours Worked by Gender grouped Education Level 
+To create summary statistics grouped by a single variable, the process is similar to what we did earlier for vigorous activity.  Just add a filter command for each level of your categorical variable.  Here we are grouping by gender so, we are creating two summary tables for each gender.  
+
+### Summary Tables
+```{r summary table hours/educ/gendermale}
+demo %>% 
+  
+  filter(gender == "male") %>% 
+  
+  filter(hrs_work_week < 121) %>%  
+  droplevels() %>% 
+  
+  group_by(education) %>%
+  
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = round(mean(hrs_work_week),1),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = round(sd(hrs_work_week),1)) %>% 
+  
+  kable() %>% 
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left")   %>% 
+    add_header_above(c("MALE RESPONSES \n \n hours worked summary statistics "= 9))
+```
+
+```{r summary table hours/educ/genderfemale}
+demo %>% 
+  
+  filter(gender == "female") %>% 
+  
+  filter(hrs_work_week < 121) %>%  
+  droplevels() %>% 
+  
+  group_by(education) %>%
+  
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = round(mean(hrs_work_week),1),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = round(sd(hrs_work_week),1)) %>% 
+  
+  kable() %>% 
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left")   %>% 
+    add_header_above(c("FEMALE RESPONSES \n \n hours worked summary statistics "= 9))
+```
+
+### Boxplot
+In order to include an additional categorical variable add the `aes`thetic `color=gender` to your `ggplot` command.  This will split each educational level by gender.
+```{r boxplot hours/educ/gender}
+demo %>% 
+  
+  filter(hrs_work_week < 121) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(y=hrs_work_week, x=education, color=gender))+
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    geom_boxplot() +
+  
+    coord_flip()  # might be nice to re-scale axis ( to see middle 50 better)
+  
+```
+
+### Narrative Summary
+<div id="narrative">
+When we look closer at usual hours worked by education level, but now grouped by gender - there are some interesting observations.  For each level of education the mean hours for women is less than that of men.  The difference in the range of middle 50% can be seen in the boxplot above.  Only when we examine **adv degree** do we see the middle 50% observations align with eachother across gender.
+</div>
