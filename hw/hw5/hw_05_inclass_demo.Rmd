@@ -13,7 +13,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = T, messages=F, warnings=F)
+knitr::opts_chunk$set(echo = F, messages=F, warnings=F)
 ```
 
 ```{r library packages, echo=F, results='hide', warnings=F, message=FALSE}
@@ -46,43 +46,40 @@ H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at th
 
 # Part One : Relationship between categorical variables
 
-## Stress Easily and Partner Shows Love
+Subject were asked "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath*?  First we will break this question down by education level, then by gender.  Then we will group by gender and compare response by education level.
 
-### Table
-```{r table stress/love}
+## Vigorous Activity Proportion by Educational Level
+
+```{r table sweat/educ w.filter}
 demo %>%
   
-  filter(partner_express_love %in% c("agree","neither agree nor disagree","disagree"),
-         stress_easily %in% c("agree","neither agree nor disagree","disagree")) %>% 
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
 
-  tabyl(partner_express_love, stress_easily) %>%   ### tabyl(explanatory, response)
+  tabyl( education, vigorous_activity) %>%
     adorn_totals(c("row")) %>% 
     adorn_percentages("row") %>% 
     adorn_pct_formatting(digits=0) %>% 
   
-  kable() %>%
-    kable_styling(bootstrap_options = "striped", 
-                  full_width = T, 
-                  position="left") %>% 
-    add_header_above(c("","stress easily"= 3))  ### response variable
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped", full_width = T, 
+                position="left") %>% 
+    add_header_above(c("","vigorous activity"= 2))
 ```
 
-### Bar Graph
-```{r bar graph stress/love}
+```{r bar graph sweat/educ}
 demo %>%
   
-  filter(partner_express_love %in% c("agree","neither agree nor disagree","disagree"),
-         stress_easily %in% c("agree","neither agree nor disagree","disagree")) %>% 
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
   
-  ggplot(aes(x=partner_express_love, fill=stress_easily)) +  ### x=explanatory, fill=response
+  ggplot(aes(x=education, fill=vigorous_activity)) +
     geom_bar(position = position_fill(reverse = T), width=.6) +
   
     scale_fill_brewer(palette="Dark2") +
-  
     scale_y_continuous(labels=percent) +
-  
     coord_flip()
 ```
 
@@ -119,46 +116,6 @@ demo %>%
     scale_y_continuous(labels=percent) +
     coord_flip()
 ```
-
-## Vigorous Activity by Gym Use
-## Gym Use by Gender
-### Table
-```{r table gym/gender w.filter}
-demo %>%
-  
-  filter(weekly_gym_use %in% c("no","1-3 times","4 or more times")) %>% 
-  droplevels() %>% 
-
-  tabyl(gender, weekly_gym_use) %>%  ## exp,resp
-    adorn_totals(c("row")) %>% 
-    adorn_percentages("row") %>% 
-    adorn_pct_formatting(digits=0) %>% 
-    #adorn_ns() %>%   ## remove if not needed
-  
-  kable(booktabs = TRUE) %>%
-    kable_styling(bootstrap_options = "striped", full_width = T, 
-                position="left")   %>% 
-    add_header_above(c("","weekly gym use"=3))
-```
-
-### Bar Graph
-```{r bar graph gym/gender}
-demo %>%
-  
-  filter(weekly_gym_use %in% c("no","1-3 times","4 or more times")) %>% 
-  droplevels() %>% 
-  
-  ggplot(aes(x=gender, fill=weekly_gym_use)) +  ## x = exp , fill= resp
-    geom_bar(position = position_fill(reverse = T), width=.6) +
-  
-    scale_fill_brewer(palette="Dark2") +
-    scale_y_continuous(labels=percent) +
-    coord_flip()
-```
-
-
-
-
 
 # Part Two: Group by a Third Categorical Variable
 ## Vigorous Activity by Education Level grouped by Gender
@@ -231,26 +188,27 @@ When looking at the all `addhealth4`observations, the percent of those who engag
 
 # Part Three: Relationship between numerical and categorical variables
 
-## Analysis of Relationship between Usual Hours Worked Per Week and Educational Level
+## Analysis of Relationship between reported Sexual Activity Annual Frequency and Educational Level
 
 ### Summary Statistics 
-```{r summary table hours/educ}
+
+```{r summary table sex/educ}
 demo %>% 
   
-  filter(hrs_work_week < 121 &
+  filter( yearly_amt_sex< 121 &
          education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
   
   group_by(education) %>%
   
   summarize(n = n(),
-            min = min(hrs_work_week),
-            q1 = quantile(hrs_work_week, probs=0.25),
-            median = median(hrs_work_week),
-            mean = round(mean(hrs_work_week),1),
-            q3 = quantile(hrs_work_week, probs=0.75),
-            max = max(hrs_work_week),
-            sd = round(sd(hrs_work_week),1)) %>% 
+            min = min(yearly_amt_sex),
+            q1 = quantile(yearly_amt_sex, probs=0.25),
+            median = median(yearly_amt_sex),
+            mean = round(mean(yearly_amt_sex),1),
+            q3 = quantile(yearly_amt_sex, probs=0.75),
+            max = max(yearly_amt_sex),
+            sd = round(sd(yearly_amt_sex),1)) %>% 
   
   kable() %>% 
     kable_styling(bootstrap_options = "striped",
@@ -264,16 +222,16 @@ demo %>%
 ```{r histogram hours/educ, eval = T}
 demo %>% 
   
-  filter(hrs_work_week < 121 &
+  filter(yearly_amt_sex < 500 &
          education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
   
-  ggplot(aes(hrs_work_week))+
+  ggplot(aes(yearly_amt_sex))+
   
     geom_histogram(aes(y=..density..,
                        fill=education), 
                    color="white", 
-                   binwidth = 5) +
+                   binwidth = 50) +
   
       scale_fill_brewer(palette="Dark2") +
   
@@ -285,11 +243,11 @@ demo %>%
 ```{r density plot hours/educ, eval=F}
 demo %>% 
   
-  filter(hrs_work_week < 121 &
+  filter(yearly_amt_sex < 500 &
          education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
   
-  ggplot(aes(hrs_work_week)) +
+  ggplot(aes(yearly_amt_sex)) +
   
     geom_density(aes(fill=education), 
                  color="white",
@@ -306,11 +264,11 @@ demo %>%
 ```{r boxplot hours/educ, eval=T}
 demo %>% 
   
-  filter(hrs_work_week < 121 &
+  filter(yearly_amt_sex < 500 &
          education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>%  
   
-  ggplot(aes(y=hrs_work_week, x=education))+
+  ggplot(aes(y=yearly_amt_sex, x=education))+
   
     scale_fill_brewer(palette="Dark2") +
   
@@ -323,11 +281,11 @@ demo %>%
 ```{r violin plot hours/educ, eval=F}
 demo %>% 
   
-  filter(hrs_work_week < 121 &
+  filter(yearly_amt_sex < 500 &
          education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
   
-  ggplot(aes(y=hrs_work_week, x=education)) +
+  ggplot(aes(y=yearly_amt_sex, x=education)) +
   
     geom_violin(aes(fill=education),
                 draw_quantiles=c(0.25,0.5,.75),
@@ -342,11 +300,11 @@ demo %>%
 ```{r density curves same plot hours/educ, eval=F}
 demo %>% 
   
-  filter(hrs_work_week < 121 &
+  filter(yearly_amt_sex < 121 &
          education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
   
-  ggplot(aes(x=hrs_work_week, color=education)) +
+  ggplot(aes(x=yearly_amt_sex, color=education)) +
   
     geom_density(alpha = 0.1, adjust=2) +
   
@@ -371,19 +329,19 @@ Same commands as earlier for hours/education, except now we will `group_by(gende
 ```{r summary table hours/gender}
 demo %>% 
   
-  filter(hrs_work_week < 121) %>%  
+  filter(yearly_amt_sex < 121) %>%  
   droplevels() %>% 
   
   group_by(gender) %>%
   
   summarize(n = n(),
-            min = min(hrs_work_week),
-            q1 = quantile(hrs_work_week, probs=0.25),
-            median = median(hrs_work_week),
-            mean = round(mean(hrs_work_week),1),
-            q3 = quantile(hrs_work_week, probs=0.75),
-            max = max(hrs_work_week),
-            sd = round(sd(hrs_work_week),1)) %>% 
+            min = min(yearly_amt_sex),
+            q1 = quantile(yearly_amt_sex, probs=0.25),
+            median = median(yearly_amt_sex),
+            mean = round(mean(yearly_amt_sex),1),
+            q3 = quantile(yearly_amt_sex, probs=0.75),
+            max = max(yearly_amt_sex),
+            sd = round(sd(yearly_amt_sex),1)) %>% 
   
   kable() %>% 
     kable_styling(bootstrap_options = "striped",
@@ -397,15 +355,15 @@ demo %>%
 ```{r histogram hours/gender}
 demo %>% 
   
-  filter(hrs_work_week < 121) %>% 
+  filter(yearly_amt_sex < 500) %>% 
   droplevels() %>% 
   
-  ggplot(aes(hrs_work_week))+
+  ggplot(aes(yearly_amt_sex))+
   
     geom_histogram(aes(y=..density..,
                        fill=gender), 
                    color="white", 
-                   binwidth = 5) +
+                   binwidth = 50) +
   
       scale_fill_brewer(palette="Dark2") +
   
@@ -418,24 +376,24 @@ demo %>%
 To create summary statistics grouped by a single variable, the process is similar to what we did earlier for vigorous activity.  Just add a filter command for each level of your categorical variable.  Here we are grouping by gender so, we are creating two summary tables for each gender.  
 
 ### Summary Tables
-```{r summary table hours/educ/gendermale}
+```{r summary table hours//gendermale}
 demo %>% 
   
   filter(gender == "male") %>% 
   
-  filter(hrs_work_week < 121) %>%  
+  filter(yearly_amt_sex < 500) %>%  
   droplevels() %>% 
   
   group_by(education) %>%
   
   summarize(n = n(),
-            min = min(hrs_work_week),
-            q1 = quantile(hrs_work_week, probs=0.25),
-            median = median(hrs_work_week),
-            mean = round(mean(hrs_work_week),1),
-            q3 = quantile(hrs_work_week, probs=0.75),
-            max = max(hrs_work_week),
-            sd = round(sd(hrs_work_week),1)) %>% 
+            min = min(yearly_amt_sex),
+            q1 = quantile(yearly_amt_sex, probs=0.25),
+            median = median(yearly_amt_sex),
+            mean = round(mean(yearly_amt_sex),1),
+            q3 = quantile(yearly_amt_sex, probs=0.75),
+            max = max(yearly_amt_sex),
+            sd = round(sd(yearly_amt_sex),1)) %>% 
   
   kable() %>% 
     kable_styling(bootstrap_options = "striped",
@@ -449,19 +407,19 @@ demo %>%
   
   filter(gender == "female") %>% 
   
-  filter(hrs_work_week < 121) %>%  
+  filter(yearly_amt_sex < 121) %>%  
   droplevels() %>% 
   
   group_by(education) %>%
   
   summarize(n = n(),
-            min = min(hrs_work_week),
-            q1 = quantile(hrs_work_week, probs=0.25),
-            median = median(hrs_work_week),
-            mean = round(mean(hrs_work_week),1),
-            q3 = quantile(hrs_work_week, probs=0.75),
-            max = max(hrs_work_week),
-            sd = round(sd(hrs_work_week),1)) %>% 
+            min = min(yearly_amt_sex),
+            q1 = quantile(yearly_amt_sex, probs=0.25),
+            median = median(yearly_amt_sex),
+            mean = round(mean(yearly_amt_sex),1),
+            q3 = quantile(yearly_amt_sex, probs=0.75),
+            max = max(yearly_amt_sex),
+            sd = round(sd(yearly_amt_sex),1)) %>% 
   
   kable() %>% 
     kable_styling(bootstrap_options = "striped",
@@ -475,10 +433,10 @@ In order to include an additional categorical variable add the `aes`thetic `colo
 ```{r boxplot hours/educ/gender}
 demo %>% 
   
-  filter(hrs_work_week < 121) %>% 
+  filter(yearly_amt_sex < 500) %>% 
   droplevels() %>% 
   
-  ggplot(aes(y=hrs_work_week, x=education, color=gender))+
+  ggplot(aes(y=yearly_amt_sex, x=education, color=gender))+
   
     scale_fill_brewer(palette="Dark2") +
   
@@ -488,7 +446,208 @@ demo %>%
   
 ```
 
+
+
 ### Narrative Summary
 <div id="narrative">
 When we look closer at usual hours worked by education level, but now grouped by gender - there are some interesting observations.  For each level of education the mean hours for women is less than that of men.  The difference in the range of middle 50% can be seen in the boxplot above.  Only when we examine **adv degree** do we see the middle 50% observations align with eachother across gender.
 </div>
+
+Additional Analysis
+# Analysis of Relationship between reported Sexual Activity Annual Frequency and Partner Loves Me / Shows Afffection
+
+# 
+
+```{r summary table sex/love}
+demo %>% 
+  
+  filter( yearly_amt_sex< 121,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+                              
+  droplevels() %>% 
+  
+  group_by(partner_express_love) %>%
+  
+  summarize(n = n(),
+            min = min(yearly_amt_sex),
+            q1 = quantile(yearly_amt_sex, probs=0.25),
+            median = median(yearly_amt_sex),
+            mean = round(mean(yearly_amt_sex),1),
+            q3 = quantile(yearly_amt_sex, probs=0.75),
+            max = max(yearly_amt_sex),
+            sd = round(sd(yearly_amt_sex),1)) %>% 
+  
+  kable() %>% 
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left")   %>% 
+    add_header_above(c("hours worked summary statistics "= 9))
+```
+
+### Visualization (Use the best option)
+
+```{r histogram sex/love, eval = T}
+demo %>% 
+  
+  filter( yearly_amt_sex< 500,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+  
+  ggplot(aes(yearly_amt_sex))+
+  
+    geom_histogram(aes(y=..density..,
+                       fill=partner_express_love), 
+                   color="white", 
+                   binwidth = 50) +
+  
+      scale_fill_brewer(palette="Dark2") +
+  
+    facet_wrap(~ partner_express_love, 
+               ncol=1,
+               as.table = FALSE)  ## reverses the order of the levels to match boxplots
+```
+
+```{r density plot sex/love, eval=F}
+demo %>% 
+  
+  filter( yearly_amt_sex< 500,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+  
+  ggplot(aes(yearly_amt_sex)) +
+  
+    geom_density(aes(fill=partner_express_love), 
+                 color="white",
+                 adjust=2) +
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    facet_wrap(~ partner_express_love, 
+               ncol=1,
+               as.table = FALSE)  ## reverses the order of the levels to match boxplots
+  
+```
+
+```{r boxplot sex/love, eval=T}
+demo %>% 
+  
+  filter( yearly_amt_sex< 500,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(y=yearly_amt_sex, x=partner_express_love))+
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    geom_boxplot(aes(fill=partner_express_love)) +
+  
+    coord_flip()  # might be nice to re-scale axis ( to see middle 50 better)
+  
+```
+
+```{r violin plot sex/love, eval=F}
+demo %>% 
+  
+  filter( yearly_amt_sex< 500,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(y=yearly_amt_sex, x=partner_express_love)) +
+  
+    geom_violin(aes(fill=partner_express_love),
+                draw_quantiles=c(0.25,0.5,.75),
+                adjust=2) +
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    coord_flip()  
+  
+```
+
+```{r density curves same plot sex/love, eval=F}
+demo %>% 
+  
+  filter( yearly_amt_sex< 500,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(x=yearly_amt_sex, color=partner_express_love)) +
+  
+    geom_density(alpha = 0.1, adjust=2) +
+  
+    xlim(10, 80) +
+  
+    scale_fill_brewer(palette="Dark2") 
+```
+
+### Summary Tables
+```{r summary table sex/love/female}
+demo %>% 
+  
+  filter(gender == "male") %>% 
+  
+  filter( yearly_amt_sex< 500,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+  droplevels() %>% 
+  
+  group_by(partner_express_love) %>%
+  
+  summarize(n = n(),
+            min = min(yearly_amt_sex),
+            q1 = quantile(yearly_amt_sex, probs=0.25),
+            median = median(yearly_amt_sex),
+            mean = round(mean(yearly_amt_sex),1),
+            q3 = quantile(yearly_amt_sex, probs=0.75),
+            max = max(yearly_amt_sex),
+            sd = round(sd(yearly_amt_sex),1)) %>% 
+  
+  kable() %>% 
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left")   %>% 
+    add_header_above(c("MALE RESPONSES \n \n hours worked summary statistics "= 9))
+```
+
+```{r summary table sex/love/female}
+demo %>% 
+  
+  filter(gender == "female") %>% 
+  
+  filter( yearly_amt_sex< 500,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+  droplevels() %>% 
+  
+  group_by(partner_express_love) %>%
+  
+  summarize(n = n(),
+            min = min(yearly_amt_sex),
+            q1 = quantile(yearly_amt_sex, probs=0.25),
+            median = median(yearly_amt_sex),
+            mean = round(mean(yearly_amt_sex),1),
+            q3 = quantile(yearly_amt_sex, probs=0.75),
+            max = max(yearly_amt_sex),
+            sd = round(sd(yearly_amt_sex),1)) %>% 
+  
+  kable() %>% 
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left")   %>% 
+    add_header_above(c("FEMALE RESPONSES \n \n annual sexual activity summary statistics "= 9))
+```
+
+### Boxplot
+In order to include an additional categorical variable add the `aes`thetic `color=gender` to your `ggplot` command.  This will split each educational level by gender.
+```{r boxplot}
+demo %>% 
+  
+  filter( yearly_amt_sex< 500,
+         partner_express_love%in% c("agree", "neither agree nor disagree","disagree")) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(y=yearly_amt_sex, x=partner_express_love, color=gender))+
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    geom_boxplot() +
+  
+    coord_flip()  # might be nice to re-scale axis ( to see middle 50 better)
+  
+```

@@ -1,4 +1,4 @@
----
+if ---
 title: "Effect of Demographic Change on Exclusionary Attitudes"
 output:
   html_document: default
@@ -15,27 +15,8 @@ Intergroup Contact on Exclusionary
 Attitudes.](http://dx.doi.org/10.1073/pnas.1317670111)” 
 *Proceedings of the National Academy of Sciences* 111(10): 3699–3704.
 
-Subjects in the experiment were individuals riding on the commuter
-rail line and overwhelmingly white. Every morning, multiple trains
-pass through various stations in suburban communities that were used
-for this study. For pairs of trains leaving the same station at
-roughly the same time, one was randomly assigned to receive the
-treatment and one was designated as a control. By doing so all the
-benefits of randomization apply for this dataset.
 
-The treatment in this experiment was the presence of two native Spanish-speaking 
-'confederates' (a term used in experiments to indicate that these
-individuals worked for the researcher, unbeknownst to the subjects)
- on the platform each morning prior to the train's arrival. The
-presence of these confederates, who would appear as Hispanic foreigners 
-to the subjects,  was intended to
-simulate the kind of demographic change anticipated for the United
-States in coming years. For those individuals in the control group, no
-such confederates were present on the platform. The treatment was
-administered for 10 days.  Participants were asked questions related
-to immigration policy both before the experiment started and after the
-experiment had ended.  The names and
-descriptions of variables in the data set `boston.csv` are:
+
 
  -------------------- ----------------------------------------------------------
  Name                 Description

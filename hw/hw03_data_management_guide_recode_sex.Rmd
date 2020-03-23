@@ -185,8 +185,8 @@ sex <- sex %>%
 sex %>% 
   filter(yearly_no_sex < 500) %>% 
   ggplot(aes(x=yearly_no_sex, color=))+
-  geom_histogram(binwidth=10, center=0.5, closed="left")+
-  facet_wrap(~H4RD14T, ncol=1)
+  geom_histogram(binwidth=50, center=0.5, closed="left")
+  #facet_wrap(~H4RD14T, ncol=1)
   
 ```
 

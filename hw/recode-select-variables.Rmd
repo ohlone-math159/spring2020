@@ -32,7 +32,7 @@ load("/cloud/project/data/addhealth4.RData")
 Select variables
 ```{r}
 mydata <- addhealth4 %>% 
-  select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11, H4ED2, H4KK15B, H4RD14, H4RD14T, H4LM19)
+  select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11, H4ED2, H4KK15B, H4RD14, H4RD14T, H4LM19, H4RD7E, H4RD14T, H4RD14, H4PE22, H4PR, H4BMI, H4DA13, H4GH6)
 ```
 
 Recode variables
@@ -106,9 +106,62 @@ mydata_c <- mydata %>%
                              "12"="bachelors",
                              "13"="adv degree",
                              "98"="don't know",
-                             .ordered=T))
-                              
+                             .ordered=T)) %>% 
+  
+  mutate(partner_express_love = recode_factor(H4RD7E,
+                                "1"="agree",
+                                "2"="agree",
+                                "3"="neither agree nor disagree",
+                                "4"="disagree",
+                                "5"="disagree",
+                                "96"="refused",
+                                "98"="don't know",
+                                .ordered=T)) %>% 
+  
+  mutate(H4RD14C = recode(H4RD14T,
+                          "1"=52,
+                          "2"=12,
+                          "3"=1
+                          )) %>% 
+  
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "6")) %>% 
+  
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "8")) %>% 
+  mutate(yearly_amt_sex = round(H4RD14*H4RD14C,0)) %>% 
+  
+  mutate( stress_easily = recode_factor(H4PE22,
+                                "1"="agree",
+                                "2"="agree",
+                                "3"="neither agree nor disagree",
+                                "4"="disagree",
+                                "5"="disagree",
+                                "6"="refused",
+                                "8"="don't know",
+                                .ordered=T)) %>% 
+  mutate(pulse_rate = H4PR) %>% 
+  
+  mutate(BMI = H4BMI) %>% 
+  
+  mutate(weekly_gym_use = cut(H4DA13,
+                       breaks=c(-Inf,0.5,3.5,7.5,96.5,97.5),
+labels=c("no",
+         "1-3 times",
+         "4 or more times",
+         "refused",
+         "legitimate skip"),
+          ordered_result = TRUE))
+
+  
 ```
+
+### add 4TH variable                              
+```{r}
+mydata_c <- mydata_c %>% 
+  mutate(sub_weight = H4GH6)
+```
+
     
 
 
@@ -117,7 +170,7 @@ glimpse(mydata_c)
 ```
 
 ```{r}
-demo <- mydata_c %>% select(race_c, gender , age, college_deg, vigorous_activity, too_tired, hrs_work_week, education  )
+demo <- mydata_c %>% select(race_c, gender , age, college_deg, vigorous_activity, too_tired, hrs_work_week, education , partner_express_love, yearly_amt_sex, pulse_rate, stress_easily, BMI, weekly_gym_use, sub_weight )
 ```
 
 ```{r}

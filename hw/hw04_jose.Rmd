@@ -81,24 +81,25 @@ The participants in the **addhealth** study were asked, "*In the past 24 hours, 
 </div>
 
 # Examining numerical variable 
-## 1st Numerical `hrs_work_week`
+## 1st Numerical `sub_weight`
 
 **Numerical Summary Table** 
 
 ```{r summarize num 1}
-hours <- clean %>% 
-  filter(hrs_work_week < 121) %>% 
+clean %>% 
+  filter(sub_weight < 526) %>% 
+  
   summarize(n = n(),
-            min = min(hrs_work_week),
-            q1 = quantile(hrs_work_week, probs=0.25),
-            median = median(hrs_work_week),
-            mean = mean(hrs_work_week),
-            q3 = quantile(hrs_work_week, probs=0.75),
-            max = max(hrs_work_week),
-            sd = sd(hrs_work_week))
+            min = min(sub_weight),
+            q1 = quantile(sub_weight, probs=0.25),
+            median = median(sub_weight),
+            mean = mean(sub_weight),
+            q3 = quantile(sub_weight, probs=0.75),
+            max = max(sub_weight),
+            sd = sd(sub_weight)) %>% 
 
-kable(round(hours,1)) %>% 
-kable_styling(full_width = F, position="center")
+  kable() %>% 
+    kable_styling(full_width = F, position="center")
 ```
 
 
@@ -106,8 +107,8 @@ kable_styling(full_width = F, position="center")
 
 ```{r hist num 1}
 clean %>%
-  filter(hrs_work_week < 121) %>% 
-  ggplot(aes(x=hrs_work_week)) + 
+  filter(sub_weight < 121) %>% 
+  ggplot(aes(x=sub_weight)) + 
     geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5) + 
       xlab("hours per week") +
       ggtitle("How many hours a week (do/did) you usually work at this job?") 
@@ -117,8 +118,8 @@ clean %>%
 
 ```{r boxplot num 1}
 clean %>%
-  filter(hrs_work_week < 121) %>% 
-  ggplot(aes(y=hrs_work_week, x=0)) + 
+  filter(sub_weight < 121) %>% 
+  ggplot(aes(y=sub_weight, x=0)) + 
     geom_boxplot(color="steelblue", width=0.6) + 
       ggtitle("How many hours a week (do/did) you usually work at this job?")+
   coord_flip()

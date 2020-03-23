@@ -27,7 +27,9 @@ Name                        Description
 
 `crimrec`                   1 if the tester has a criminal record, 0 if the tester does not.
 
-`interact`                  1 if tester interacted with employer during the job application, 0 if tester does not interact with employer.
+`interact`                  1 if tester interacted with employer during the job application, 0 if tester does not interact with employer.  
+
+
 `city`                      1 is job is located in the city center, 0 if job is located in the suburbs.
 
 `distance`                  Job’s average distance to downtown.
@@ -38,29 +40,11 @@ Name                        Description
 
 ------------------------------------------------------------------------------------------
 
-install `janitor` package
-```{r}
-library(janitor)
-library(dplyr)
-library(kableExtra)
-```
 
 ## Question 1  
 
-Begin by loading the data into R and explore the data. How many cases are there in the data? In what percentage of cases is the tester black?
+What are the cases/observation?  How many cases/observations are there? 
 
-## Answer 1
-
-```{r}
-## load data
-audit <- read.csv("data/criminalrecord.csv")
-## number of observations
-dim(audit)
-## black proportion
-mean(audit$black)
-```
-
-There are `r nrow(audit)` observations. `r round(mean(audit$black), 2) * 100`% of applicants are black.
 
 ## Question 2  
 

@@ -1,0 +1,178 @@
+---
+title: "Practice First Exam"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r libary packages, include=F}
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(readr)
+library(scales)   ### this was missing my original Rmd - you will need to add to knit
+```
+
+
+```{r load data, include = F}
+criminalrecord <- read_csv("/cloud/project/data/criminalrecord.csv")
+```
+
+# Exam Details
+Your RStudio portion of the exam will consist of three portions corresponding with hw 3-5, with a bonus section.
+
+* HW3 recoding/renaming
+
+* HW4 single variable
+  - summary table
+  - narrative summary
+
+* HW5 multiple variables (2 categorical)
+  - summary table
+  - graphic
+  - narrative summary
+  
+## Practice Scenario
+
+In this exercise, we analyze the causal effects of a criminal record on the job prospects of white and black job applicants. This exercise is based on: 
+
+Pager, Devah. (2003). "[The Mark of a Criminal Record](https://doi.org/10.1086/374403)." *American Journal of Sociology* 108(5):937-975. You are also welcome to watch Professor Pager discuss the design and result [here](https://youtu.be/nUZqvsF_Wt0).
+
+To isolate the causal effect of a criminal record for black and white applicants, Pager ran an audit experiment. In this type of experiment, researchers present two similar people that differ only according to one trait thought to be the source of discrimination.
+
+To examine the role of a criminal record, Pager hired a pair of white men and a pair of black men and instructed them to apply for existing entry-level jobs in the city of Milwaukee. The men in each pair were matched on a number of dimensions, including physical appearance and self-presentation. As much as possible, the only difference between the two was that Pager randomly varied which individual in the pair would indicate to potential employers that he had a criminal record. Further, each week, the pair alternated which applicant would present himself as an ex-felon. To determine how incarceration and race influence employment chances, she compared callback rates among applicants with and without a criminal background and calculated how those callback rates varied by race.
+
+In the data you will use `ciminalrecord.csv` nearly all these cases are present, but 4 cases have been redacted. As a result, your findings may differ slightly from those in the paper. The names and descriptions of variables are shown below. You may not need to use all of these variables for this activity. We’ve kept these unnecessary variables in the dataset because it is common to receive a dataset with much more information than you need.
+
+
+------------------------------------------------------------------------------------------
+Name                        Description
+--------------------------- --------------------------------------------------------------
+`jobid`                     Job ID number  
+
+`callback`                  1 if tester received a callback, 0 if the tester did not receive a callback. 
+
+`black`                     1 if the tester is black, 0 if the tester is white.
+
+`crimrec`                   1 if the tester has a criminal record, 0 if the tester does not.
+
+`interact`                  1 if tester interacted with employer during the job application, 0 if tester does not interact with employer.
+
+`city`                      1 is job is located in the city center, 0 if job is located in the suburbs.
+
+`distance`                  Job’s average distance to downtown.
+
+`custserv`                  1 if job is in the costumer service sector, 0 if it is not.
+
+`manualskill`               1 if job requires manual skills, 0 if it does not.
+
+------------------------------------------------------------------------------------------
+
+### Prompt 1 - Dataframe basics 
+
+What are the cases/observation (row)?  
+Data on a single application to a job
+
+How many cases/observations are there? 
+696 observations
+
+How many variables are there?  
+9 variables (8 are actual variables, while job ID is an identifier)
+
+
+### Prompt 2 - Recode
+Recode the variables `black`, `callback` and `crimrec` into a new dataframe `criminalrecord_c`  (recode the `0` and `1`s)
+
+```{r}
+criminalrecord_c <- criminalrecord %>% 
+  
+  mutate(black_c = recode_factor(black,
+                                "1"="black",
+                                "0"="white",
+                                .ordered=T)) %>% 
+
+  mutate(callback_c = recode_factor(callback,
+                                "1"="callback",
+                                "0"="no callback",
+                                .ordered=T)) %>% 
+  
+  mutate(crimrec_c = recode_factor(crimrec,
+                                "1"="criminal record",
+                                "0"="no criminal record",
+                                .ordered=T)) 
+
+```
+
+
+
+### Prompt 3 - Single Variable
+Create a table for the proportion of callbacks for all applicants.  Provide a narrative summary of your findings.
+
+```{r}
+criminalrecord_c %>%
+  tabyl(callback_c) %>% 
+    adorn_pct_formatting(digits=1) %>%
+    adorn_totals()%>%
+  kable() %>%
+    kable_styling(full_width = F, position="center")
+```
+
+
+### Prompt 4 - Two Variables
+Create a table for the proportion of callbacks for those with and without a criminal record.  Show the results in a bar plot. Provide a narrative summary of your findings.
+
+```{r}
+criminalrecord_c %>%
+  
+  tabyl(crimrec_c, callback_c) %>%   ### tabyl(explanatory, response)
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+  
+  kable() %>%
+    kable_styling(bootstrap_options = "striped", 
+                  full_width = F, 
+                  position="left") %>% 
+    add_header_above(c("","Did the tester receive a callback?"= 2))  ### response variable
+```
+
+```{r}
+criminalrecord_c %>%
+  
+  ggplot(aes(x=crimrec_c, fill=callback_c)) +  ### x=explanatory, fill=response
+    geom_bar(position = position_fill(reverse = T), width=.6) +
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    scale_y_continuous(labels=percent) +
+  
+    coord_flip()
+```
+
+Narrative Summary
+I found tejkjlksdklsddm sdfosfsmmasdlsdfa;fasdl;sa
+
+
+### Prompt 5 - Bonus Problem 
+Create a barplot for the proportion of callbacks for white applicants with and without a criminal record, and calculate this proportion for black applicants with and without a criminal record.  Show the results in a bar plot.  Provide a narrative summary of your finding
+
+```{r}
+criminalrecord_c %>%
+
+  ggplot(aes(x=crimrec_c, fill=callback_c)) +   ## this line is identical to your previous bar plot
+  
+    geom_bar(position = position_fill(reverse = T), width=.6) +
+    
+    scale_fill_brewer(palette="Dark2") +
+  
+    facet_wrap(~black_c, ncol=1) + ### you need to add third variable here as the facet_wrap
+  
+    scale_y_continuous(labels=percent) +
+  
+    coord_flip()
+```
+

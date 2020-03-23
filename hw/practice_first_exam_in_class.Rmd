@@ -1,0 +1,159 @@
+---
+title: "Practice First Exam"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r libary packages, include=F}
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(readr)
+```
+
+
+```{r load data, include = F}
+criminalrecord <- read_csv("/cloud/project/criminalrecord.csv")
+```
+
+## Scenario
+
+In this exercise, we analyze the causal effects of a criminal record on the job prospects of white and black job applicants. This exercise is based on: 
+
+Pager, Devah. (2003). "[The Mark of a Criminal Record](https://doi.org/10.1086/374403)." *American Journal of Sociology* 108(5):937-975. You are also welcome to watch Professor Pager discuss the design and result [here](https://youtu.be/nUZqvsF_Wt0).
+
+To isolate the causal effect of a criminal record for black and white applicants, Pager ran an audit experiment. In this type of experiment, researchers present two similar people that differ only according to one trait thought to be the source of discrimination.
+
+To examine the role of a criminal record, Pager hired a pair of white men and a pair of black men and instructed them to apply for existing entry-level jobs in the city of Milwaukee. The men in each pair were matched on a number of dimensions, including physical appearance and self-presentation. As much as possible, the only difference between the two was that Pager randomly varied which individual in the pair would indicate to potential employers that he had a criminal record. Further, each week, the pair alternated which applicant would present himself as an ex-felon. To determine how incarceration and race influence employment chances, she compared callback rates among applicants with and without a criminal background and calculated how those callback rates varied by race.
+
+In the data you will use `ciminalrecord.csv` nearly all these cases are present, but 4 cases have been redacted. As a result, your findings may differ slightly from those in the paper. The names and descriptions of variables are shown below. You may not need to use all of these variables for this activity. We’ve kept these unnecessary variables in the dataset because it is common to receive a dataset with much more information than you need.
+
+
+------------------------------------------------------------------------------------------
+Name                        Description
+--------------------------- --------------------------------------------------------------
+`jobid`                     Job ID number  
+
+`callback`                  1 if tester received a callback, 0 if the tester did not receive a callback. 
+
+`black`                     1 if the tester is black, 0 if the tester is white.
+
+`crimrec`                   1 if the tester has a criminal record, 0 if the tester does not.
+
+`interact`                  1 if tester interacted with employer during the job application, 0 if tester does not interact with employer.
+
+`city`                      1 is job is located in the city center, 0 if job is located in the suburbs.
+
+`distance`                  Job’s average distance to downtown.
+
+`custserv`                  1 if job is in the costumer service sector, 0 if it is not.
+
+`manualskill`               1 if job requires manual skills, 0 if it does not.
+
+------------------------------------------------------------------------------------------
+### Prompt 2 - Recode
+Recode the variables `black`, `callback` and `crimerec` into a new dataframe `clean_p_exam`  (recode the `0` and `1`s)
+
+```{r}
+criminalrecord_c <- criminalrecord %>% 
+
+  mutate(callback_c = recode_factor(callback,
+                                "1" = "callback",
+                                "0" = "no_callback",
+                                .ordered=T)) %>% 
+  
+  mutate(black_c = recode_factor(black,
+                                "1" = "black",
+                                "0" = "white",
+                                .ordered=T)) %>%
+  
+  mutate(crimrec_c = recode_factor(crimrec,
+                                "1" = "crimrec",
+                                "0" = "no_crimrec",
+                                .ordered=T)) 
+```
+
+
+### Prompt 3 - Single Variable
+Create a table for the proportion of callbacks for all applicants.  Show the results in a bar plot.  Provide a narrative summary of your findings.
+```{r}
+criminalrecord_c %>% 
+  
+  tabyl(callback_c) %>% 
+    adorn_pct_formatting(digits=1) %>%
+    adorn_totals() %>% 
+  
+  kable() %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = F, 
+                  position="center")
+  
+```
+
+
+
+### Prompt 4 - Two Variables
+Create a table for the proportion of callbacks sorted by manualskill.  Show the results in a bar plot. Provide a narrative summary of your findings.
+```{r}
+criminalrecord_c %>%
+  
+  tabyl(interact_c, callback_c) %>%
+    adorn_totals("row") %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+    adorn_ns() %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left") %>% 
+    add_header_above(c("","received callback"=2))
+```
+
+
+
+
+### Prompt 5 - Bonus Problem 
+Create a table for the proportion of callbacks for manual skill for those with and without criminal records, and calculate this proportion for non-manual skill with and without a criminal record.  Show the results in a bar plot.  Provide a narrative summary of your finding
+
+```{r}
+criminalrecord_c %>%
+  
+  filter(city_c == "city") %>% 
+  
+  tabyl(crimrec_c, callback_c) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+    adorn_ns() %>% 
+  
+  kable() %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left") %>% 
+    add_header_above(c("","city jobs only \n \n received callback"=2))
+```
+
+```{r}
+criminalrecord_c %>%
+  
+   filter(city_c == "suburb") %>%
+  
+  tabyl(crimrec_c, callback_c) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+    adorn_ns() %>% 
+  
+  kable() %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left") %>% 
+    add_header_above(c("","suburb job only \n \n received callback"=2))
+```
+
