@@ -21,6 +21,7 @@ library(gridExtra)
 straws <- read_csv("straws.csv", col_types = cols(X1 = col_skip()))
 straws <- straws %>% 
   mutate(blue = ifelse(straws$color=="blue",1,0))
+p_blue_population = mean(straws$blue)
 ```
 
 # Background
@@ -78,6 +79,99 @@ sample1 %>% tabyl(color)
 ## **Prompt 2** - How could improve your insight into the proportion of blue straws?
 
   - <**your answer goes here**>
+
+
+## Sampling Distribution
+
+In order to better understand the variability in random samples, it is useful to simulate multiple random samples from the same population.  After obtaining multiple samples, we will create a visualization (histogram) displaying the results of all the random samples.  Then we will analyze the simulation.
+
+In order to simulate multiple random samples, we will use the `rep_sample_n` from the `infer` package.  
+
+```{r}
+samples_n50_reps1000 <- straws %>%
+        rep_sample_n(size = 50, reps = 1000, replace = F)
+```
+
+Then we create use the `summarize` command to caculate the proportion of blue straws for each of the 20 random sample of 50 straws.
+
+```{r}
+summary_n50_reps1000 <- samples_n50_reps1000 %>% 
+          summarise(p_hat = mean(blue))
+```
+
+Now, we will visualize the 1000 random samples' proportion of blue straws.
+
+```{r}
+summary_n50_reps1000 %>% 
+  
+  ggplot() +
+  
+  geom_histogram(aes(p_hat*100), 
+                 binwidth = 2, 
+                 color="white", 
+                 fill="steelblue") +
+  
+  labs(x = "Sample Proportion of Blue Straws (Percent)",
+       title ="Sampling Distribution of p_hat based on sample size, n, of 50")
+```
+
+
+```{r}
+#### additional code to use in the confidence interval homework #####
+#### also need to calculate actual p_blue of straws ####
+ci_n50_reps1000 <-  samples_n50_reps1000 %>%
+  
+        summarise(p_hat = mean(blue), 
+                  se = sqrt(p_hat*(1-p_hat)/50),  ### need to modify for proper sample size
+                  me = qnorm(0.85) * se,
+                  lower = p_hat - me,
+                  upper = p_hat + me)
+
+ci_n50_reps1000 <- ci_n50_reps1000 %>%
+  mutate(capture_p = ifelse(lower < p_blue_population & upper > p_blue_population, "yes", "no"))
+
+ci_n50_reps1000_data <- gather(ci_n50_reps1000, type, bound, lower:upper)
+
+ci_n50_reps1000_data %>% 
+  
+  sample_n(size=20) %>% 
+
+  ggplot(aes(y = replicate, x = bound, group = replicate, color=capture_p)) +
+    geom_point(size = 2)+
+    geom_line(color="forestgreen")+
+    geom_vline(xintercept = 0.1904, color = "steelblue")+
+    scale_x_continuous(limits = c(0.00, 0.40))+
+    theme(legend.position = "none")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Set sample size
