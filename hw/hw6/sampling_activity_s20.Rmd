@@ -1,0 +1,353 @@
+---
+title: "Straws-Sample-Confidence-Intervals"
+author: "Jose Rico"
+date: "March 22, 2020"
+output: 
+  html_document:
+    toc: true
+    theme: cosmo
+    highlight: tango
+---
+
+```{r, include=F, message=FALSE}
+library(readr)
+library(tidyverse)
+library(janitor)
+library(infer)
+library(gridExtra)
+```
+
+```{r loading data, message = F, error=FALSE, include=F}
+straws <- read_csv("straws.csv", col_types = cols(X1 = col_skip()))
+straws <- straws %>% 
+  mutate(blue = ifelse(straws$color=="blue",1,0))
+```
+
+# Background
+For this activity, you will be exploring sampling using R.  We will be sampling a population of 2500 virtual straws from the dataframe `straws`.  `straws` is a dataframe of 2500 virtual straws of six colors (blue, green, orange, purple, red and yellow). Below is a visualization of the virtual 2500 straws.
+
+```{r, echo=F}
+ggplot(straws, aes(x_pos,y_pos, fill=color, color=color))+
+  geom_raster(interpolate=F)+
+  
+  scale_colour_manual(values = c("blue","green" ,"orange", "purple", "red", "yellow"), aesthetics = c("colour", "fill"))+
+  
+  scale_x_continuous(limits=c(0,50))+
+  scale_y_continuous(limits=c(0,50))+
+  
+  ggtitle("Visualization of our Population of 2500 straws")+
+  
+  theme(legend.position = "none",
+        panel.grid = element_blank(),
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_blank()) 
+```
+
+# Data Frame Details
+
+Our `straws` dataframe has 2 variables of interest  
+
+  - **color** - color of the individual straw
+  - **blue** - binary variable (**1** if the straw is blue, **0** is the straw is not blue)
+
+
+# Sampling
+
+We can take a single sample of straws in R, using the `sample_n` function in R.  The `sample_n` function has two parameters of interest for us.  
+
+  - The `size = 50` defines how many rows to sample from the `straws` dataframe.  
+  - The `replace = F`, tells R to keep selecting rows without replacing selections.  
+  
+    - This means that once a row is selected it can not be re-selected, this is called **sampling without replacement**.  
+
+After taking the sample, we create a quick tabulation of our `sample1`'s **color** variable.
+
+```{r}
+sample1 <- straws %>% 
+  sample_n(size = 50, replace = F )
+
+sample1 %>% tabyl(color)
+```
+
+## **Prompt 1** - Do you think the percent of blue straws that you just obtained is the actual percent for the proportion of blue straws?  Why or why not?
+
+  - <**your answer goes here**>
+
+## **Prompt 2** - How could improve your insight into the proportion of blue straws?
+
+  - <**your answer goes here**>
+
+
+Set sample size
+```{r}
+sample_size <- 50
+n <- sample_size
+```
+
+Set seed for psuedo-randomization 
+```{r}
+
+```
+
+```{r}
+straws_blue_yes_no <- straws %>% 
+  mutate(blue = ifelse(straws$color=="blue",1,0))
+```
+
+```{r}
+p_blue = mean(straws_blue_yes_no$blue)
+```
+
+```{r}
+
+sample1 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample1)
+s1_blue <- sample1 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample1))
+prop_blue_1 <- s1_blue$prop1
+prop_blue_1
+```        
+
+```{r}
+sample2 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample2)
+s2_blue <- sample2 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample2))
+prop_blue_2 <- s2_blue$prop1
+prop_blue_2
+```
+
+```{r}
+sample3 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample3)
+s3_blue <- sample3 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample3))
+prop_blue_3 <- s3_blue$prop1
+prop_blue_3
+```
+
+```{r}
+sample4 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample4)
+s4_blue <- sample4 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample4))
+prop_blue_4 <- s4_blue$prop1
+prop_blue_4
+```
+
+```{r}
+sample5 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample5)
+s5_blue <- sample5 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample5))
+prop_blue_5 <- s5_blue$prop1
+prop_blue_5
+```
+
+```{r}
+sample6 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample1)
+s6_blue <- sample6 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample6))
+prop_blue_6 <- s6_blue$prop1
+prop_blue_6
+```        
+
+```{r}
+sample7 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample7)
+s7_blue <- sample7 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample2))
+prop_blue_7 <- s7_blue$prop1
+prop_blue_7
+```
+
+```{r}
+sample8 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample3)
+s8_blue <- sample8 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample8))
+prop_blue_8 <- s8_blue$prop1
+prop_blue_8
+```
+
+```{r}
+sample9 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample9)
+s9_blue <- sample9 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample4))
+prop_blue_9 <- s9_blue$prop1
+prop_blue_9
+```
+
+```{r}
+sample10 <- data.frame(straw_sam = sample(straws$color,sample_size))
+summary(sample5)
+s10_blue <- sample10 %>% 
+  filter(straw_sam=="blue") %>% 
+  summarize(prop1= n()/nrow(sample10))
+prop_blue_10 <- s10_blue$prop1
+prop_blue_10
+```
+
+
+```{r}
+straw_sum <- data.frame(sample = 1:10, blue_prop = c(prop_blue_1,prop_blue_2,prop_blue_3,prop_blue_4,prop_blue_5,prop_blue_6,prop_blue_7,prop_blue_8,prop_blue_9,prop_blue_10 ))
+```
+
+set confidence level by using corresponding z value
+```{r}
+conf_level = 0.99
+z <- qnorm((1-(1-conf_level)/2))
+z
+```
+
+
+```{r}
+straw_ci <- straw_sum %>% 
+  mutate(low_prop = blue_prop - round(z*sqrt(blue_prop*(1-blue_prop)/sample_size),3)) %>% 
+  mutate(high_prop = blue_prop + round(z*sqrt(blue_prop*(1-blue_prop)/sample_size),3)) %>% 
+  mutate(width=high_prop - low_prop)
+```
+
+```{r}
+straw_tidy <- straw_ci %>% 
+  select(sample,low_prop, high_prop) %>% 
+  pivot_longer(names_to = "type",
+               values_to = "prop",
+               cols= -sample)
+```
+
+
+```{r}
+ggplot(data=straw_tidy, aes(y=sample, x=prop, group=sample))+
+  geom_point()+
+  geom_line(color="forestgreen")+
+  geom_vline(xintercept = 0.1904)+
+  scale_y_continuous(breaks=1:10)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Additional work - not needed
+```{r}
+n=1000
+ci <- straws_blue_yes_no %>%
+        rep_sample_n(size = n, reps = 20, replace = TRUE) %>%
+        summarise(p_hat = mean(blue), 
+                  se = sqrt(p_hat*(1-p_hat)/n),
+                  me = qnorm(0.85) * se,
+                  lower = p_hat - me,
+                  upper = p_hat + me)
+
+ci <- ci %>%
+  mutate(capture_p = ifelse(lower < p_blue & upper > p_blue, "yes", "no"))
+
+ci_data <- gather(ci, type, bound, lower:upper)
+
+p1 <- ggplot(data = ci_data, aes(y = replicate, x = bound, group = replicate, color=capture_p)) +
+  geom_point(size = 2)+
+  geom_line(color="forestgreen")+
+  geom_vline(xintercept = 0.1904, color = "steelblue")+
+  scale_x_continuous(limits = c(0.12, 0.26))+
+  theme(legend.position = "none")
+p1
+```
+
+```{r}
+n=50
+ci <- straws_blue_yes_no %>%
+        rep_sample_n(size = n, reps = 20, replace = TRUE) %>%
+        summarise(p_hat = mean(blue), 
+                  se = sqrt(p_hat*(1-p_hat)/n),
+                  me = qnorm(0.9) * se,
+                  lower = p_hat - me,
+                  upper = p_hat + me)
+
+ci <- ci %>%
+  mutate(capture_p = ifelse(lower < 0.1904 & upper > 0.1904, "yes", "no"))
+
+ci_data <- gather(ci, type, bound, lower:upper)
+
+p2 <- ggplot(data = ci_data, aes(y = replicate, x = bound, group = replicate, color=capture_p)) +
+  geom_point(size = 2)+
+  geom_line(color="forestgreen")+
+  geom_vline(xintercept = 0.1904, color = "steelblue")+
+  scale_x_continuous(limits = c(0, 0.50))
+
+```
+
+
+```{r }
+n=200
+ci <- straws_blue_yes_no %>%
+        rep_sample_n(size = n, reps = 10, replace = TRUE) %>%
+        summarise(p_hat = mean(blue), 
+                  se = sqrt(p_hat*(1-p_hat)/n),
+                  me = qnorm(0.975) * se,
+                  lower = p_hat - me,
+                  upper = p_hat + me)
+
+ci <- ci %>%
+  mutate(capture_p = ifelse(lower < 0.1904 & upper > 0.1904, "yes", "no"))
+
+ci_data <- gather(ci, type, bound, lower:upper)
+
+p3 <- ggplot(data = ci_data, aes(y = replicate, x = bound, group = replicate, color=capture_p)) +
+  geom_point(size = 2)+
+  geom_line(color="forestgreen")+
+  geom_vline(xintercept = 0.1904, color = "steelblue")+
+  scale_x_continuous(limits = c(0, 0.50))
+```
+
+
+```{r }
+n=200
+ci <- straws_blue_yes_no %>%
+        rep_sample_n(size = n, reps = 10, replace = TRUE) %>%
+        summarise(p_hat = mean(blue), 
+                  se = sqrt(p_hat*(1-p_hat)/n),
+                  me = qnorm(0.9) * se,
+                  lower = p_hat - me,
+                  upper = p_hat + me)
+
+ci <- ci %>%
+  mutate(capture_p = ifelse(lower < 0.1904 & upper > 0.1904, "yes", "no"))
+
+ci_data <- gather(ci, type, bound, lower:upper)
+
+p4 <- ggplot(data = ci_data, aes(y = replicate, x = bound, group = replicate, color=capture_p)) +
+  geom_point(size = 2)+
+  geom_line(color="forestgreen")+
+  geom_vline(xintercept = 0.1904, color = "steelblue")+
+  scale_x_continuous(limits = c(0, 0.50))
+```
+
+How did we do?
+
+Find Population Proportion of Blue Straws
+```{r}
+prop.table(table(straws$color))
+```
