@@ -5,6 +5,7 @@ date: "March 22, 2020"
 output: 
   html_document:
     toc: true
+    toc_float : true
     theme: cosmo
     highlight: tango
 ---
@@ -81,7 +82,7 @@ sample1 %>% tabyl(color)
   - <**your answer goes here**>
 
 
-## Sampling Distribution
+# Sampling Distribution
 
 In order to better understand the variability in random samples, it is useful to simulate multiple random samples from the same population.  After obtaining multiple samples, we will create a visualization (histogram) displaying the results of all the random samples.  Then we will analyze the simulation.
 
