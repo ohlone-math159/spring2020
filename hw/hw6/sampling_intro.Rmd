@@ -172,47 +172,6 @@ summary_n50_reps1000 %>%
 > **your answer goes here**
 
 
-# Next HW 6 - The Confidence Interval and Confidence Level
-```{r, include=F , eval=F}
-#### additional code to use in the confidence interval homework #####
-#### also need to calculate actual p_blue of straws ####
-#### this is probably the last step we show - need student to first observe SE, Creation of Bounds for Single CI ####
-
-samples_n50_reps20 <- straws %>%
-        rep_sample_n(size = 50, reps = 20, replace = F)
-
-ci_n50_reps20 <-  samples_n50_reps20 %>%
-  
-    group_by(replicate) %>% 
-  
-          summarize(blue = sum(color == "blue"),
-                  prop_blue = blue/ 50,
-                  se = sqrt(prop_blue*(1-prop_blue)/50),  ### need to modify for proper sample size
-                  me = qnorm(0.95) * se,
-                  lower = prop_blue - me,
-                  upper = prop_blue + me)
-
-ci_n50_reps20 <- ci_n50_reps20 %>%
-  mutate(capture_p = ifelse(lower < p_blue_population & upper > p_blue_population, "yes", "no"))
-
-ci_n50_reps20_data <- gather(ci_n50_reps20, type, bound, lower:upper)
-
-ci_n50_reps20_data %>% 
-
-  ggplot(aes(y = replicate, x = bound, group = replicate, color=capture_p)) +
-    geom_point(size = 2)+
-    geom_line(color="forestgreen")+
-    geom_vline(xintercept = 0.1904, color = "steelblue")+
-    scale_x_continuous(limits = c(0.00, 0.50))+
-    theme(legend.position = "none")
-
-```
-
-
-
-
-
-
 
 
 
