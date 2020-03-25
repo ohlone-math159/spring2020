@@ -27,7 +27,7 @@ p_blue_population = mean(straws$blue)
 ```
 
 # Background
-For this activity, you will be exploring sampling using R.  We will be sampling a population of 2500 virtual straws from the dataframe `straws`.  `straws` is a dataframe of 2500 virtual straws of six colors (blue, green, orange, purple, red and yellow). Below is a visualization of the virtual 2500 straws.  Our parameter (of the population) of interest is **What is the proportion of blue straws in our population?**
+For this activity, you will be exploring sampling using R.  We will be sampling a population of 2500 virtual straws from the dataframe `straws`.  Our parameter (of the population) of interest is **What is the proportion of blue straws in our population?**   `straws` is a dataframe of 2500 virtual straws of six colors (blue, green, orange, purple, red and yellow). Below is a visualization of the virtual 2500 straws.  
 
 ```{r, echo=F}
 ggplot(straws, aes(x_pos,y_pos, fill=color, color=color))+
@@ -50,7 +50,7 @@ ggplot(straws, aes(x_pos,y_pos, fill=color, color=color))+
 
 # Data Frame Details
 
-Our `straws` dataframe has 2 variables of interest  
+Our `straws` dataframe has 1 main variables of interest  
 
   - **color** - color of the individual straw
 
@@ -112,7 +112,7 @@ samples_n50_reps1000 <- straws %>%
 ## Summarizing our Samples
 We are interested in the proportion of blue straws in each sample, so we need to instruct R to calculate the sample proportion for each individual sample of 50.  
 
-1. First we will `group_by` according to each sample (`replicate` in our dataframe).  
+1. First we will `group_by` according to each sample (**replicate** in our dataframe).  
 2. Then we'll use the `summarize` command to count the number of blue straws in each sample. 
 3. Finally, `mutate` a new column, **prop_blue**, which is the result of the calculation of the proportion of blue straws for each of the 1000 random sample of 50 straws.
 
@@ -151,14 +151,15 @@ summary_n50_reps1000 %>%
   
   ggplot(aes(prop_blue)) +
   
-  geom_histogram(binwidth = 0.02, 
+  geom_histogram(binwidth = 0.01, 
                  color="white", 
                  fill="steelblue") +
   
   labs(x = "Proportion of Blue Straws (Individual Sample)",
        title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 50)") +
   
-  scale_x_continuous(breaks = c(0.04, .08, .12, .16, .2, .24, .28, .32, .36, .40, .44))
+  
+    scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))
 
 
 ```
@@ -172,12 +173,62 @@ summary_n50_reps1000 %>%
 > **your answer goes here**
 
 
+# Post Activity - Study Effect of Increasing Sample Size
+We have just demonstrated the process of constructing a hypothetical sampling distribution.   Next step is to see the effect of increasing the sample size on the sampling distributions.  The following code is a single chunk that simulates, summarizes and visualizes for a sample size of  
+
+## Sample Size = 100
+
+```{r, echo=F, warning=FALSE}
+n = 100
+
+straws %>%
+        rep_sample_n(size = n, reps = 1000, replace = F) %>% 
+  
+          group_by(replicate) %>% 
+  
+          summarize(blue = sum(color == "blue")) %>% 
+  
+          mutate(prop_blue = blue/ n)  %>% 
+
+ggplot(aes(prop_blue)) +
+  
+    geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+  
+      labs(x = "Proportion of Blue Straws (Individual Sample)",
+          title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 100") +
+  
+    scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))
 
 
+```
 
 
+## Sample Size = 200 
+```{r, echo=F, warning=FALSE}
+n = 200
+
+straws %>%
+        rep_sample_n(size = n, reps = 1000, replace = F) %>% 
+        group_by(replicate) %>% 
+        summarize(blue = sum(color == "blue")) %>% 
+        mutate(prop_blue = blue/ n)  %>% 
+
+        ggplot(aes(prop_blue)) +
+        geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+        labs(x = "Proportion of Blue Straws (Individual Sample)",
+              title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 100") +
+        scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))
 
 
+```
+
+### **Prompt 7** - What do you notice happening to the sampling distribution as the sample size gets increased?
+
+> **your answer goes here**
 
 
 
