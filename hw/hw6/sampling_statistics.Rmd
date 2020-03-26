@@ -1,0 +1,156 @@
+---
+title: "Straws-Sample-Confidence-Intervals"
+author: "Jose Rico"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_float : true
+    theme: cosmo
+    highlight: tango
+---
+
+```{r, include=F, message=FALSE}
+library(readr)
+library(tidyverse)
+library(janitor)
+library(infer)
+library(kableExtra)
+library(gridExtra)
+library(scales)
+library(ggpubr)
+```
+
+```{r loading data, message = F, error=FALSE, include=F}
+straws <- read_csv("straws.csv", col_types = cols(X1 = col_skip()))
+straws <- straws 
+p_blue_population = mean(straws$blue)
+```
+
+# Background
+In the introduction to sampling distributions we saw that the sampling distribution will have less variablity as we increase the sample size.  In this activity we want to quantify the variability using the statistical summary statistic known as standard deviation.  
+
+## Sample Size = 50
+
+```{r, echo=F, warning=FALSE}
+n = 50
+
+s50 <- straws %>%
+  
+        rep_sample_n(size = n, reps = 1000, replace = F) %>% 
+          group_by(replicate) %>% 
+          summarize(blue = sum(color == "blue")) %>% 
+          mutate(prop_blue = blue/ n) 
+
+s50 %>% 
+  summarise(s50_dist_mean = mean(prop_blue),
+            s50_dist_sd = round(sd(prop_blue),3),
+            s50_bottom_2.5 = quantile(prop_blue,0.025),
+            s50_top_2.5 = quantile(prop_blue,0.975)) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+
+s50_dist_mean = mean(s50$prop_blue)
+s50_dist_sd = round(sd(s50$prop_blue),3)
+
+s50 %>% 
+  ggplot(aes(prop_blue)) +
+    geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+      labs(x = "Proportion of Blue Straws (Individual Sample)",
+          title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 50)") +
+      scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))+
+      geom_vline(xintercept = seq(s50_dist_mean - 4*s50_dist_sd,s50_dist_mean + 4*s50_dist_sd, s50_dist_sd),
+                 linetype="dashed", color = "red")
+
+```
+
+## Sample Size = 100
+
+```{r, echo=F, warning=FALSE}
+n = 100
+
+s100 <- straws %>%
+          rep_sample_n(size = n, reps = 1000, replace = F) %>% 
+          group_by(replicate) %>% 
+          summarize(blue = sum(color == "blue")) %>% 
+          mutate(prop_blue = blue/ n) 
+
+s100 %>% 
+  summarise(s100_dist_mean = mean(prop_blue),
+            s100_dist_sd = round(sd(prop_blue),3),
+            s100_bottom_2.5 = quantile(prop_blue,0.025),
+            s100_top_2.5 = quantile(prop_blue,0.975)) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+
+s100_dist_mean = mean(s100$prop_blue)
+s100_dist_sd = round(sd(s100$prop_blue),3)
+
+s100 %>% 
+  ggplot(aes(prop_blue)) +
+    geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+  
+      labs(x = "Proportion of Blue Straws (Individual Sample)",
+          title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 100") +
+      scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))+
+      geom_vline(xintercept = seq(s100_dist_mean - 4*s100_dist_sd,s50_dist_mean + 4*s100_dist_sd, s100_dist_sd),,
+                 linetype="dashed", color = "red")
+
+```
+
+## Sample Size = 200
+
+```{r, echo=F, warning=FALSE}
+n = 200
+
+s200 <- straws %>%
+          rep_sample_n(size = n, reps = 1000, replace = F) %>% 
+          group_by(replicate) %>% 
+          summarize(blue = sum(color == "blue")) %>% 
+          mutate(prop_blue = blue/ n) 
+
+s200 %>% 
+  summarise(s200_dist_mean = mean(prop_blue),
+            s200_dist_sd = round(sd(prop_blue),3),
+            s200_bottom_2.5 = quantile(prop_blue,0.025),
+            s200_top_2.5 = quantile(prop_blue,0.975)) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+
+s200_dist_mean = mean(s200$prop_blue)
+s200_dist_sd = round(sd(s200$prop_blue),3)
+
+s200 %>% 
+  ggplot(aes(prop_blue)) +
+    geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+  
+      labs(x = "Proportion of Blue Straws (Individual Sample)",
+          title =c("Distribution of Proportion of Blue Straws for 1000 Samples \n (n = 200)")) +
+      scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))+
+      geom_vline(xintercept = seq(s200_dist_mean - 4*s200_dist_sd,s200_dist_mean + 4*s200_dist_sd, s200_dist_sd),
+                 linetype="dashed", color = "red")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
