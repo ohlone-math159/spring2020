@@ -1,0 +1,139 @@
+---
+title: "Straws-Sample-Confidence-Intervals"
+author: "Jose Rico"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_float : true
+    theme: cosmo
+    highlight: tango
+---
+
+```{r, include=F, message=FALSE}
+library(readr)
+library(tidyverse)
+library(janitor)
+library(infer)
+library(kableExtra)
+library(gridExtra)
+library(scales)
+library(mosaic)
+```
+
+```{r loading data, message = F, error=FALSE, include=F}
+straws <- read_csv("straws.csv", col_types = cols(X1 = col_skip()))
+```
+
+# Background
+As you have probably surmised by now that statistics from a sample has inherent variability from the randomness in the sampling process.  When statistician take a sample and they want to report the sample statistics as an estimate for the population, they are careful in their reporting.  There trick is to provide an interval where they are confident (to a stated probability) that the true population proportions will lie within the interval.  
+
+## Find True Population proportion of blue straws
+
+```{r}
+parameters <- straws %>% 
+          summarize(blue = sum(color == "blue"),
+                    prop_blue = blue/ 2500)
+```
+
+## Take a sample
+
+```{r}
+n = 50
+
+sample1 <- straws %>% 
+  sample_n(size = n, replace = F ) 
+
+stat_sample1 <- sample1 %>% 
+  
+      summarize(blue = sum(color == "blue"),
+                prop_blue = blue/ n,
+                se = sqrt(prop_blue*(1-prop_blue)/n),
+                me = qnorm(0.975) * se,
+                lower = prop_blue - me,
+                upper = prop_blue + me)
+
+kable(stat_sample1) %>% 
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+```
+
+```{r}
+qnorm(0.95)
+```
+
+# Let R do all the work
+```{r}
+confint(binom.test(~(color == "blue"), conf.level = 0.95, ci.method= "Wald", data = sample1))
+```
+
+```{r}
+confint(binom.test(x=8, n=50, ci.method= "Wald"))
+```
+
+
+# Take Muliple Sample
+```{r}
+#### additional code to use in the confidence interval homework #####
+#### also need to calculate actual p_blue of straws ####
+#### this is probably the last step we show - need student to first observe SE, Creation of Bounds for Single CI ####
+
+samples_n50_reps20 <- straws %>%
+        rep_sample_n(size = 50, reps = 20, replace = F)
+
+ci_n50_reps20 <-  samples_n50_reps20 %>%
+  
+    group_by(replicate) %>% 
+  
+          summarize(blue = sum(color == "blue"),
+                  prop_blue = blue/ 50,
+                  se = sqrt(prop_blue*(1-prop_blue)/50),  ### need to modify for proper sample size
+                  me = qnorm(0.95) * se,
+                  lower = prop_blue - me,
+                  upper = prop_blue + me)
+
+ci_n50_reps20 <- ci_n50_reps20 %>%
+  mutate(capture_p = ifelse(lower < 0.1904 & upper > 0.1904, "yes", "no"))
+
+ci_n50_reps20_data <- gather(ci_n50_reps20, type, bound, lower:upper)
+
+ci_n50_reps20_data %>% 
+
+  ggplot(aes(y = replicate, x = bound, group = replicate, color =capture_p)) +
+    geom_point(size = 2)+
+    geom_line(color="forestgreen")+
+    geom_vline(xintercept = 0.1904, color = "steelblue")+
+    scale_x_continuous(limits = c(0.00, 0.50))+
+    theme(legend.position = "none")
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

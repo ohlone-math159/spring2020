@@ -28,7 +28,7 @@ p_blue_population = mean(straws$blue)
 ```
 
 # Background
-In the introduction to sampling distributions we saw that the sampling distribution will have less variablity as we increase the sample size.  In this activity we want to quantify the variability using the statistical summary statistic known as standard deviation.  
+In the introduction to sampling distributions we saw that the sampling distribution will have less variablity as we increase the sample size.  In this activity we want to quantify the variability using the statistical summary statistic known as standard deviation. We will also provide additional summary statistics, mean, 2.5th and 97.5th percentiles (remember Q1, the 25th percentile?).  Examine the following sampling distributions, then attempt the prompts.   
 
 ## Sample Size = 50
 
@@ -66,6 +66,8 @@ s50 %>%
 
 ```
 
+
+
 ## Sample Size = 100
 
 ```{r, echo=F, warning=FALSE}
@@ -97,7 +99,7 @@ s100 %>%
       labs(x = "Proportion of Blue Straws (Individual Sample)",
           title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 100") +
       scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))+
-      geom_vline(xintercept = seq(s100_dist_mean - 4*s100_dist_sd,s50_dist_mean + 4*s100_dist_sd, s100_dist_sd),,
+      geom_vline(xintercept = seq(s100_dist_mean - 4*s100_dist_sd,s50_dist_mean + 4*s100_dist_sd, s100_dist_sd),
                  linetype="dashed", color = "red")
 
 ```
@@ -114,7 +116,7 @@ s200 <- straws %>%
           mutate(prop_blue = blue/ n) 
 
 s200 %>% 
-  summarise(s200_dist_mean = mean(prop_blue),
+  summarise(s200_dist_mean = round(mean(prop_blue),3),
             s200_dist_sd = round(sd(prop_blue),3),
             s200_bottom_2.5 = quantile(prop_blue,0.025),
             s200_top_2.5 = quantile(prop_blue,0.975)) %>% 
@@ -137,11 +139,31 @@ s200 %>%
                  linetype="dashed", color = "red")
 ```
 
+## Prompts to Answer in Class
 
+**Prompt 1** - How does the sampling distribution's mean change as the sample size increases?  What does this allow us to infer about sampling size's influence on the sampling distribution mean?
 
+> **your answer goes here**
 
+**Prompt 2** - How does the sampling distribution's standard deviation change as the sample size increases?  Can you explain why this happening?
 
+> **your answer goes here**
 
+**Prompt 3** - What are the dashed red lines?  How do they help us better understand the sampling distribution?
+
+> **your answer goes here**
+
+**Prompt 4** - What is meant by the 2.5th and 97.5th percentiles?  How does it's values relate to the standard deviation and mean?
+
+> **your answer goes here**
+
+**Prompt 5** - When looking at a sampling distribution, it is possible to ascertain what are likely values to expect when sampling the population for a given sample size.  What are likely values for the proportion of blue straws for sampling sizes of 50, 100 and 200?  (*Hint: Likely values are values that will occur on average 95% of the time, while unlikely values are those that occur only 5% of the time*) 
+
+> **your answer goes here**
+
+**Prompt 6** - How does this activity help us better understand the issue involved with reporting sample statistics to the public?
+
+> **your answer goes here**
 
 
 
