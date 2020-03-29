@@ -32,7 +32,7 @@ In the introduction to sampling distributions we saw that the sampling distribut
 
 ## Sample Size = 50
 
-```{r, echo=F, warning=FALSE}
+```{r, echo=T, warning=FALSE}
 n = 50
 
 s50 <- straws %>%
@@ -52,6 +52,8 @@ s50 %>%
 
 s50_dist_mean = mean(s50$prop_blue)
 s50_dist_sd = round(sd(s50$prop_blue),3)
+s50_bottom_2.5 = quantile(s50$prop_blue,0.025)
+s50_top_2.5 = quantile(s50$prop_blue,0.975)
 
 s50 %>% 
   ggplot(aes(prop_blue)) +
@@ -59,10 +61,13 @@ s50 %>%
                  color="white", 
                  fill="steelblue") +
       labs(x = "Proportion of Blue Straws (Individual Sample)",
-          title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 50)") +
+          title ="Distribution of Proportion of Blue Straws for 1000 Samples
+          \n(based on sample size of 50)") +
       scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))+
-      geom_vline(xintercept = seq(s50_dist_mean - 4*s50_dist_sd,s50_dist_mean + 4*s50_dist_sd, s50_dist_sd),
-                 linetype="dashed", color = "red")
+      geom_vline(xintercept = seq(s50_dist_mean - 4*s50_dist_sd,
+                                  s50_dist_mean + 4*s50_dist_sd, s50_dist_sd),
+                 linetype="dashed", color = "green")+
+      geom_vline(xintercept=c(s50_bottom_2.5,s50_top_2.5), linetype="dashed", color = "red")
 
 ```
 
@@ -89,6 +94,9 @@ s100 %>%
 
 s100_dist_mean = mean(s100$prop_blue)
 s100_dist_sd = round(sd(s100$prop_blue),3)
+s100_bottom_2.5 = quantile(s100$prop_blue,0.025)
+s100_top_2.5 = quantile(s100$prop_blue,0.975)
+
 
 s100 %>% 
   ggplot(aes(prop_blue)) +
@@ -99,8 +107,9 @@ s100 %>%
       labs(x = "Proportion of Blue Straws (Individual Sample)",
           title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 100") +
       scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))+
-      geom_vline(xintercept = seq(s100_dist_mean - 4*s100_dist_sd,s50_dist_mean + 4*s100_dist_sd, s100_dist_sd),
-                 linetype="dashed", color = "red")
+      geom_vline(xintercept = seq(s100_dist_mean - 4*s100_dist_sd,s100_dist_mean + 4*s100_dist_sd, s100_dist_sd),
+                 linetype="dashed", color = "green")+
+      geom_vline(xintercept=c(s100_bottom_2.5,s100_top_2.5), linetype="dashed", color = "red")
 
 ```
 
@@ -125,6 +134,8 @@ s200 %>%
 
 s200_dist_mean = mean(s200$prop_blue)
 s200_dist_sd = round(sd(s200$prop_blue),3)
+s200_bottom_2.5 = quantile(s200$prop_blue,0.025)
+s200_top_2.5 = quantile(s200$prop_blue,0.975)
 
 s200 %>% 
   ggplot(aes(prop_blue)) +
@@ -136,7 +147,8 @@ s200 %>%
           title =c("Distribution of Proportion of Blue Straws for 1000 Samples \n (n = 200)")) +
       scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))+
       geom_vline(xintercept = seq(s200_dist_mean - 4*s200_dist_sd,s200_dist_mean + 4*s200_dist_sd, s200_dist_sd),
-                 linetype="dashed", color = "red")
+                 linetype="dashed", color = "green")+
+      geom_vline(xintercept=c(s200_bottom_2.5,s200_top_2.5), linetype="dashed", color = "red")
 ```
 
 ## Prompts to Answer in Class
@@ -149,11 +161,11 @@ s200 %>%
 
 > **your answer goes here**
 
-**Prompt 3** - What are the dashed red lines?  How do they help us better understand the sampling distribution?
+**Prompt 3** - What are the dashed green lines?  How do they help us better understand the sampling distribution?
 
 > **your answer goes here**
 
-**Prompt 4** - What is meant by the 2.5th and 97.5th percentiles?  How does it's values relate to the standard deviation and mean?
+**Prompt 4** - What is meant by the 2.5th and 97.5th percentiles (dashed red lines)?  How does it's values relate to the standard deviation and mean?
 
 > **your answer goes here**
 

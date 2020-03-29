@@ -67,11 +67,11 @@ confint(binom.test(~(color == "blue"), conf.level = 0.95, ci.method= "Wald", dat
 ```
 
 ```{r}
-confint(binom.test(x=8, n=50, ci.method= "Wald"))
+confint(binom.test(x=800, n=5000, ci.method= "Wald"))
 ```
 
 
-# Take Muliple Sample
+# Take Muliple Samples
 ```{r}
 #### additional code to use in the confidence interval homework #####
 #### also need to calculate actual p_blue of straws ####

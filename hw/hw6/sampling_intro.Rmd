@@ -27,8 +27,12 @@ p_blue_population = mean(straws$blue)
 ```
 
 # Background
-For this activity, you will be exploring sampling using R.  We will be sampling a population of 2500 virtual straws from the dataframe `straws`.  Our parameter (of the population) of interest is **What is the proportion of blue straws in our population?**   `straws` is a dataframe of 2500 virtual straws of six colors (blue, green, orange, purple, red and yellow). Below is a visualization of the virtual 2500 straws.  
+For this activity, you will be exploring sampling using R.    We will be sampling a population of 2500 virtual straws from the dataframe `straws`.  
 
+  - Our parameter (of the population) of interest is **What is the proportion of blue straws in our population?**   
+
+  - `straws` is a dataframe of 2500 virtual straws of six colors (blue, green, orange, purple, red and yellow). 
+  
 ```{r, echo=F}
 ggplot(straws, aes(x_pos,y_pos, fill=color, color=color))+
   geom_raster(interpolate=F)+
@@ -143,6 +147,10 @@ samples_n50_reps1000 %>%
     coord_flip()
 ```
 
+### **Prompt 5** - How does looking at 100 of our random samples help us better understand sampling?
+
+> **your answer goes here**
+
 ## Visualizing the Distribution of Sample Proportions
 Now, we will visualize the 1000 random samples' proportion of blue straws in a histogram.
 
@@ -164,11 +172,11 @@ summary_n50_reps1000 %>%
 
 ```
 
-### **Prompt 5** -  Explain what the histogram is displaying.  Be sure to explain the  x and y axes along with what does the height of each bar represents.  How does this visualization help us to better understand our parameter of proportion of blue straw in our population?
+### **Prompt 6** -  Explain what the histogram is displaying.  Be sure to explain the  x and y axes along with what does the height of each bar represents.  How does this visualization help us to better understand our parameter of proportion of blue straw in our population?
 
 > **your answer goes here**
 
-### **Prompt 6** -  What insights have you been able to gather regarding sampling's ability to gain information about a population?  
+### **Prompt 7** -  What insights have you been able to gather regarding sampling's ability to gain information about a population?  
 
 > **your answer goes here**
 
@@ -178,7 +186,7 @@ We have just demonstrated the process of constructing a hypothetical sampling di
 
 ## Sample Size = 100
 
-```{r, echo=F, warning=FALSE}
+```{r, echo=T, warning=FALSE}
 n = 100
 
 straws %>%
@@ -197,7 +205,7 @@ ggplot(aes(prop_blue)) +
                  fill="steelblue") +
   
       labs(x = "Proportion of Blue Straws (Individual Sample)",
-          title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 100") +
+          title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 100)") +
   
     scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))
 
@@ -220,13 +228,13 @@ straws %>%
                  color="white", 
                  fill="steelblue") +
         labs(x = "Proportion of Blue Straws (Individual Sample)",
-              title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 100") +
+              title ="Distribution of Proportion of Blue Straws for 1000 Samples \n(based on sample size of 200)") +
         scale_x_continuous(limits = c(0, 0.5), breaks = seq(0,0.5,0.04))
 
 
 ```
 
-### **Prompt 7** - What do you notice happening to the sampling distribution as the sample size gets increased?
+### **Prompt 8** - What do you notice happening to the sampling distribution as the sample size gets increased?
 
 > **your answer goes here**
 
