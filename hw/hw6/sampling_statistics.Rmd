@@ -151,6 +151,15 @@ s200 %>%
       geom_vline(xintercept=c(s200_bottom_2.5,s200_top_2.5), linetype="dashed", color = "red")
 ```
 
+### Table of Statistics for Sampling Distributions
+
+
+|  sample size  | mean   |  sd  |  bottom_2.5  |  top_2.5 |
+|--------------|--------|--------|-----------|----------|
+| 50  | `r s50_dist_mean` | `r s50_dist_sd` | `r s50_bottom_2.5`  | `r s50_top_2.5`  |
+| 100  | `r s100_dist_mean` | `r s100_dist_sd` | `r s100_bottom_2.5`  | `r s100_top_2.5`  |
+| 200  | `r s200_dist_mean` | `r s200_dist_sd` | `r s200_bottom_2.5`  | `r s200_top_2.5`  |
+
 ## Prompts to Answer in Class
 
 **Prompt 1** - How does the sampling distribution's mean change as the sample size increases?  What does this allow us to infer about sampling size's influence on the sampling distribution mean?

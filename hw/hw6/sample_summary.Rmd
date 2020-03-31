@@ -1,0 +1,78 @@
+---
+title: "Sample - Summary - Homework"
+author: "Jose Rico"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_float : true
+    theme: cosmo
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=F, message=FALSE}
+library(readr)
+library(tidyverse)
+library(janitor)
+library(infer)
+library(kableExtra)
+library(gridExtra)
+library(scales)
+library(tidyr)
+```
+
+## Assignment Overview
+
+This will be your summative assignment for the sampling unit.  You will be;
+  - conducting a simulation
+  - analysizing the simulations with statistics and visualizations
+  - constucting confidence intervals
+  
+## Assignment Scenario
+
+We will be analyzing a particular game, the rolling of three dice.  A winning rolls is when you get at least a match of two die faces.  For example; 1,1,4 would be a winning roll.   1,2,3 would be a losing roll.    
+
+## Constructing a population data frame
+
+Simulate rolling 100,000 times
+```{r}
+roll1 = sample(1:6,100000, replace=T)
+roll2 = sample(1:6,100000, replace=T)
+roll3 = sample(1:6,100000, replace=T)
+roll_sim_population <- data.frame(roll1, roll2, roll3) %>% 
+  mutate(win = if_else(roll1==roll2 | roll1==roll3 | roll2==roll3, TRUE, FALSE))
+```
+
+## Assignment Tasks
+
+### Sampling/Analysis/Narratives for different sample sizes
+1. Take 1000 samples for each sample size 25, 100 and 400.
+2. Construct sampling distributions histograms for each sample size.
+3. Calculate (and Table) sampling distributions statistics for each sample size. (mean, sd, 2.5th and 97.5th percentiles)
+
+##### Prompt 1 - Explain what happens to the sampling distribution as the sample size increases from 25 to 100 to 400.
+
+> **your answer goes here**
+
+##### Prompt 2 - How would you answer the following question, What winning percentages would be unlikely for a sample of 25? 100? and 400?  If they are different, why?  If they are the same, why? 
+
+> **your answer goes here**
+
+4. Take a single sample for each sample size 25, 100 and 400 and construct a 95% confidence interval for proportion of wins for the population.
+
+##### Prompt 3 - Compare your confidence intervals for different sample sizes.  How are they similar and/or different?
+
+> **your answer goes here**
+
+##### Prompt 4 - Interpret in context what your confidence interval for a sample size of 400 means?
+
+> **your answer goes here**
+
+
+
+
+
