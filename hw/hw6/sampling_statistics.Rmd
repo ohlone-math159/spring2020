@@ -1,5 +1,5 @@
 ---
-title: "Straws-Sample-Confidence-Intervals"
+title: "Straws-Sample-Statistics"
 author: "Jose Rico"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
@@ -9,6 +9,10 @@ output:
     theme: cosmo
     highlight: tango
 ---
+
+```{r, echo=F}
+knitr::opts_chunk$set(echo = T, set.seed(112358), warning=FALSE, message=FALSE, fig.height=4, fig.align='center') #Chunk default settings 
+```
 
 ```{r, include=F, message=FALSE}
 library(readr)

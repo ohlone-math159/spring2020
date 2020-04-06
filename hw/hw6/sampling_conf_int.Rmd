@@ -10,6 +10,10 @@ output:
     highlight: tango
 ---
 
+```{r, echo=F}
+knitr::opts_chunk$set(echo = T, set.seed(1234567), warning=FALSE, message=FALSE, fig.height=4, fig.align='center') #Chunk default settings 
+```
+
 ```{r, include=F, message=FALSE}
 library(readr)
 library(tidyverse)
@@ -26,17 +30,41 @@ straws <- read_csv("straws.csv", col_types = cols(X1 = col_skip()))
 ```
 
 # Background
-As you have probably surmised by now that statistics from a sample has inherent variability from the randomness in the sampling process.  When statistician take a sample and they want to report the sample statistics as an estimate for the population, they are careful in their reporting.  There trick is to provide an interval where they are confident (to a stated probability) that the true population proportions will lie within the interval.  
+As you have probably surmised by now that statistics from a sample has inherent variability from the randomness in the sampling process.  When statisticians take a sample and they want to report the sample statistics as an estimate for the population, they are careful in their reporting.  Their trick is to provide an interval where they are confident (to a stated probability) that the true population proportions will lie within the interval.  
 
-## Find True Population proportion of blue straws
 
-```{r}
-parameters <- straws %>% 
-          summarize(blue = sum(color == "blue"),
-                    prop_blue = blue/ 2500)
-```
+## Reporting Sampling Statistics with a Confidence Interval
+With our understanding of sampling distributions, we can see that is likely that our sample proportion could be a predictable distance from the true population proportion.  95% of our samples should be within approximately two standard deviations from the true population proportion.  We use this observation to construct a 95% confidence interval (*which is range that we are 95% confident that the true population proportion will lie in*)
 
-## Take a sample
+### Sample Distribution's Standard Deviation
+We can predict/calculate the sampling standard deviation for a given a sample size with the following equation;  
+
+**Standard Deviation of Sampling Distribution (aka Sampling Error)** 
+
+$SE=\sqrt{\frac{p(1-p)}{n}}$
+
+### Margin of Error
+From the standard error, we can calculate the margin of error by multiplying the standard error by 2 (since for 95% confidence we need to cover +/- 2 standard deviations, due to the randomness in selecting a single sample - which results in variability of sample proportions from the true population proportion)
+
+An additional option with confidence intervals is choose a confidence level other than 95%.   This requires us to modify the formula for margin of error;
+
+**Margin of Error** 
+
+$ME=z^*\sqrt{\frac{p(1-p)}{n}}$
+
+where $z^*$ is a z score (from a standardized normal distribution) that correlates with the given confidence level. $z=1.96$ for 95% (we often approximate 1.96 as 2 to simplify mental calculations)
+
+### Construction of the confidence interval
+Confidence Intervals have an lower and upper bound that can be calculated by adding and subtracting the margin of error from the sample proportion (aka point estimate)
+
+$\hat{p}\pm ME$
+
+### Constructing the CI in R from a single sample
+In the following code, we first take a sample of 50 straws.  Then we use **summarize** to calculate the sample proportion, standard error, margin of error, and ultimatelty the lower and upper bounds for the confidence interval.  
+
+Note: this is a 95% Confidence Interval, since our $z = qnorm(0.975) = `r qnorm(0.975)`$.  
+
+You can determine the argument for **qnorm** by taking the average of **1** and the confidence level.  (e.g., $\frac{1+0.95}{2}=0.975$)  
 
 ```{r}
 n = 50
@@ -57,28 +85,40 @@ kable(stat_sample1) %>%
     kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
 ```
 
-```{r}
-qnorm(0.95)
-```
-
 # Let R do all the work
-```{r}
-confint(binom.test(~(color == "blue"), conf.level = 0.95, ci.method= "Wald", data = sample1))
-```
+The `mosaic` package has a function **binom.test** that when piped into **confint** function, a confidence level is constructed from a data frame.  The first argument `~(color == "blue")` tells R to construct the interval for the proportion of **color**'s are **blue**.  There are a variety of methods to construct confidence intervals, we are using the **Wald Method** which matches the formulas discussed earlier.  
 
 ```{r}
-confint(binom.test(x=800, n=5000, ci.method= "Wald"))
+binom.test(~(color == "blue"), conf.level = 0.95, ci.method= "Wald", data = sample1) %>% 
+  confint()
+```
+## Confidence Interval without a dataframe.
+If you don't have a data frame, but you know the number of blue straws for a given sample size, you can enter them as arguments to the **binom.test** function.  **x** is equal the number of successes (blue straws) and **n** is equal to the size of the sample.
+
+```{r}
+binom.test(x=11, n=50, ci.method= "Wald") %>% 
+  confint()
 ```
 
+# How good is my Confidence Interval
+
+## Find True Population proportion of blue straws
+Normally, a researcher will never know the true population parameters since it is very challenging to obtain data from every member of a population.  But, for our scenario with our 2500 virtual straws we can easily find the population's proportion of blue straws.  Since we are able to know the true population parameter, we will be able to evaluate the success of our parameter estimates (i.e., do are confidence intervals capture the true population proportion)
+
+```{r}
+parameters <- straws %>% 
+          summarize(blue = sum(color == "blue"),
+                    prop_blue = blue/ 2500)
+parameters
+```
 
 # Take Muliple Samples
-```{r}
-#### additional code to use in the confidence interval homework #####
-#### also need to calculate actual p_blue of straws ####
-#### this is probably the last step we show - need student to first observe SE, Creation of Bounds for Single CI ####
+A natural question, is how good is my estimate for the population proportion.  Does the true population proportion lie within my confidence interval?  To answer this question, we will take 50 samples and then construct a confidence interval for each of our 50 samples.  We will check to see if the interval includes the true population proportion by visualizing each interval.  What do you notice?  What happens if we change the confidence level (i.e. the z value in the margin of error calculation)
 
+
+```{r}
 samples_n50_reps20 <- straws %>%
-        rep_sample_n(size = 50, reps = 20, replace = F)
+        rep_sample_n(size = 50, reps = 50, replace = F)
 
 ci_n50_reps20 <-  samples_n50_reps20 %>%
   
@@ -87,7 +127,7 @@ ci_n50_reps20 <-  samples_n50_reps20 %>%
           summarize(blue = sum(color == "blue"),
                   prop_blue = blue/ 50,
                   se = sqrt(prop_blue*(1-prop_blue)/50),  ### need to modify for proper sample size
-                  me = qnorm(0.95) * se,
+                  me = qnorm(0.975) * se,
                   lower = prop_blue - me,
                   upper = prop_blue + me)
 

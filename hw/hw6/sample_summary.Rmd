@@ -10,8 +10,8 @@ output:
     highlight: tango
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r,  set.seed(1123581321), echo=F}
+knitr::opts_chunk$set(cache=T, echo = T, warning=FALSE, message=FALSE, fig.height=4, fig.align='center') #Chunk default settings 
 ```
 
 ```{r, include=F, message=FALSE}
@@ -27,7 +27,8 @@ library(tidyr)
 
 ## Assignment Overview
 
-This will be your summative assignment for the sampling unit.  You will be;
+This will be your summative assignment for the sampling unit.  You will be;  
+
   - conducting a simulation
   - analysizing the simulations with statistics and visualizations
   - constucting confidence intervals

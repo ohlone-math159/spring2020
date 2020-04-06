@@ -1,5 +1,5 @@
 ---
-title: "Straws-Sample-Confidence-Intervals"
+title: "Straws-Sample-Intro"
 author: "Jose Rico"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
@@ -18,12 +18,13 @@ library(infer)
 library(kableExtra)
 library(gridExtra)
 library(scales)
+set.seed(1123581321)
 ```
 
 ```{r loading data, message = F, error=FALSE, include=F}
 straws <- read_csv("straws.csv", col_types = cols(X1 = col_skip()))
 straws <- straws 
-p_blue_population = mean(straws$blue)
+p_blue_population = mean(straws$blue)  ## need to fix....
 ```
 
 # Background
@@ -182,7 +183,7 @@ summary_n50_reps1000 %>%
 
 
 # Post Activity - Study Effect of Increasing Sample Size
-We have just demonstrated the process of constructing a hypothetical sampling distribution.   Next step is to see the effect of increasing the sample size on the sampling distributions.  The following code is a single chunk that simulates, summarizes and visualizes for a sample size of  
+We have just demonstrated the process of constructing a hypothetical sampling distribution for sample size of 50.   Next step is to see the effect of increasing the sample size on the sampling distribution.  The following code is a single chunk that simulates, summarizes and visualizes for a sample size of 100
 
 ## Sample Size = 100
 
