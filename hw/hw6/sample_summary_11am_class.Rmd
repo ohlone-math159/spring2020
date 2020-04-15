@@ -1,0 +1,276 @@
+---
+title: "Sample - Summary - Homework"
+author: "Jose Rico"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_float : true
+    theme: cosmo
+    highlight: tango
+---
+
+```{r,  set.seed(1123581321), echo=F}
+knitr::opts_chunk$set(cache=T, echo = T, warning=FALSE, message=FALSE, fig.height=4, fig.align='center') #Chunk default settings 
+```
+
+```{r, include=F, message=FALSE}
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(janitor)
+library(infer)
+library(kableExtra)
+library(gridExtra)
+library(scales)
+library(tidyr)
+library(mosaic)
+```
+
+## Assignment Overview
+
+This will be your summative assignment for the sampling unit.  You will be;  
+
+  - conducting a simulation (I have already done that for you)
+  - analyzing the simulations with statistics and visualizations
+  - constructing confidence intervals from sample statistics
+  
+## Assignment Scenario
+
+We will be analyzing a particular game, the rolling of three dice.  A winning rolls is when you get at least a match of two die faces.  For example; 1,1,4 would be a winning roll.   1,2,3 would be a losing roll.    
+
+## Constructing a population data frame
+
+Simulate rolling 100,000 times
+```{r}
+set.seed(1123581321)
+roll1 = sample(1:6,100000, replace=T)
+roll2 = sample(1:6,100000, replace=T)
+roll3 = sample(1:6,100000, replace=T)
+roll_sim_population <- data.frame(roll1, roll2, roll3) %>% 
+  mutate(win = if_else(roll1==roll2 | roll1==roll3 | roll2==roll3, TRUE, FALSE))
+```
+
+## Assignment Tasks
+
+### Sampling/Analysis/Narratives for different sample sizes
+
+1. Take 1000 samples for sample size 25
+2. Construct sampling distributions histograms for sample size of 25.  
+3. Calculate (and Table) sampling distributions statistics for each sample size. (mean, sd, 2.5th and 97.5th percentiles)
+
+#### Sample Size of 25
+```{r, echo=F}
+set.seed(1123581321)
+### First take 1000 samples with sample size of 25
+samples_n25_reps1000 <- roll_sim_population %>%
+        rep_sample_n(size = 25, reps = 1000, replace = F)
+
+### Calculate Summary Statistics
+summary_n25_reps1000 <- samples_n25_reps1000 %>% 
+          group_by(replicate) %>% 
+          summarize(win = sum(win == "TRUE")) %>% 
+          mutate(prop_win = win/ 25)
+
+### Create Histogram
+summary_n25_reps1000 %>% 
+  
+  ggplot(aes(prop_win)) +
+  
+  geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+  
+  labs(x = "Proportion of Winning Rolls (Individual Sample)",
+       title ="Distribution of Proportion of Winning Rolls for 1000 Samples \n(based on sample size of 25)") +
+  
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0,1,0.08))
+
+### calculation of values
+s25_dist_mean = mean(summary_n25_reps1000$prop_win)
+s25_dist_sd = round(sd(summary_n25_reps1000$prop_win),3)
+s25_bottom_2.5 = quantile(summary_n25_reps1000$prop_win,0.025)
+s25_top_2.5 = quantile(summary_n25_reps1000$prop_win,0.975)
+```
+
+#### Sample Size of 100
+```{r, echo=F}
+set.seed(1123581321)
+### First take 1000 samples with sample size of 25
+samples_n100_reps1000 <- roll_sim_population %>%
+        rep_sample_n(size = 100, reps = 1000, replace = F)
+
+### Calculate Summary Statistics
+summary_n100_reps1000 <- samples_n100_reps1000 %>% 
+          group_by(replicate) %>% 
+          summarize(win = sum(win == "TRUE")) %>% 
+          mutate(prop_win = win/ 100)
+
+### Create Histogram
+summary_n100_reps1000 %>% 
+  
+  ggplot(aes(prop_win)) +
+  
+  geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+  
+  labs(x = "Proportion of Winning Rolls (Individual Sample)",
+       title ="Distribution of Proportion of Winning Rolls for 1000 Samples \n(based on sample size of 100)") +
+  
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0,1,0.08))
+
+### calculation of values
+s100_dist_mean = mean(summary_n100_reps1000$prop_win)
+s100_dist_sd = round(sd(summary_n100_reps1000$prop_win),3)
+s100_bottom_2.5 = quantile(summary_n100_reps1000$prop_win,0.025)
+s100_top_2.5 = quantile(summary_n100_reps1000$prop_win,0.975)
+```
+
+#### Sample Size of 400
+```{r, echo=F}
+set.seed(1123581321)
+### First take 1000 samples with sample size of 25
+samples_n400_reps1000 <- roll_sim_population %>%
+        rep_sample_n(size = 400, reps = 1000, replace = F)
+
+### Calculate Summary Statistics
+summary_n400_reps1000 <- samples_n400_reps1000 %>% 
+          group_by(replicate) %>% 
+          summarize(win = sum(win == "TRUE")) %>% 
+          mutate(prop_win = win/400)
+
+### Create Histogram
+summary_n400_reps1000 %>% 
+  
+  ggplot(aes(prop_win)) +
+  
+  geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+  
+  labs(x = "Proportion of Winning Rolls (Individual Sample)",
+       title ="Distribution of Proportion of Winning Rolls for 1000 Samples \n(based on sample size of 400)") +
+  
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0,1,0.08))
+
+### calculation of values
+s400_dist_mean = mean(summary_n400_reps1000$prop_win)
+s400_dist_sd = round(sd(summary_n400_reps1000$prop_win),3)
+s400_bottom_2.5 = quantile(summary_n400_reps1000$prop_win,0.025)
+s400_top_2.5 = quantile(summary_n400_reps1000$prop_win,0.975)
+```
+
+|  sample size  | mean   |  sd  |  bottom_2.5  |  top_2.5 |
+|--------------|--------|--------|-----------|----------|
+| 25  | `r s25_dist_mean` | `r s25_dist_sd` | `r s25_bottom_2.5`  | `r s25_top_2.5`  |
+| 100  | `r s100_dist_mean` | `r s100_dist_sd` | `r s100_bottom_2.5`  | `r s100_top_2.5`  |
+| 400 | `r s400_dist_mean` | `r s400_dist_sd` | `r s400_bottom_2.5`  | `r s400_top_2.5`  |
+
+
+u
+
+> **your answer goes here**
+
+4. Take a single sample for each sample size 25, 100 and 400 and construct a 95% confidence interval for proportion of wins for the population.
+
+n=25
+```{r, echo=F}
+#set.seed(1123581321)
+
+n = 25
+
+sample1 <- roll_sim_population %>% 
+  sample_n(size = n, replace = F ) 
+
+stat_sample1 <- sample1 %>% 
+  
+      summarize(win = sum(win == "TRUE"),
+                prop_win = win/ n,
+                se = sqrt(prop_win*(1-prop_win)/n),
+                me = qnorm(0.975) * se,
+                lower = prop_win - me,
+                upper = prop_win + me)
+
+kable(stat_sample1) %>% 
+    kable_styling(bootstrap_options = "striped", 
+                  full_width = F, position = "left")
+### this technique does not use the mosaic package - that's why Ish - it worked.
+```
+
+n= 100
+```{r, echo=F}
+#set.seed(1123581321)
+
+n = 100
+
+sample1 <- roll_sim_population %>% 
+  sample_n(size = n, replace = F ) 
+
+stat_sample1 <- sample1 %>% 
+  
+      summarize(win = sum(win == "TRUE"),
+                prop_win = win/ n,
+                se = sqrt(prop_win*(1-prop_win)/n),
+                me = qnorm(0.975) * se,
+                lower = prop_win - me,
+                upper = prop_win + me)
+
+kable(stat_sample1) %>% 
+    kable_styling(bootstrap_options = "striped", 
+                  full_width = F, position = "left")
+```
+
+n= 400
+```{r, echo=F}
+#set.seed(1123581321)
+n = 400
+
+sample1 <- roll_sim_population %>% 
+  sample_n(size = n, replace = F ) 
+
+stat_sample1 <- sample1 %>% 
+  
+      summarize(win = sum(win == "TRUE"),
+                prop_win = win/ n,
+                se = sqrt(prop_win*(1-prop_win)/n),
+                me = qnorm(0.975) * se,
+                lower = prop_win - me,
+                upper = prop_win + me)
+
+kable(stat_sample1) %>% 
+    kable_styling(bootstrap_options = "striped", 
+                  full_width = F, position = "left")
+```
+
+##### Prompt 3 - Compare your confidence intervals for different sample sizes.  How are they similar and/or different?
+
+> **your answer goes here**
+
+##### Prompt 4 - Interpret in context what your confidence interval for a sample size of 400 means?
+
+> **your answer goes here**
+
+
+```{r}
+ab <- 12
+cd <- 24
+ef <- 36
+```
+
+| col1 | col2 | col3 |
+|-----|----|----|
+| ab | `r ab` |  |
+| cd | `r cd` | i did it! |
+
+
+## In Class - Generation of Population to Sample from...
+```{r}
+pop <- data.frame(individual = sample(c("satisfied", "not satisfied"), size = 1000000, replace=T, prob=c(0.37, 0.63)))
+```
+
+
+
+
+
+

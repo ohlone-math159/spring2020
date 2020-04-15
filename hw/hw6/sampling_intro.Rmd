@@ -78,6 +78,7 @@ We can take a single sample of straws in R, using the `sample_n` function in R. 
 After taking the sample, we create a quick tabulation of our `sample1`'s **color** variable.
 
 ```{r}
+set.seed(1123581321)
 sample1 <- straws %>% 
   sample_n(size = 50, replace = F )
 
@@ -86,11 +87,11 @@ sample1 %>% tabyl(color)
 
 ### **Prompt 1** - Do you think the percent of blue straws that you just obtained is the actual percent for the proportion of blue straws?  Why or why not?  Is it close?  How close?
 
-> **your answer goes here**
+> hello
 
 ### **Prompt 2** - How could improve your insight into the proportion of blue straws?
 
-> **your answer goes here**
+> something new
 
 
 # Sampling Distribution

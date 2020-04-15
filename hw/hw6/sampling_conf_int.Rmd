@@ -67,7 +67,9 @@ Note: this is a 95% Confidence Interval, since our $z = qnorm(0.975) = `r qnorm(
 You can determine the argument for **qnorm** by taking the average of **1** and the confidence level.  (e.g., $\frac{1+0.95}{2}=0.975$)  
 
 ```{r}
-n = 50
+set.seed(1234567)
+
+n = 400
 
 sample1 <- straws %>% 
   sample_n(size = n, replace = F ) 
@@ -82,21 +84,24 @@ stat_sample1 <- sample1 %>%
                 upper = prop_blue + me)
 
 kable(stat_sample1) %>% 
-    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+    kable_styling(bootstrap_options = "striped", 
+                  full_width = F, position = "left")
 ```
 
 # Let R do all the work
-The `mosaic` package has a function **binom.test** that when piped into **confint** function, a confidence level is constructed from a data frame.  The first argument `~(color == "blue")` tells R to construct the interval for the proportion of **color**'s are **blue**.  There are a variety of methods to construct confidence intervals, we are using the **Wald Method** which matches the formulas discussed earlier.  
+The `mosaic` package has a function **binom.test** that when piped into **confint** function, a confidence interval is constructed from a data frame.  The first argument `~(color == "blue")` tells R to construct the interval for the proportion of **color**'s are **blue**.  There are a variety of methods to construct confidence intervals, we are using the **Wald Method** which matches the formulas discussed earlier.  
 
 ```{r}
+### this code requires the mosaic package
 binom.test(~(color == "blue"), conf.level = 0.95, ci.method= "Wald", data = sample1) %>% 
   confint()
 ```
 ## Confidence Interval without a dataframe.
 If you don't have a data frame, but you know the number of blue straws for a given sample size, you can enter them as arguments to the **binom.test** function.  **x** is equal the number of successes (blue straws) and **n** is equal to the size of the sample.
 
+
 ```{r}
-binom.test(x=11, n=50, ci.method= "Wald") %>% 
+binom.test(x=145, n=970, ci.method= "Wald") %>% 
   confint()
 ```
 
@@ -117,17 +122,21 @@ A natural question, is how good is my estimate for the population proportion.  D
 
 
 ```{r}
+set.seed(1234567)
+
+n1 = 200
+
 samples_n50_reps20 <- straws %>%
-        rep_sample_n(size = 50, reps = 50, replace = F)
+        rep_sample_n(size = n1, reps = 25, replace = F)
 
 ci_n50_reps20 <-  samples_n50_reps20 %>%
   
     group_by(replicate) %>% 
   
           summarize(blue = sum(color == "blue"),
-                  prop_blue = blue/ 50,
-                  se = sqrt(prop_blue*(1-prop_blue)/50),  ### need to modify for proper sample size
-                  me = qnorm(0.975) * se,
+                  prop_blue = blue/ n1,
+                  se = sqrt(prop_blue*(1-prop_blue)/n1),  ### need to modify for proper sample size
+                  me = qnorm(0.9) * se,
                   lower = prop_blue - me,
                   upper = prop_blue + me)
 

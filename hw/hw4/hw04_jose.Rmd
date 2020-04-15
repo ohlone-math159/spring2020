@@ -6,7 +6,7 @@ output:
     highlight: tango
     toc: yes
     toc_float: yes
-    css: ../css/sandstone.css
+    css: /cloud/project/css/sandstone.css
   pdf_document: default
 ---
 
@@ -20,6 +20,8 @@ library(dplyr)
 library(ggplot2)
 library(janitor)
 library(kableExtra)
+library(infer)
+library(mosaic)
 ```
 
 ```{r set ggplot2 parameters}
@@ -50,23 +52,21 @@ H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at th
 **Numerical Summary Table**  
 
 ```{r summary table cat 1}
-clean %>%
+demo %>%
   tabyl(vigorous_activity) %>%
   adorn_pct_formatting(digits=1) %>%
   adorn_totals()%>%
   kable() %>%
   kable_styling(full_width = F, position="center")
 ```
-, y= ..prop.., group=1
-fill="steelblue", width=0.5)+
-  ggtitle("In the past 24 hours, have you participated in vigorous physical activity
-  long enough to work up a sweat, get your heart thumping, or get out of breath?") +
+
   
 **Bar Plot - Frequency of Levels**
 
 ```{r bar plot cat 1}
-clean %>% 
-  #filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+demo %>% 
+  filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+  droplevels() %>% 
   ggplot(aes(x=vigorous_activity, y= ..prop.., group=1)) +
     geom_bar(fill="steelblue", width=0.5) +
       ggtitle("In the past 24 hours, have you participated in vigorous physical activity long 
@@ -74,6 +74,29 @@ enough to work up a sweat, get your heart thumping, or get out of breath?") +
       xlab("subject's response")
   
 ```
+## Inference (CI and Test of Significance)
+```{r}
+## need to first filter your data frame
+td <- demo %>% 
+  filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
+  droplevels()
+
+## then you can run a your test 
+ # prop.test(td$vigorous_activity == "yes", correct = FALSE)  ### error in knit 
+  
+ # binom.test(~(vigorous_activity == "yes"), conf.level = 0.95, ci.method = "Wald", data = td)
+  
+  chisq.test(table(td$vigorous_activity), p=c(1/2,1/2))
+  
+  table(td$vigorous_activity)
+  
+  xchisq.test(table(td$vigorous_activity), p=c(1/2,1/2)) ## extra p argument is needed for goodness of fit
+  
+  xchisq.test(td$vigorous_activity ~ td$gender)
+```
+
+
+
 
 **Narrative summary**  
 <div id = "narrative">
@@ -86,7 +109,7 @@ The participants in the **addhealth** study were asked, "*In the past 24 hours, 
 **Numerical Summary Table** 
 
 ```{r summarize num 1}
-clean %>% 
+demo %>% 
   filter(sub_weight < 526) %>% 
   
   summarize(n = n(),
@@ -106,7 +129,7 @@ clean %>%
 **Histogram - visualization of the distribution**
 
 ```{r hist num 1}
-clean %>%
+demo %>%
   filter(sub_weight < 121) %>% 
   ggplot(aes(x=sub_weight)) + 
     geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5) + 
@@ -117,7 +140,7 @@ clean %>%
 **Boxplot - visualization of 5 number summary**
 
 ```{r boxplot num 1}
-clean %>%
+demo %>%
   filter(sub_weight < 121) %>% 
   ggplot(aes(y=sub_weight, x=0)) + 
     geom_boxplot(color="steelblue", width=0.6) + 

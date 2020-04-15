@@ -24,6 +24,7 @@ library(kableExtra)
 library(gridExtra)
 library(scales)
 library(tidyr)
+library(mosaic)
 ```
 
 ## Assignment Overview
@@ -69,7 +70,7 @@ samples_n400_reps1000 <- roll_sim_population %>%
 
 ```
 
-2. Construct sampling distributions histograms for each sample size.  
+2. Construct sampling distributions histograms for  sample size = 25.  
 
 #### Calculate Summary Statistics for Each Sample (n=25)
 ```{r}
@@ -96,9 +97,38 @@ summary_n25_reps1000 %>%
        title ="Distribution of Proportion of Winning Rolls for 1000 Samples \n(based on sample size of 25)") +
   
   
-    scale_x_continuous(limits = c(0, 1.0), breaks = seq(0,1.0,0.08))
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0,1,0.08))
 ```
 
+2. Construct sampling distributions histograms for  sample size = 100.  
+
+#### Calculate Summary Statistics for Each Sample (n=100)
+```{r}
+summary_n100_reps1000 <- samples_n100_reps1000 %>% 
+  
+          group_by(replicate) %>% 
+  
+          summarize(win = sum(win == "TRUE")) %>% 
+  
+          mutate(prop_win = win/100)  #### need to change divisor to match the sample size
+```
+
+#### Create histogram for distribution of 1000 samples for sample size (n=100).
+```{r}
+summary_n100_reps1000 %>% 
+  
+  ggplot(aes(prop_win)) +
+  
+  geom_histogram(binwidth = 0.01, 
+                 color="white", 
+                 fill="steelblue") +
+  
+  labs(x = "Proportion of Winning Rolls (Individual Sample)",
+       title ="Distribution of Proportion of Winning Rolls for 1000 Samples \n(based on sample size of 100)") +
+  
+  
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0,1,0.08))
+```
 
 
 3. Calculate (and Table) sampling distributions statistics for each sample size. (mean, sd, 2.5th and 97.5th percentiles)
@@ -108,9 +138,12 @@ n25_dist_mean = mean(summary_n25_reps1000$prop_win)
 n25_dist_sd = round(sd(summary_n25_reps1000$prop_win),3)
 n25_bottom_2.5 = quantile(summary_n25_reps1000$prop_win,0.025)
 n25_top_2.5 = quantile(summary_n25_reps1000$prop_win,0.975)
+
+n100_dist_mean = mean(summary_n100_reps1000$prop_win)
+n100_dist_sd = round(sd(summary_n100_reps1000$prop_win),3)
+n100_bottom_2.5 = quantile(summary_n100_reps1000$prop_win,0.025)
+n100_top_2.5 = quantile(summary_n100_reps1000$prop_win,0.975)
 ```
-
-
 
 
 ### Table of Statistics for Sampling Distributions
@@ -118,8 +151,9 @@ n25_top_2.5 = quantile(summary_n25_reps1000$prop_win,0.975)
 |  sample size  | mean   |  sd  |  bottom_2.5  |  top_2.5 |
 |--------------|--------|--------|-----------|----------|
 | 25  | `r n25_dist_mean` | `r n25_dist_sd` | `r n25_bottom_2.5`  | `r n25_top_2.5`  |
-| 100  | `r s100_dist_mean` | `r s100_dist_sd` | `r s100_bottom_2.5`  | `r s100_top_2.5`  |
-| 200  | `r s200_dist_mean` | `r s200_dist_sd` | `r s200_bottom_2.5`  | `r s200_top_2.5`  |
+| 100  | `r n100_dist_mean` | `r n100_dist_sd` | `r n100_bottom_2.5`  | `r n100_top_2.5`  |
+
+
 
 
 ##### Prompt 1 - Explain what happens to the sampling distribution as the sample size increases from 25 to 100 to 400.
@@ -131,6 +165,23 @@ n25_top_2.5 = quantile(summary_n25_reps1000$prop_win,0.975)
 > **your answer goes here**
 
 4. Take a single sample for each sample size 25, 100 and 400 and construct a 95% confidence interval for proportion of wins for the population.
+
+#### Take a sample of size 25 from our population
+
+```{r}
+set.seed(1123581321)
+sample_n25 <- roll_sim_population %>% 
+  sample_n(size = 25, replace = F )
+```
+
+#### Construct CI for single sample of n=25
+
+```{r}
+binom.test(~(win == "TRUE"), conf.level = 0.95, ci.method= "Wald", data = sample_n25) %>% 
+  confint() %>% 
+    kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+```
 
 ##### Prompt 3 - Compare your confidence intervals for different sample sizes.  How are they similar and/or different?
 

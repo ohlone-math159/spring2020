@@ -24,6 +24,8 @@ library(purrr)
 library(kableExtra)
 library(ggmosaic)  ###Note: you will need to run the following in your console.###  ###devtools::install_github("haleyjeppson/ggmosaic")###
 library(scales)
+library(infer)
+library(epiR)
 ```
 
 ```{r set ggplot2 parameters, echo=F}
@@ -60,13 +62,29 @@ demo %>%
   tabyl( education, vigorous_activity) %>%
     adorn_totals(c("row")) %>% 
     adorn_percentages("row") %>% 
-    adorn_pct_formatting(digits=0) %>% 
+    adorn_pct_formatting(digits=0) %>%
+    adorn_ns() %>% 
   
   kable(booktabs = TRUE) %>%
     kable_styling(bootstrap_options = "striped", full_width = T, 
                 position="left") %>% 
     add_header_above(c("","vigorous activity"= 2))
 ```
+```{r}
+demo_t1 <- demo %>%
+  select(education, vigorous_activity) %>% 
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+
+table()
+
+demo_t1
+
+xchisq.test(demo_t1)  
+
+```
+
 
 ```{r bar graph sweat/educ}
 demo %>%
@@ -94,6 +112,7 @@ demo %>%
     adorn_totals(c("row")) %>% 
     adorn_percentages("row") %>% 
     adorn_pct_formatting(digits=0) %>% 
+    adorn_ns() %>% 
 
   kable() %>%
     kable_styling(bootstrap_options = "striped",
@@ -101,6 +120,13 @@ demo %>%
                 position="left") %>% 
     add_header_above(c("","vigorous activity"=2))
   
+demo_f <-demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() 
+  
+xchisq.test(demo_f$vigorous_activity,demo_f$gender)
+fisher.test(demo_f$gender, demo_f$vigorous_activity)
 ```
 
 ```{r bar graph sweat/gender}

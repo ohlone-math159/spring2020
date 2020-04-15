@@ -1,0 +1,16 @@
+base
+readr
+ggplot2
+dplyr
+janitor
+infer
+kableExtra
+gridExtra
+scales
+tidyr
+lattice
+ggstance
+ggformula
+mosaicData
+Matrix
+mosaic
