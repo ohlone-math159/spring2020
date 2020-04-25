@@ -132,7 +132,7 @@ s100_top_2.5 = quantile(summary_n100_reps1000$prop_win,0.975)
 set.seed(1123581321)
 ### First take 1000 samples with sample size of 25
 samples_n400_reps1000 <- roll_sim_population %>%
-        rep_sample_n(size = 400, reps = 1000, replace = F)
+        rep_sample_n(size = 400, reps = 10000, replace = F)
 
 ### Calculate Summary Statistics
 summary_n400_reps1000 <- samples_n400_reps1000 %>% 
@@ -145,7 +145,7 @@ summary_n400_reps1000 %>%
   
   ggplot(aes(prop_win)) +
   
-  geom_histogram(binwidth = 0.01, 
+  geom_histogram(binwidth = 0.005, 
                  color="white", 
                  fill="steelblue") +
   
