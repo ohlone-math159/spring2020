@@ -39,14 +39,10 @@ Original Variable  |   New Variable  |    Description
 -------------------|-----------------|------------------
 RACE  |  race_c  | subject's race
 BIO_SEX4 | gender | subject's gender
---  |  age | subject's age
-H4ED2 | college_deg | Dd you complete college (bachelor's degree)?
 H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
 H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
-H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
 
-# Examing categorical variable 
-## 1st Categorical `vigorous_activity`
+## 1st Categorical (binary - 2 levels) `vigorous_activity`
 
 **Numerical Summary Table**  
 
@@ -77,18 +73,23 @@ enough to work up a sweat, get your heart thumping, or get out of breath?") +
 
 **Inference (CI and Test of Significance)**
 ```{r}
+##clean variable for inference tests - binary (only 2 levels)
 vig_act <- demo %>% 
   select(vigorous_activity) %>% 
   filter(vigorous_activity=="yes" | vigorous_activity=="no") %>% 
   droplevels() 
-
-
-
 ```
+
 ```{r, echo=T}
+## inference CI and test of significance  (note: prop.test is for binary variables)
 prop.test(~vigorous_activity == "no", data = vig_act)
 ```
 
+```{r, echo=F, eval=F}
+## the xchisq.test assesses the probability of obtaining a sample result if the levels were equaly likely.
+## chisquared not needed for binart categorical variables
+xchisq.test(~vigorous_activity, data = vig_act)
+```
 
 **Summary of Analysis**
 
@@ -96,72 +97,72 @@ prop.test(~vigorous_activity == "no", data = vig_act)
 The participants in the **addhealth** study were asked, "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?*  
 
 * 3056 out of 5111 (59.8%) of participants in the study answered "no".  
-* Our sample proportion of 59.8% represents a statistically significant majority (greater than 50%, p-value < 2.2e-16)
+* Our sample proportion of 59.8% represents a statistically significant majority ($h_{0}=0.5$, p-value < 2.2e-16)
 * 95% confidence interval for non-participation in vigorous activity is 58.4% to 61.1%  (output from **mosaic**'s `prop.test` function)
 </div>
 
-# Examining numerical variable 
-## 1st Numerical `sub_weight`
+## 2nd Categorical (mulitple levels) `too tired`
 
-**Numerical Summary Table** 
+**Numerical Summary Table**  
 
-```{r summarize num 1}
+```{r}
+  demo %>% 
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time")) %>% 
+  droplevels() %>% 
+  tabyl(too_tired) %>%
+  adorn_pct_formatting(digits=1) %>%
+  adorn_totals()%>%
+  kable() %>%
+  kable_styling(full_width = F, position="center")
+```
+
+**Bar Plot - Frequency of Levels**
+
+```{r}
 demo %>% 
-  filter(sub_weight < 526) %>% 
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time")) %>% 
+  droplevels() %>% 
+  ggplot(aes(x=too_tired, y= ..prop.., group=1)) +
+    geom_bar(fill="steelblue", width=0.5) +
+      ggtitle("During the past seven days: \nYou felt that you were too tired to do things") +
+      xlab("subject's response")
   
-  summarize(n = n(),
-            min = min(sub_weight),
-            q1 = quantile(sub_weight, probs=0.25),
-            median = median(sub_weight),
-            mean = mean(sub_weight),
-            q3 = quantile(sub_weight, probs=0.75),
-            max = max(sub_weight),
-            sd = sd(sub_weight)) %>% 
-
-  kable() %>% 
-    kable_styling(full_width = F, position="center")
 ```
 
-
-**Histogram - visualization of the distribution**
-
-```{r hist num 1}
-demo %>%
-  filter(sub_weight < 121) %>% 
-  ggplot(aes(x=sub_weight)) + 
-    geom_histogram(aes(y=..density..), color="white", fill="steelblue", binwidth = 5) + 
-      xlab("hours per week") +
-      ggtitle("How many hours a week (do/did) you usually work at this job?") 
+**Inference (CI and Test of Significance)**
+```{r}
+##clean variable for inference tests - binary (only 2 levels)
+tired <- demo %>% 
+  select(too_tired) %>% 
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time")) %>% 
+  droplevels() 
 ```
 
-**Boxplot - visualization of 5 number summary**
-
-```{r boxplot num 1}
-demo %>%
-  filter(sub_weight < 121) %>% 
-  ggplot(aes(y=sub_weight, x=0)) + 
-    geom_boxplot(color="steelblue", width=0.6) + 
-      ggtitle("How many hours a week (do/did) you usually work at this job?")+
-  coord_flip()
+```{r, echo=T}
+## inference CI and test of significance                    ##
+## (note: prop.test needs you to choose a particular level) ##
+prop.test(~too_tired == "never or rarely", data = tired)
 ```
 
+```{r, echo=T}
+## the xchisq.test assesses the probability of obtaining ##
+## a sample result if the levels were equaly likely.     ##
+xchisq.test(~too_tired, data = tired)
+```
 
+**Summary of Analysis**
 
-**Narrative Summary**
 <div id = "narrative">
+The participants in the **addhealth** study were asked, "*During the past seven days: You felt that you were too tired to do things*"  
 
-Participants were asked, in reference to their curren or most recent job (which they work more than 10 hours/week), "*How many hours a week (do/did) you usually work at this job?*"  
-
-* **5023** out of **5114** responded with hours between 10 and 120.  
-  
-* **82** participants were a **legitimate skip** since they have not worked a paying job for at least 10 hours a week, they are not represented here.  
-
-The center of the distribution is best described with the **mode** and **median** of 40 hours/week.   There is considerable overall variation as hours vary from 10 to 120, although the middle 50% of particpants are between 40 and 45 hours, for an interquartile range (**IQR**) of 5 hours.  Weekly work hours is *slightly skewed to the **right*** (since outliers extend, to the right, to 120 hours).  This skew also results in the **mean** being greater than the **median**, which is a typically characteristic of right skewed distributions. 
+* 1764 out of 5113 (34.5%) of participants in the study answered "never or rarely".  
+* Our sample proportion of 34.5% represents a statistically significant minority ($h_{0}=0.5$, p-value < 2.2e-16)
+* 95% confidence interval for never or rarely felt too tired to do thing is 33.2% to 35.8%  (output from **mosaic**'s `prop.test` function)
+* A Chi-Squared test for equal likely levels yielded a test statistics of $\chi^2=2560$, with p-value < 2.2e-16, which allows us to conclude that the proportion for each response level are statistically significant (not equally likely).  *In other words our sample's distribution of results is not likely to occur by chance, if each response was equally likely*
 </div>
 
 
-
-additional work
+keep ---- additional work
 ## Inference (CI and Test of Significance)
 ```{r}
 ## need to first filter your data frame
