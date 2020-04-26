@@ -1,15 +1,14 @@
 ---
-title: "HW05 Exploring Relationships Sample Report"
-author: "your name"
-output:
+title: "HW08 Exploring Relationships w/ Inference - Guide"
+author: "Jose Rico"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
   html_document:
+    toc: true
+    toc_float : true
+    css: /cloud/project/css/sandstone.css
     theme: sandstone
     highlight: tango
-    toc: yes
-    toc_float: yes
-    css: /cloud/project/css/sandstone.css
-    tables: yes
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -22,7 +21,6 @@ library(ggplot2)
 library(janitor)
 library(purrr)
 library(kableExtra)
-library(ggmosaic)  ###Note: you will need to run the following in your console.###  ###devtools::install_github("haleyjeppson/ggmosaic")###
 library(scales)
 library(infer)
 library(epiR)
@@ -51,7 +49,7 @@ H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at th
 
 Subject were asked "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath*?  First we will break this question down by education level, then by gender.  Then we will group by gender and compare response by education level.
 
-## Vigorous Activity Proportion by Educational Level
+## Table and Graphic of Vigorous Activity Proportion by Educational Level
 
 ```{r table sweat/educ w.filter}
 demo %>%
@@ -71,20 +69,6 @@ demo %>%
                 position="left") %>% 
     add_header_above(c("","vigorous activity"= 2))
 ```
-```{r}
-demo_t1 <- demo %>%
-  select(education, vigorous_activity) %>% 
-  filter(vigorous_activity %in% c("yes","no") &
-         education %in% c( "hs grad", "bachelors")) %>% 
-  droplevels()
-
-demo_t1
-
-xchisq.test(vigorous_activity ~ education, data = demo_t1)  
-prop.test(vigorous_activity ~ education, data = demo_t1)
-
-```
-
 
 ```{r bar graph sweat/educ}
 demo %>%
@@ -100,6 +84,35 @@ demo %>%
     scale_y_continuous(labels=percent) +
     coord_flip()
 ```
+
+## Inference: Chi Squared Test for Association
+```{r}
+act_ed <- demo %>%
+  select(education, vigorous_activity) %>% 
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() 
+```
+
+```{r, echo=T}
+xchisq.test( education ~ vigorous_activity , data = act_ed) 
+```
+
+## Inference: Assessing the largest difference in proportions
+```{r}
+act_ed2 <- demo %>%
+  select(education, vigorous_activity) %>% 
+  filter(vigorous_activity %in% c("no","yes") &
+         education %in% c( "hs grad", "adv degree")) %>% 
+  droplevels()
+```
+
+```{r}
+prop.test(vigorous_activity ~ education, data = act_ed2)
+```
+
+
+
 
 ## Vigorous Activity  by Gender
 ```{r table sweat/gender}

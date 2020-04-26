@@ -1,0 +1,285 @@
+---
+title: "HW08 Exploring Relationships w/ Inference - Guide"
+author: "Jose Rico"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_float : true
+    css: /cloud/project/css/sandstone.css
+    theme: sandstone
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, messages=F, warnings=F)
+```
+
+```{r library packages, echo=F, results='hide', warnings=F, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(purrr)
+library(kableExtra)
+library(scales)
+library(infer)
+library(epiR)
+library(mosaic)
+```
+
+```{r set ggplot2 parameters, echo=F}
+theme_update(plot.title = element_text(hjust = 0.5))
+```
+
+```{r load demo data, echo=F}
+load("/cloud/project/data/demo_addhealth_clean.Rdata")
+```
+ 
+
+# Variables of Interest
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+BIO_SEX4 | gender | subject's gender
+H4ED2 | education | Highest level of education completed (5 levels)
+H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
+H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
+
+# Part One : Relationship between 1st set of categorical variables (`vigorous_activity` vs. `education`)
+
+Subject were asked "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath*?  First we will break this question down by education level, then by gender.  Then we will group by gender and compare response by education level.
+
+## Table and Graphic of Vigorous Activity Proportion by Educational Level
+
+```{r table sweat/educ w.filter}
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+
+  tabyl( education, vigorous_activity) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>%
+    adorn_ns() %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped", full_width = T, 
+                position="left") %>% 
+    add_header_above(c("","vigorous activity"= 2))
+```
+
+```{r }
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(x=education, fill=vigorous_activity)) +
+    geom_bar(position = position_fill(reverse = T), width=.6) +
+  
+    scale_fill_brewer(palette="Dark2") +
+    scale_y_continuous(labels=percent) +
+    coord_flip()
+```
+
+## Inference: Chi Squared Test for Association
+```{r}
+act_ed <- demo %>%
+  select(education, vigorous_activity) %>% 
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() 
+```
+
+```{r, echo=T}
+xchisq.test( education ~ vigorous_activity , data = act_ed) 
+```
+
+## Inference: Assessing the largest difference in proportions
+Need to comment on what I did and right it up right.
+```{r}
+act_ed2 <- demo %>%
+  select(education, vigorous_activity) %>% 
+  filter(vigorous_activity %in% c("no","yes") &
+         education %in% c( "hs grad", "adv degree")) %>% 
+  droplevels()
+```
+
+```{r, echo=TRUE}
+prop.test((vigorous_activity == "no") ~ education, data = act_ed2)
+```
+
+
+# Part Two : Relationship between 2nd set of categorical variables (`too_tired` vs. `gender`)
+
+Subject were asked "*During the past seven days: You felt that you were too tired to do things*"?  First we will break this question down by gender.  Then we will...
+
+## Table and Graphic of Vigorous Activity Proportion by Educational Level
+
+```{r }
+demo %>%
+  
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
+         gender %in% c("male","female")) %>% 
+  droplevels() %>% 
+
+  tabyl(gender, too_tired) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>%
+    adorn_ns() %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped", full_width = T, 
+                position="left") %>% 
+    add_header_above(c("","How often tired in past 7 days?"= 4))
+```
+
+```{r }
+demo %>%
+  
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
+         gender %in% c("male","female")) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(x=gender, fill=too_tired)) +
+    geom_bar(position = position_fill(reverse = T), width=.6) +
+  
+    scale_fill_brewer(palette="Dark2") +
+    scale_y_continuous(labels=percent) +
+    coord_flip()
+```
+
+
+
+## Inference: Chi Squared Test for Association
+```{r}
+tired_gen <- demo %>%
+  select(gender, too_tired) %>% 
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
+         gender %in% c("male","female")) %>% 
+  droplevels()  
+```
+
+```{r, echo=T}
+xchisq.test( gender ~ too_tired , data = tired_gen) 
+```
+
+## Inference: Assessing the largest difference in proportions
+```{r}
+tired_gen2 <- demo %>%
+  select(gender, too_tired) %>% 
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
+         gender %in% c("male","female")) %>% 
+  droplevels()
+```
+
+```{r, echo=TRUE}
+prop.test((too_tired=="never or rarely") ~ gender, data = tired_gen2)  ## prop.test(response ~ explanatory)
+```
+
+# Part Three: Group by a Third Categorical Variable - Vigorous Activity by Education Level grouped by Gender
+
+## Graphic of Breakdown by Gender
+```{r bar plot sweat/educ/gender}
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+
+  ggplot(aes(x=education, fill=vigorous_activity)) +
+    geom_bar(position = position_fill(reverse = TRUE), width=.6) +
+    
+    scale_fill_brewer(palette="Dark2") +
+    facet_wrap(~gender, ncol=1) +
+    scale_y_continuous(labels=percent) +
+    coord_flip()
+```
+
+## Table for Males
+```{r table sweat/edu/gendermale} 
+demo %>% 
+  filter(gender =="male") %>% 
+
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>%
+  
+  tabyl(education, vigorous_activity) %>% 
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+  
+  kable() %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left") %>%
+    add_header_above(c("","MALE RESPONSES \n \n vigorous activity"=2))
+
+```
+
+## Inference: Chi Squared Test for Association (for Males only)
+```{r}
+act_ed_M <- demo %>%
+  select(education, vigorous_activity, gender) %>% 
+  filter(gender=="male",
+         vigorous_activity %in% c("yes","no"),
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() 
+```
+
+```{r, echo=T}
+xchisq.test( education ~ vigorous_activity , data = act_ed_M) 
+```
+
+## Table for Women
+```{r table sweat/educ/genderfemale}
+demo %>% 
+  
+  filter(gender == "female") %>% 
+
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+  
+  tabyl(education, vigorous_activity) %>% 
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left") %>% 
+    add_header_above(c("","FEMALE RESPONSES \n \n vigorous activity"=2))
+
+```
+
+## Inference: Chi Squared Test for Association (for Females only)
+```{r}
+act_ed_F <- demo %>%
+  select(education, vigorous_activity, gender) %>% 
+  filter(gender=="female",
+         vigorous_activity %in% c("yes","no"),
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() 
+```
+
+```{r, echo=T}
+xchisq.test( education ~ vigorous_activity , data = act_ed_F) 
+```
+
+
+
+## Narrative Summary
+NEED TO WORK ON ALONG WITH DIRECTIONS
+<div id="narrative">
+When looking at the all `addhealth4`observations, the percent of those who engaging in vigorous activity in the past 24 hours decreases as education level increases, showing a potential association.  When comparing vigorous activity with gender, **49% of men** responsed with **yes**, compared to **33% for women**.  The relationship between vigorous activiy and education level was different for men and women. The earlier trend of vigorous activity decreasing and education level increases is observed for men, but for women the trends is not observed.
+</div>
+
+
