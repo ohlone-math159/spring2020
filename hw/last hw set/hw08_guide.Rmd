@@ -19,11 +19,8 @@ knitr::opts_chunk$set(echo = F, messages=F, warnings=F)
 library(dplyr)
 library(ggplot2)
 library(janitor)
-library(purrr)
 library(kableExtra)
 library(scales)
-library(infer)
-library(epiR)
 library(mosaic)
 ```
 
@@ -41,21 +38,22 @@ load("/cloud/project/data/demo_addhealth_clean.Rdata")
 Original Variable  |   New Variable  |    Description
 -------------------|-----------------|------------------
 BIO_SEX4 | gender | subject's gender
+H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
 H4ED2 | education | Highest level of education completed (5 levels)
 H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
-H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
 
 
 # Part One : Relationship between 1st set of categorical variables (`vigorous_activity` vs. `education`)
 
-Subject were asked "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath*?  First we will break this question down by education level, then by gender.  Then we will group by gender and compare response by education level.
+Subject were asked "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath*?  
 
-## Table and Graphic of Vigorous Activity Proportion by Educational Level
+## Table and Graphic of `vigorous_activity` vs. `education`
 
-```{r table sweat/educ w.filter}
+```{r}
 demo %>%
   
-  filter(vigorous_activity %in% c("yes","no") &
+  filter(vigorous_activity %in% c("no", "yes") &
          education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
   droplevels() %>% 
 
@@ -86,8 +84,9 @@ demo %>%
     coord_flip()
 ```
 
-## Inference: Chi Squared Test for Association
+## Inference: Chi Squared Test for Independence 
 ```{r}
+## filtering and storing in new dataframe
 act_ed <- demo %>%
   select(education, vigorous_activity) %>% 
   filter(vigorous_activity %in% c("yes","no") &
@@ -95,12 +94,14 @@ act_ed <- demo %>%
   droplevels() 
 ```
 
+The order of the variables in the `xchisq.test` does not matter in the calculation
+of the test statistic.  They are written this way so the test output matches the earlier table.
 ```{r, echo=T}
-xchisq.test( education ~ vigorous_activity , data = act_ed) 
+xchisq.test(education ~ vigorous_activity , data = act_ed) 
 ```
 
 ## Inference: Assessing the largest difference in proportions
-Need to comment on what I did and right it up right.
+From the table and Chi Squared results, the largest difference is between education levels is **hs grad** and **adv degree**.  I want to construct a confidence interval to see how big is the difference.  So, I will just filter the **hs grad** and **adv degree** levels into a new data frame and then run a `prop.test` for difference in proportions for **no** response to vigorous activity.
 ```{r}
 act_ed2 <- demo %>%
   select(education, vigorous_activity) %>% 
@@ -113,12 +114,17 @@ act_ed2 <- demo %>%
 prop.test((vigorous_activity == "no") ~ education, data = act_ed2)
 ```
 
+## Narrative Summary
+
+<div id="narrative">
+NEED TO WORK ON ALONG WITH DIRECTIONS
+</div>
 
 # Part Two : Relationship between 2nd set of categorical variables (`too_tired` vs. `gender`)
 
 Subject were asked "*During the past seven days: You felt that you were too tired to do things*"?  First we will break this question down by gender.  Then we will...
 
-## Table and Graphic of Vigorous Activity Proportion by Educational Level
+## Table and Graphic of `too_tired` vs. `gender`
 
 ```{r }
 demo %>%
@@ -170,7 +176,12 @@ xchisq.test( gender ~ too_tired , data = tired_gen)
 ```
 
 ## Inference: Assessing the largest difference in proportions
+Note: this time around I am not filtering for the 2 levels where the largest difference was found, 
+because my explanatory variable only has 2 levels.  Instead, I will choose the level of the largest 
+difference for a single level in my response variable (**never or rarely**) only when I select the
+level in `prop.test`'s argument.  (actually - I did not need to use the chunk below) 
 ```{r}
+### unecessary chunk - since not filtering my explanatory variable
 tired_gen2 <- demo %>%
   select(gender, too_tired) %>% 
   filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
@@ -182,7 +193,13 @@ tired_gen2 <- demo %>%
 prop.test((too_tired=="never or rarely") ~ gender, data = tired_gen2)  ## prop.test(response ~ explanatory)
 ```
 
-# Part Three: Group by a Third Categorical Variable - Vigorous Activity by Education Level grouped by Gender
+## Narrative Summary
+
+<div id="narrative">
+NEED TO WORK ON ALONG WITH DIRECTIONS
+</div>
+
+# Part Three: Group by a Third Categorical Variable - `vigorous_activity` vs. `education` vs. `gender`
 
 ## Graphic of Breakdown by Gender
 ```{r bar plot sweat/educ/gender}
@@ -277,9 +294,9 @@ xchisq.test( education ~ vigorous_activity , data = act_ed_F)
 
 
 ## Narrative Summary
-NEED TO WORK ON ALONG WITH DIRECTIONS
+
 <div id="narrative">
-When looking at the all `addhealth4`observations, the percent of those who engaging in vigorous activity in the past 24 hours decreases as education level increases, showing a potential association.  When comparing vigorous activity with gender, **49% of men** responsed with **yes**, compared to **33% for women**.  The relationship between vigorous activiy and education level was different for men and women. The earlier trend of vigorous activity decreasing and education level increases is observed for men, but for women the trends is not observed.
+NEED TO WORK ON ALONG WITH DIRECTIONS
 </div>
 
 

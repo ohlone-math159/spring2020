@@ -44,7 +44,7 @@ H4MH23 | too_tired | (During the past seven days:) You felt that you were too ti
 
 # 1st Categorical (binary - 2 levels) `vigorous_activity`
 
-**Numerical Summary Table**  
+## Numerical Summary Table  
 
 ```{r summary table cat 1}
   demo %>% 
@@ -71,7 +71,7 @@ enough to work up a sweat, get your heart thumping, or get out of breath?") +
   
 ```
 
-**Inference (CI and Test of Significance)**
+## Inference (CI and Test of Significance)
 ```{r}
 ##clean variable for inference tests - binary (only 2 levels)
 vig_act <- demo %>% 
@@ -82,16 +82,18 @@ vig_act <- demo %>%
 
 ```{r, echo=T}
 ## inference CI and test of significance  (note: prop.test is for binary variables)
+## select variable and level of interest 
+## need to reference data frame
 prop.test(~vigorous_activity == "no", data = vig_act)
 ```
 
 ```{r, echo=F, eval=F}
 ## the xchisq.test assesses the probability of obtaining a sample result if the levels were equaly likely.
-## chisquared not needed for binart categorical variables
+## chisquared not needed for binary categorical variables
 xchisq.test(~vigorous_activity, data = vig_act)
 ```
 
-**Summary of Analysis**
+## Summary of Analysis
 
 <div id = "narrative">
 The participants in the **addhealth** study were asked, "*In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?*  
@@ -101,9 +103,9 @@ The participants in the **addhealth** study were asked, "*In the past 24 hours, 
 * 95% confidence interval for non-participation in vigorous activity is 58.4% to 61.1%  (output from **mosaic**'s `prop.test` function)
 </div>
 
-# 2nd Categorical (mulitple levels) `too tired`
+# 2nd Categorical (multiple levels) `too tired`
 
-**Numerical Summary Table**  
+## Numerical Summary Table 
 
 ```{r}
   demo %>% 
@@ -116,7 +118,7 @@ The participants in the **addhealth** study were asked, "*In the past 24 hours, 
   kable_styling(full_width = F, position="center")
 ```
 
-**Bar Plot - Frequency of Levels**
+## Bar Plot - Frequency of Levels
 
 ```{r}
 demo %>% 
@@ -129,9 +131,9 @@ demo %>%
   
 ```
 
-**Inference (CI and Test of Significance)**
+## Inference (CI and Test of Significance)
 ```{r}
-##clean variable for inference tests - binary (only 2 levels)
+##clean variable for inference tests 
 tired <- demo %>% 
   select(too_tired) %>% 
   filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time")) %>% 
@@ -140,7 +142,7 @@ tired <- demo %>%
 
 ```{r, echo=T}
 ## inference CI and test of significance                    ##
-## (note: prop.test needs you to choose a particular level) ##
+## (note: prop.test needs you to choose a particular level with ~variable == "level" ) ##
 prop.test(~too_tired == "never or rarely", data = tired)
 ```
 
@@ -150,7 +152,7 @@ prop.test(~too_tired == "never or rarely", data = tired)
 xchisq.test(~too_tired, data = tired)  ## you can add % for each level with p(c(.25,.25,.25,.25))
 ```
 
-**Summary of Analysis**
+## Summary of Analysis
 
 <div id = "narrative">
 The participants in the **addhealth** study were asked, "*During the past seven days: You felt that you were too tired to do things*"  

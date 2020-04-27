@@ -101,8 +101,7 @@ If you don't have a data frame, but you know the number of blue straws for a giv
 
 
 ```{r}
-binom.test(x=145, n=970, ci.method= "Wald") %>% 
-  confint()
+prop.test(x=27, n=120, p=0.288) 
 ```
 
 # How good is my Confidence Interval
