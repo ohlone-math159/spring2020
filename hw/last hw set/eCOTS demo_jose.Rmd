@@ -1,0 +1,270 @@
+---
+title: "eCOTS RStudio demo"
+author: "Jeff Witmer"
+date: "5/21/2020"
+output:
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+---
+
+This is a compilation of R commands in an RMarkdown file, used in RStudio.
+
+```{r, include=FALSE}
+library(mosaic) # This loads the mosaic package
+```
+
+Here is a code block where the code and the results are shown.
+```{r}
+x <- 36 + 44  # everything after a pound sign is a comment
+x
+```
+
+
+Note that each chunk of code starts and ends with a fence of three back-ticks. If you go to the Insert button (top right) you can choose "Insert R" and get the following (called a "chunk"):
+```{r}
+
+```
+Then you can add a command inside the chunk fences.
+
+## Loading the data
+Let's get the dataframe "present," using its url to locate it.
+```{r echo=FALSE}
+source("http://www.openintro.org/stat/data/present.R")
+str(present) #take a look at the structure of the "present" data set
+```
+
+These are the numbers of boys and of girls born in the US for each of 63 years.
+
+Now let's learn a few things about the dataframe.
+```{r}
+dim(present)  #Get the dimensions of the dataframe (which are 63 by 3)
+head(present) #Look at the first 6 lines of data
+tail(present) #Look at the last 6 lines of data
+```
+
+
+Look at the girls variable in the present dataframe:
+```{r}
+present$girls 
+```
+
+
+Here are three plots.
+```{r}
+xyplot(girls ~ year, data=present)
+xyplot(present$girls ~ present$year)
+xyplot(girls ~ year, data=present, type = "l")
+```
+
+
+A new plot.
+```{r}
+xyplot(boys + girls ~ year, data=present, type = "l")
+```
+
+
+Let's make a histogram, and then another, and another.
+```{r}
+histogram(~boys, data=present, col="red")
+histogram(present$boys) #another way to do the same thing
+histogram(~boys, data=present, nint=15) #ask for 15 bins
+```
+
+Let's make a histogram using the base package (rather than the mosaic package). The base package uses the command hist().
+```{r}
+hist(present$boys) #uses the base package, rather than the mosaic package
+```
+
+The mosaic package uses the syntax "command(~variable, data=mydata)" but the base package doesn't always like that syntax:
+```{r}
+#hist(~boys, data=present) #this doesn't work, b/c the base package uses a different syntax
+```
+
+
+Let's read in the Vitamin D data:
+```{r}
+VitDData <- read.csv("~/Randomization testing/VitDData.csv")
+str(VitDData)
+```
+
+
+Summary statistics:
+```{r}
+favstats(Days ~ Group, data=VitDData)
+```
+
+A graph.
+```{r}
+bwplot(Days ~ Group, data=VitDData)
+```
+
+```{r}
+mosaic::dotPlot( ~Days | Group,  layout = c(1, 2), width = 1, cex = 0.3, data=VitDData)
+```
+
+
+```{r}
+bargraph( ~ Group, data=VitDData)
+```
+
+
+```{r}
+tally( ~ Group, data=VitDData)
+```
+
+
+
+####Regression -- Brain size and Body size
+```{r include=FALSE}
+BrainBody <- read.csv("https://blackboard.oberlin.edu/bbcswebdav/xid-1383678_1")
+```
+
+The left plot shows original data and the second (right) plot shows the data in log scale.
+```{r}
+plot(Brain ~ Body, data= BrainBody)
+plot(log(Brain) ~ log(Body), data= BrainBody)
+```
+
+Regression model
+```{r, echo=FALSE}
+Logmodel=lm(log(Brain) ~ log(Body), data= BrainBody)
+summary(Logmodel)
+plot(log(Brain) ~ log(Body), data= BrainBody)
+abline(Logmodel)
+```
+
+Residual Plot.
+```{r, echo=FALSE}
+plot(Logmodel, 1, add.smooth=FALSE, labels.id=FALSE)
+```
+
+
+Now for some data wrangling.
+Here are some “Reduction functions” to summarize variables:
+mean() 
+sd()
+max()
+n()  – which is used within the summarise() command to count the number of cases 
+
+There are  “data verbs” to carry out operations on data tables. 
+Examples include summarise() – which aggregates multiple cases into a single case
+group_by()  –  which gives modifies a reduction function to give a single value for different groups of cases
+arrange() – which is used to put cases into a certain order
+
+Let's work with the WorldCities data from the DataComputing package (and book by Danny Kaplan).
+
+```{r, include=FALSE}
+require(dplyr)
+require(DataComputing)
+library(tidyr)
+```
+
+```{r echo=FALSE}
+data("WorldCities")
+```
+
+Let's find out how many cities are in the database.
+```{r}
+WorldCities %>% summarise(count=n())
+```
+
+
+Now let's get a few summary statistics. 
+```{r}
+WorldCities %>% summarise(averagePop = mean(population), max(population), 
+                          min(population), totalPop = sum(population))
+```
+
+Now we'll group cities by country, get the average for each country, and then arrange the averages. We end up seeing that Singapore (SG) has the highest average, with Hong Kong (HK) next. (This is not surprising, since each of these countries consists of a single, large city.)
+```{r}
+WorldCities %>% group_by(country) %>% 
+  summarise(averagePop = mean(population)) %>% arrange(desc(averagePop))
+```
+
+Moving on to baby names, we have data from the US Social Security Administration from 1880 through 2013.
+```{r echo=FALSE}
+load("/cloud/project/data/BabyNames.rda")
+
+```
+
+If we want to plot the numbers of male and of female births over time, we first need to get the data into a useful format.
+```{r}
+YearlyBirths <- BabyNames %>% 
+  group_by(year, sex) %>%
+  summarise(births = sum(count))
+```
+
+Here is a plot:
+```{r, fig.height= 4, fig.width= 5}
+xyplot( births ~ year, data=YearlyBirths, groups=sex, main="", auto.key=list(space="top", columns=3)) 
+```
+
+How did I know the command and parameters to create that plot? The mPlot() command is very helpful. But let's work in the console for a while.
+```{r}
+mPlot(YearlyBirths)
+```
+
+Here is the ggformula() version of that plot:
+```{r}
+gf_point(births ~ year, data = YearlyBirths, color = ~ sex) %>% 
+gf_theme(legend.position = "right") %>% 
+gf_labs(title = "", caption = "")
+```
+
+
+We can filter cases so that only females are chosen:
+```{r}
+Females <- BabyNames %>% filter(sex != "M")
+tail(Females)
+```
+
+We can filter on any name. For example, if your favorite name is Merrilee then these commands will produce a graph of the popularity of Merrilee as a female name over the years:
+```{r, fig.height= 4, fig.width= 5}
+Merrilee <- BabyNames %>% filter(sex == "F", name == "Merrilee")
+with(Merrilee, plot(year, count, type = "o"))
+```
+
+
+```{r, fig.height= 4, fig.width= 5}
+Madonna <- BabyNames %>% filter(sex == "F", name == "Madonna")
+with(Madonna, plot(year, count, type = "o"))
+MadonnaSorted <- Madonna %>% arrange(desc(count))
+head(MadonnaSorted)
+```
+
+
+We could make some graphs of the SaratogaHouses data, which we will rename as SaraH.
+```{r, echo = FALSE}
+data(SaratogaHouses) #This command loads the SaratogaHouses data
+SaraH <- SaratogaHouses #This renames the SaratogaHouses data, to save on future typing
+```
+
+We start by making a scatterplot of price vs livingArea, with points color-coded by the variable centalAir. Here is the command in ggformula that creates this graph:
+```{r}
+gf_point(price ~ livingArea, data = SaraH, color = ~ centralAir) %>% 
+gf_labs(title = "", caption = "")
+```
+
+
+Next we will add regression lines, one for each level of centralAir:
+```{r}
+gf_point(price ~ livingArea, data = SaraH, color = ~ centralAir) %>%
+gf_lm() %>% 
+gf_labs(title = "", caption = "")
+```
+
+Next we create three scatterplots of price vs livingArea, with points color-coded by the variable centalAir: one for each of three fuel sources. Here is the command in ggformula that creates this graph:
+```{r}
+gf_point(price ~ livingArea, data = SaraH, color = ~ centralAir) %>%
+gf_lm() %>%
+gf_facet_wrap(~ fuel, ncol = 4) %>% 
+gf_labs(title = "", caption = "")
+```
+

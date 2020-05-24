@@ -101,7 +101,8 @@ If you don't have a data frame, but you know the number of blue straws for a giv
 
 
 ```{r}
-prop.test(x=27, n=120, p=0.288) 
+prop.test(x=480, n=900
+          , p=0.5) 
 ```
 
 # How good is my Confidence Interval

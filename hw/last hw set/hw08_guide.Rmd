@@ -22,6 +22,7 @@ library(janitor)
 library(kableExtra)
 library(scales)
 library(mosaic)
+library(manipulate)
 ```
 
 ```{r set ggplot2 parameters, echo=F}
@@ -41,6 +42,11 @@ BIO_SEX4 | gender | subject's gender
 H4MH23 | too_tired | (During the past seven days:) You felt that you were too tired to do things.
 H4ED2 | education | Highest level of education completed (5 levels)
 H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
+
+
+```{r}
+mPlot(demo)
+```
 
 
 
@@ -97,11 +103,11 @@ act_ed <- demo %>%
 The order of the variables in the `xchisq.test` does not matter in the calculation
 of the test statistic.  They are written this way so the test output matches the earlier table.
 ```{r, echo=T}
-xchisq.test(education ~ vigorous_activity , data = act_ed) 
+xchisq.test(education ~ vigorous_activity , data = act_ed) ### exp ~ resp
 ```
 
 ## Inference: Assessing the largest difference in proportions
-From the table and Chi Squared results, the largest difference is between education levels is **hs grad** and **adv degree**.  I want to construct a confidence interval to see how big is the difference.  So, I will just filter the **hs grad** and **adv degree** levels into a new data frame and then run a `prop.test` for difference in proportions for **no** response to vigorous activity.
+From the table and Chi Squared results, the largest difference is between education levels is **hs grad** and **adv degree**.  I want to construct a confidence interval to see how big is the difference.  So, I will just filter the **hs grad** and **adv degree** levels into a new data frame and then run a `prop.test` for difference in proportions for **no** responses to vigorous activity.
 ```{r}
 act_ed2 <- demo %>%
   select(education, vigorous_activity) %>% 
@@ -111,13 +117,20 @@ act_ed2 <- demo %>%
 ```
 
 ```{r, echo=TRUE}
-prop.test((vigorous_activity == "no") ~ education, data = act_ed2)
+## Testing Difference in Proportion of vigorous activity = "no" between hsgrad and adv degree
+prop.test((vigorous_activity == "no") ~ education, data = act_ed2) ## resp ~ exp
 ```
+
+
+
+
 
 ## Narrative Summary
 
 <div id="narrative">
-NEED TO WORK ON ALONG WITH DIRECTIONS
+We conducted a Chi Squared Test for Independence for daily participation in vigorous activity and educational level.  Our Chi Squared statistic was 13.8 (df=4) with p-value of 0.007845.  This is strong enough evidence to reject the null hypothesis of independence.  Therefore, we can conclude that participation in vigorous activity is **associated** with educational level.  B
+
+Our largest difference for "no" - vigorous activity was between the educational levels of **hsgrad** at 55%  and **adv degree** at 64%.  A 95% confidence interval for the true difference is between 3-14%.  This difference is statistically significant based on the confidence interval not including zero, as well as the result testing the null hypothesis of "no difference", yielded a p-value of 0.002981, which is strong enough evidence against the null hypothesis to reject it and make the conclusion that there is a statistical significance difference between the levels for our (population?).  
 </div>
 
 # Part Two : Relationship between 2nd set of categorical variables (`too_tired` vs. `gender`)
@@ -138,11 +151,9 @@ demo %>%
     adorn_percentages("row") %>% 
     adorn_pct_formatting(digits=0) %>%
     adorn_ns() %>% 
-  
-  kable(booktabs = TRUE) %>%
+    kable(booktabs = TRUE) %>%
     kable_styling(bootstrap_options = "striped", full_width = T, 
-                position="left") %>% 
-    add_header_above(c("","How often tired in past 7 days?"= 4))
+                position="left")
 ```
 
 ```{r }
@@ -172,7 +183,7 @@ tired_gen <- demo %>%
 ```
 
 ```{r, echo=T}
-xchisq.test( gender ~ too_tired , data = tired_gen) 
+xchisq.test( gender ~ too_tired , data = tired_gen)  ## exp ~ resp
 ```
 
 ## Inference: Assessing the largest difference in proportions
@@ -190,7 +201,82 @@ tired_gen2 <- demo %>%
 ```
 
 ```{r, echo=TRUE}
-prop.test((too_tired=="never or rarely") ~ gender, data = tired_gen2)  ## prop.test(response ~ explanatory)
+prop.test((too_tired=="most of the time or all of the time") ~ gender, data = tired_gen2)  ## prop.test(response ~ explanatory)
+```
+
+## Narrative Summary
+
+<div id="narrative">
+NEED TO WORK ON ALONG WITH DIRECTIONS
+</div>
+
+# ADDITIONAL IN CLASS EXAMPLE
+# Part Two - A : Relationship between 2nd set of categorical variables (`too_tired` vs. `education`)
+
+Subject were asked "*During the past seven days: You felt that you were too tired to do things*"?  First we will break this question down by education.  Then we will...
+
+## Table and Graphic of `too_tired` vs. `education`
+
+```{r }
+demo %>%
+  
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
+            education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>%  
+  droplevels() %>% 
+
+  tabyl(education, too_tired) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>%
+    adorn_ns() %>% 
+    kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped", full_width = T, 
+                position="left")
+```
+
+```{r }
+demo %>%
+  
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
+            education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(x=education, fill=too_tired)) +
+    geom_bar(position = position_fill(reverse = T), width=.6) +
+  
+    scale_fill_brewer(palette="Dark2") +
+    scale_y_continuous(labels=percent) +
+    coord_flip()
+```
+
+
+
+## Inference: Chi Squared Test for Association
+```{r}
+tired_educ <- demo %>%
+  select(education, too_tired) %>% 
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
+            education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels()  
+```
+
+```{r, echo=T}
+xchisq.test( education ~ too_tired , data = tired_educ)  ## exp ~ resp
+```
+
+## Inference: Assessing the largest difference in proportions
+
+```{r}
+### unecessary chunk - since not filtering my explanatory variable
+tired_educ2 <- demo %>%
+  select(education, too_tired) %>% 
+  filter(too_tired %in% c("never or rarely","sometimes","alot of the time", "most of the time or all of the time"),
+            education %in% c( "not hs grad", "hs grad")) %>% 
+  droplevels()  
+```
+
+```{r, echo=TRUE}
+prop.test((too_tired=="never or rarely") ~ education, data = tired_educ2)  ## prop.test(response ~ explanatory)
 ```
 
 ## Narrative Summary
