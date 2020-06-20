@@ -177,3 +177,8 @@ demo <- mydata_c %>% select(race_c, gender , age, college_deg, vigorous_activity
 save(demo, file="/cloud/project/data/demo_addhealth_clean.Rdata")
 ```
 
+```{r}
+demo %>% 
+  table(education, stress_easily)
+```
+
