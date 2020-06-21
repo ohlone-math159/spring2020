@@ -1,0 +1,408 @@
+---
+title: "hw05_explore_relationships_sample_report"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ~/R/spring2020/css/sandstone.css
+    tables: yes
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, messages=F, warnings=F)
+```
+
+```{r library packages, results='hide', warnings=F, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(purrr)
+library(kableExtra)
+library(ggmosaic)  ###Note: you will need to run the following in your console.###  ###devtools::install_github("haleyjeppson/ggmosaic")###
+library(scales)
+```
+
+```{r set ggplot2 parameters, echo=F}
+theme_update(plot.title = element_text(hjust = 0.5))
+```
+
+```{r load data}
+load("/cloud/project/data/demo_addhealth_clean.Rdata")
+```
+ 
+
+# Variables of Interest
+
+Original Variable  |   New Variable  |    Description
+-------------------|-----------------|------------------
+BIO_SEX4 | gender | subject's gender
+H4ED2 | education | Highest level of education completed (5 levels)
+H4DA11 | vigorous_activity | In the past 24 hours, have you participated in vigorous physical activity long enough to work up a sweat, get your heart thumping, or get out of breath?
+H4LM19 | hrs_worked_week | How many hours a week (do/did) you usually work at this job?
+
+# Part I : Association between two categorical variables
+
+## Vigorous Activity Proportion by Education Attainment
+
+### Two-way table
+A two way table displays a categorical variable broken down by another categorical variable.  In this example `vigorous_activity` (response variable) is broken down by `education` (explanatory variable).  Which means we are assessing if the proportion of participation in a vigorous activity varies across educational levels.  We will use the `tabyl` function that you are already familiar with.  When using `tably` with 2 variables, the first input is typically the **explanatory** variable and the second input is the **response** variable.  Note how the levels for `vigorous_activity` don't have any reference (yes to what, one may ask).  To provide more details you can add a header above your table's columns.
+
+```{r table sweat/educ}
+demo %>%
+  filter(education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree"),
+         vigorous_activity %in% c("yes", "no")) %>% 
+  droplevels() %>% 
+  tabyl( education, vigorous_activity) %>%
+    adorn_totals(c("row","col")) %>% 
+    #adorn_percentages("row") %>% 
+    #adorn_pct_formatting(digits=0) %>% 
+  
+  kable() %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = F, 
+                  position="left") %>% 
+  add_header_above(c("","Have you engaged in a vigorous activity \n in the past 24 hours?"=3))
+```
+
+#### Adding header above response variable's levels
+The argument `add_header_above()` will print a header above your columns, but you will need to specify the number of columns, in this case there are **6**.  The c("","vigorous_activity"=5) says leave the first column blank (since it already has a header of education) and place the header `vigorous_activity` above the remaining 5 columns of yes, no, refused, don't know and NA_.
+
+```{r table sweat/educ w.header}
+demo %>%
+  
+  tabyl( education, vigorous_activity) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left") %>% 
+    add_header_above(c("","vigorous activity"=5))
+```
+
+#### Filtering observations
+After you have created the basic table you might want to `filter` by your categorical variable's levels to improve the readability of the table.  `vigorous_activity` has unncessary levels of **don't know** and **refused**, so I removed them by filtering for just the levels of **yes** and **no** using `filter(vigorous_activity %in% c("yes","no"))` the `%in%` operator along with `c()` function allow you to filter for a list of desired levels.  `filter(!vigorous_activity %in% c("don't know","refused"))` would also have worked, although you would have to add a second filter of `filter(!is.na(vigorous_activity))`  (*You will probably find it easier to filter the levels that you want, although it might take more typing of levels.*)
+
+**Note: the change in `add_header_above` , since now there are only 3 columns in my table.**
+
+```{r table sweat/educ w.filter}
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+
+  
+  tabyl( education, vigorous_activity) %>%
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped", full_width = T, 
+                position="left") %>% 
+    add_header_above(c("","vigorous activity"= 2))
+```
+
+## Bar Graph to accompany table
+Having a graphic accompany your two way table will add a visual aspect to yout analysis.  Since our variables are **both categorical** we will use  `geom_bar` to construct a bar graph.  There are many options for a type of bar graph.  For more details on options see [R for Data Wrangling : Barplot](https://cengel.github.io/R-data-wrangling/data-visualization-with-ggplot2.html#barplot).  For a bar graph with 2 categorical variables, the **explanatory** variables is the `x` variable, while the **response* variable is used to `fill` in the bars.  In order to match the Yes/No order in my table, I usd the argument `position = position_fill(reverse = TRUE)` in the `geom_bar` layer.  The `scale_y_continuous(labels=percent)` argument changes the scaling of my measurement axis (Note: It is initially the y-axis, but after `coord_flip()` it becomes the x-axis).
+
+```{r bar graph sweat/educ}
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(x=education, fill=vigorous_activity)) +
+    geom_bar(position = position_fill(reverse = T), width=.6) +
+  
+    scale_fill_brewer(palette="Dark2") +
+    scale_y_continuous(labels=percent) +
+    coord_flip()
+```
+
+## Additional Examples - Vigorous Activity and Gender  
+
+### Table 
+```{r table sweat/gender}
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  
+  tabyl(gender, vigorous_activity) %>% 
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+
+  kable() %>%
+    kable_styling(bootstrap_options = "striped",
+                full_width = T, 
+                position="left") %>% 
+    add_header_above(c("","vigorous activity"=2))
+  
+```
+
+### Bar Plot
+```{r bar graph sweat/gender}
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no"))  %>% 
+  droplevels() %>% 
+  
+  ggplot(aes(x=gender, fill=vigorous_activity)) +
+    geom_bar(position = position_fill(reverse = T), width=.6) +
+  
+    scale_fill_brewer(palette="Dark2") +
+    scale_y_continuous(labels=percent) +
+    coord_flip()
+```
+
+# Adding in a third categorical variable to the analysis
+Often you will want to see the relationship between two categorical variables when your observations are grouped by a third variables and then tabulated separately.  For this example, we are grouping the observations by `gender` and then creating a two-way table for each gender.  This is to see if the trends between `vigorous_activity` and `education` hold across `gender`s.  In order to do this, 2 two-way tables are constructed, one for each level of third categorical variable (in this case 2 levels, **male** and **female**).   An additional filter command will allow one to create tables for each level of the third categorical variable.  Since our third variable is `gender` we will insert `filter(gender == "male")` to filter out all observations where gender is male.
+
+## Constructing Tables
+
+### Male Responses
+```{r table sweat/edu/gendermale} 
+demo %>% 
+  filter(gender =="male") %>% 
+
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+  
+  tabyl(education, vigorous_activity) %>% 
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left") %>%
+    add_header_above(c("MALE RESPONSES \n \n vigorous activity"=3))
+
+```
+
+### Female Responses
+```{r table sweat/educ/genderfemale}
+demo %>% 
+  
+  filter(gender == "female") %>% 
+
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+  
+  tabyl(education, vigorous_activity) %>% 
+    adorn_totals(c("row")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left") %>% 
+    add_header_above(c("","FEMALE RESPONSES \n \n vigorous activity"=2))
+
+```
+## Faceting Bar Plots
+Method of construction is similar to the earlier example of bar plot for two categorical variables.  THe addition of the `facet_wrap` argument, will create barplots for each level of the third categorical variable.  In order to look at barplots of `hrs_work_week` for different educational levels, we add a plot layer `facet_wrap(~ gender, ncol = 1)`. The `~ gender` define the variable to  facet by in the barplots.  The `ncol = 1` argument sets the output of  barplots into one column.  
+
+```{r bar plot}
+demo %>%
+  
+  filter(vigorous_activity %in% c("yes","no") &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+
+  ggplot(aes(x=education, fill=vigorous_activity)) +
+    geom_bar(position = position_fill(reverse = TRUE), width=.6) +
+    
+    scale_fill_brewer(palette="Dark2") +
+    facet_wrap(~gender, ncol=1) +
+    ggtitle("Engaging in a Vigorous Activity (24h) comparison with Education Level\n Grouped by Gender") +
+    scale_y_continuous(labels=percent) +
+    coord_flip()
+```
+
+
+### Narrative Summary
+
+<div id="narrative">
+When looking at the all `addhealth4`observations, the percent of those who engaging in vigorous activity in the past 24 hours decreases as education level increases, showing a potential association.  When comparing vigorous activity with gender, **49% of men** responsed with **yes**, compared to **33% for women**.  The relationship between vigorous activiy and education level was different for men and women. The earlier trend of vigorous activity decreasing and education level increases is observed for men, but for women the trends is not observed.
+</div>
+
+
+# Association between numerical and categorical variables
+
+## Analysis of Relationship between Educational Level anfd Usual Hours Worked Per Week 
+
+### Summary Statistics 
+```{r summary table hours/educ}
+demo %>% 
+  
+  filter(hrs_work_week < 121 &
+         education %in% c("not hs grad", "hs grad", "post hs", "bachelors", "adv degree")) %>% 
+  droplevels() %>% 
+  
+  group_by(education) %>%
+  
+  summarize(n = n(),
+            min = min(hrs_work_week),
+            q1 = quantile(hrs_work_week, probs=0.25),
+            median = median(hrs_work_week),
+            mean = round(mean(hrs_work_week),1),
+            q3 = quantile(hrs_work_week, probs=0.75),
+            max = max(hrs_work_week),
+            sd = round(sd(hrs_work_week),1)) %>% 
+  
+  kable() %>% 
+    kable_styling(bootstrap_options = "striped",
+                  full_width = T, 
+                  position="left")   %>% 
+    add_header_above(c("hours worked summary statistics "= 9))
+```
+
+## Visualization 
+There are several options to choose from when visually inspecting the relationship between a numerical and categorical variable.  Your summary statistics provide numerical values to compare across the categorical variable, while your visualization provide an opportunity to see difference in the overall distribution.
+
+
+### Faceting 
+Faceting is used when we'd like to create small multiples of the same plot over a different categorical variable. By default, all of the small multiples will have the same vertical axis.
+
+For example, suppose we were interested in looking at whether usual hour worked  varied by the educational level. This is what is meant by "the distribution of one variable over another variable": `hrs_work_week` is response variable and `education` is the explanatory variable. In order to look at histograms of `hrs_work_week` for different educational levels, we add a plot layer `facet_wrap(~ education, ncol = 1)`. The `~ education` define the variable to  facet by in the histograms.  The `ncol = 1` argument sets the output of  histograms into one column.  The addition of the `aes`thetic `fill=education` gives each faceted histogram a color corresponding to its educational **level**.
+
+### Faceted Histogram
+
+```{r histogram hours/educ}
+demo %>% 
+  
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  
+  ggplot(aes(hrs_work_week))+
+  
+    geom_histogram(aes(y=..density..,
+                       fill=education), 
+                   color="white", 
+                   binwidth = 5) +
+  
+      scale_fill_brewer(palette="Dark2") +
+  
+    facet_wrap(~ education, 
+               ncol=1,
+               as.table = FALSE)  ## reverses the order of the levels to match boxplots
+```
+
+### Faceted Density Plot
+
+Density plot is a **computed** smoothed version of the histogram  (note: the `adjust` argument changes how the smoothing is calculated). This is a useful alternative to the histogram for continuous data that comes from an underlying smooth distribution.  Also note how the `aes`thetics and structure are similar to the histogram.  
+
+```{r density plot hours/educ, eval=T}
+demo %>% 
+  
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  
+  ggplot(aes(hrs_work_week)) +
+  
+    geom_density(aes(fill=education), 
+                 color="white",
+                 adjust=2) +
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    facet_wrap(~ education, 
+               ncol=1,
+               as.table = FALSE)  ## reverses the order of the levels to match boxplots
+  
+```
+
+## Boxplots
+While histograms can help to show the distribution of data, boxplots have much more flexibility, and can provide even more information in a single graph. The **y** `aes`thetic is the **numeric** variable you want to include in the boxplot, and the **x** `aes`thetic is a **grouping** variable. For instance, below we set  `education` as the `aes`thetic `mapping` for x, and `hrs_work_week` as the `aes`thetic `mapping` for y. This creates a boxplot of the usaul hours worked per week  for different levels of education.  The `aes`thetic `fill` argument is not necessary, but assigns color for each level's boxplot (which should match your **grouping* or **x** variable. 
+
+
+```{r boxplot hours/educ}
+demo %>% 
+  
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  
+  ggplot(aes(y=hrs_work_week, x=education))+
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    geom_boxplot(aes(fill=education)) +
+  
+    coord_flip()  # might be nice to re-scale axis ( to see middle 50 better)
+  
+```
+
+### Violin Plots
+
+A violin plot is a compact display of a continuous distribution. It is a blend of `geom_boxplot()` and `geom_density()`: a violin plot is a mirrored density plot displayed in the same way as a boxplot. Note how the `aes`thetics are similar to the `geom_boxplot`.  Adding the `draw_quantiles=c(0.25,0.5,.75)` argument draws Q1, median and Q3. 
+
+```{r violin plot, eval=T}
+demo %>% 
+  
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  
+  ggplot(aes(y=hrs_work_week, x=education)) +
+  
+    geom_violin(aes(fill=education),
+                draw_quantiles=c(0.25,0.5,.75),
+                adjust=2) +
+  
+    scale_fill_brewer(palette="Dark2") +
+  
+    coord_flip()  
+  
+```
+
+## Density curves for each level on the same plot
+Sometimes, you might want to directly compare the density curves for each level on the same plot.  Set `ggplot`'s `aes`thetic `color`= education (which is my categorical variable).  You can also set your **x-axis**'s limits with the argument `xlim()`.  In this example the x-axis limits are set from 10 to 80 hours.  `xlim` and `ylim` can be used on most `geom`s.
+
+```{r density curves same plot}
+demo %>% 
+  
+  filter(!education =="don't know") %>% 
+  droplevels() %>% 
+  filter(hrs_work_week < 121) %>% 
+  
+  ggplot(aes(x=hrs_work_week, color=education)) +
+  
+    geom_density(alpha = 0.1, adjust=2) +
+  
+    xlim(10, 80) +
+  
+    scale_fill_brewer(palette="Dark2") 
+```
+
+
+### Future Notes
+
+Cant get this to work 3 way table with tabyl (Error in class(dat[[1]]) <- new_class : adding class "factor" to an invalid object)
+```{r, eval =F}
+demo %>%
+#  filter(vigorous_activity %in% c("yes","no"))  %>% 
+#  droplevels() %>% 
+#  filter(!education =="don't know") %>% 
+ # droplevels() %>% 
+  tabyl(education, vigorous_activity, gender)
+```
+
+
+

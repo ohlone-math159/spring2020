@@ -1,0 +1,204 @@
+---
+title: "Select and Recode Variables"
+output:
+  html_document:
+    theme: sandstone
+    highlight: tango
+    toc: yes
+    toc_float: yes
+    css: ../css/sandstone.css
+  pdf_document: default
+---
+
+
+```{r, echo=F}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE) #Chunk default settings 
+```
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+```
+
+3.  Load in your data.
+
+Load in your raw data file - with `load` command for the `addhealth4` data
+```{r}
+#load("/cloud/project/data/addhealth4.RData") ##RStudioCloud
+load("~/R/spring2020/data/addhealth4.RData") ##RStudio Desktop
+```
+
+Select variables
+```{r}
+mydata <- addhealth4 %>% 
+  select(RACE, BIO_SEX4, iyear4, h4od1y , H4GH1, H4GH7, H4GH8, H4MH2, H4MH7, H4MH9, H4MH22, H4MH23, H4MH24, H4MH25, H4DA11, H4ED2, H4KK15B, H4RD14, H4RD14T, H4LM19, H4RD7E, H4RD14T, H4RD14, H4PE22, H4PR, H4BMI, H4DA13, H4GH6)
+```
+
+Recode variables
+```{r}
+mydata_c <- mydata %>% 
+  mutate(race_c = recode_factor(RACE,
+                                "5"="white",
+                                "2"="black",
+                                "4"="asian_pacific_islander",
+                                "3"="native_american",
+                                "1"="multiple_races",
+                                "6"="other",
+                                .ordered=T)) %>% 
+  mutate(vigorous_activity = recode_factor(H4DA11,
+                                 "1"="yes",
+                                 "0"="no",
+                                "6"="refused",
+                                "8"="don't know",
+                                .ordered=T)) %>% 
+  mutate(H4RD14C = recode(H4RD14T,
+                          "1"=52,
+                          "2"=12,
+                          "3"=1
+                          )) %>% 
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "6")) %>% 
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "8")) %>% 
+  mutate(yearly_no_sex = round(H4RD14*H4RD14C,0)) %>% 
+    mutate(gender = recode_factor(BIO_SEX4,
+                                  "1" ="male",
+                                  "2"="female",
+                                  .ordered=T)) %>%  
+  mutate(college_deg = recode_factor(H4ED2,
+                             "1"="no",
+                             "2"="no",
+                             "3"="no",
+                             "4"="no",
+                             "5"="no",
+                             "6"="no",
+                             "7"="yes",
+                             "8"="yes",
+                             "9"="yes",
+                             "10"="yes",
+                             "11"="yes",
+                             "12"="yes",
+                             "13"="yes",
+                             "98"="don't know",
+                             .ordered=T)) %>% 
+  mutate(too_tired = recode_factor(H4MH23, 
+                                   "0"="never or rarely",
+                                   "1"="sometimes",
+                                   "2"="alot of the time",
+                                   "3"="most of the time or all of the time",
+                                   "6"="refused",
+                                   .ordered=T)) %>% 
+  mutate(age = iyear4-h4od1y) %>% 
+  mutate(hrs_work_week = H4LM19 ) %>% 
+  mutate(education = recode_factor(H4ED2,
+                             "1"="not hs grad",
+                             "2"="not hs grad",
+                             "3"="hs grad",
+                             "4"="post hs",
+                             "5"="post hs",
+                             "6"="post hs",
+                             "7"="bachelors",
+                             "8"="bachelors",
+                             "9"="adv degree",
+                             "10"="adv degree",
+                             "11"="adv degree",
+                             "12"="bachelors",
+                             "13"="adv degree",
+                             "98"="don't know",
+                             .ordered=T)) %>% 
+  
+  mutate(partner_express_love = recode_factor(H4RD7E,
+                                "1"="agree",
+                                "2"="agree",
+                                "3"="neither agree nor disagree",
+                                "4"="disagree",
+                                "5"="disagree",
+                                "96"="refused",
+                                "98"="don't know",
+                                .ordered=T)) %>% 
+  
+  mutate(H4RD14C = recode(H4RD14T,
+                          "1"=52,
+                          "2"=12,
+                          "3"=1
+                          )) %>% 
+  
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "6")) %>% 
+  
+  mutate(H4RD14C = na_if(H4RD14C,
+                         "8")) %>% 
+  mutate(yearly_amt_sex = round(H4RD14*H4RD14C,0)) %>% 
+  
+  mutate( stress_easily = recode_factor(H4PE22,
+                                "1"="agree",
+                                "2"="agree",
+                                "3"="neither agree nor disagree",
+                                "4"="disagree",
+                                "5"="disagree",
+                                "6"="refused",
+                                "8"="don't know",
+                                .ordered=T)) %>% 
+  mutate(pulse_rate = H4PR) %>% 
+  
+  mutate(BMI = H4BMI) %>% 
+  
+  mutate(weekly_gym_use = cut(H4DA13,
+                       breaks=c(-Inf,0.5,3.5,7.5,96.5,97.5),
+labels=c("no",
+         "1-3 times",
+         "4 or more times",
+         "refused",
+         "legitimate skip"),
+          ordered_result = TRUE))
+
+  
+```
+
+### add additional  variables                             
+```{r}
+mydata_c <- mydata_c %>% 
+  mutate(sub_weight = H4GH6)
+```
+
+    
+
+
+```{r}
+glimpse(mydata_c)
+```
+
+```{r}
+demo <- mydata_c %>% select(race_c, gender , age, college_deg, vigorous_activity, too_tired, hrs_work_week, education , partner_express_love, yearly_amt_sex, pulse_rate, stress_easily, BMI, weekly_gym_use, sub_weight )
+```
+
+```{r}
+save(demo, file="~/R/spring2020/data/demo_addhealth_clean.Rdata")
+```
+
+```{r}
+demo %>% 
+<<<<<<< HEAD
+tabyl(college_deg)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+  table(education, stress_easily)
+```
+
+>>>>>>> 07a030abedfae0d81ed2ce81fc3043fc351a1d5f
