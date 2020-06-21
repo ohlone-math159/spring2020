@@ -26,7 +26,8 @@ library(janitor)
 
 Load in your raw data file - with `load` command for the `addhealth4` data
 ```{r}
-load("/cloud/project/data/addhealth4.RData")
+#load("/cloud/project/data/addhealth4.RData") ##RStudioCloud
+load("~/R/spring2020/data/addhealth4.RData") ##RStudio Desktop
 ```
 
 Select variables
@@ -156,7 +157,7 @@ labels=c("no",
   
 ```
 
-### add 4TH variable                              
+### add additional  variables                             
 ```{r}
 mydata_c <- mydata_c %>% 
   mutate(sub_weight = H4GH6)
@@ -174,6 +175,24 @@ demo <- mydata_c %>% select(race_c, gender , age, college_deg, vigorous_activity
 ```
 
 ```{r}
-save(demo, file="/cloud/project/data/demo_addhealth_clean.Rdata")
+save(demo, file="~/R/spring2020/data/demo_addhealth_clean.Rdata")
 ```
+
+```{r}
+demo %>% 
+tabyl(college_deg)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 

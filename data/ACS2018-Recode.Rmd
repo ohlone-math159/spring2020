@@ -1,0 +1,83 @@
+---
+title: "ACS2018-Recode"
+author: "Jose Rico"
+date: "6/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(kableExtra)
+```
+
+3.  Load in your data.
+
+Load in your raw data file - with `load` command for the `addhealth4` data
+```{r}
+#load("/cloud/project/data/addhealth4.RData") ##RStudioCloud
+ACS2018_TriCity <- readRDS("~/R/spring2020/data/ACS2018_TriCity.rds") ##RStudio Desktop
+```
+
+Select variables
+```{r}
+acs <- ACS2018_TriCity %>%  # page 30 of recode book
+  select(PWGTP, AGEP, CIT, COW, ENG, FER, JWMNP, LANX, MAR, SEX, SCHL, WAGP, ESR, WKHP , WRK, NATIVITY, PINCP )
+```
+
+Recode variables
+```{r}
+acs_c <- acs %>% 
+  mutate(ENG_c = recode_factor(ENG,
+                                "1"="Very Well",
+                                "2"="Well",
+                                "3"="Not Well",
+                                "4"="Not at all",
+                                .ordered=T)) %>%
+  mutate(CIT_c = recode_factor(CIT,
+                                "1"="Born in US",
+                                "2"="Born in US Territory",
+                                "3"="Born Abroad by American Parent",
+                                "4"="US Citizen by Naturalization",
+                               "5"="Not a citizen of the US",
+                                .ordered=T)) %>% 
+  mutate(FER_c = recode_factor(FER,
+                                "1"="Yes",
+                                "2"="No",
+                                .ordered=T)) %>%
+```
+
+```{r}
+acs_c %>% 
+  tabyl(ENG_c)
+```
+
+
+```{r}
+acs_c %>% 
+
+  #filter(ENG_c %in% c("Very Well", "Well", "Not Well", "Not at all")) %>% 
+  #droplevels() %>% 
+
+  
+  tabyl(CIT_c, ENG_c) %>% 
+    adorn_totals(c("row","col")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+    adorn_ns() %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped", full_width = T, 
+                position="left")  %>% 
+    add_header_above(c("","Ability to Speak English"= 6 ))
+```
+
+
+
+
+
