@@ -196,3 +196,8 @@ tabyl(college_deg)
 
 
 
+=======
+  table(education, stress_easily)
+```
+
+>>>>>>> 07a030abedfae0d81ed2ce81fc3043fc351a1d5f
