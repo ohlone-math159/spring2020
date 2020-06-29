@@ -24,10 +24,56 @@ Load in your raw data file - with `load` command for the `addhealth4` data
 ACS2018_TriCity <- readRDS("~/R/spring2020/data/ACS2018_TriCity.rds") ##RStudio Desktop
 ```
 
+```{r}
+tabyl(ACS2018_TriCity$COW)
+```
+Codebook
+
+CIT Character 1
+Citizenship status
+1 .Born in the U.S.
+2 .Born in Puerto Rico, Guam, the U.S. Virgin Islands, or the .Northern Marianas
+3 .Born abroad of American parent(s)
+4 .U.S. citizen by naturalization
+5 .Not a citizen of the U.S.
+
+COW Character 1
+Class of worker
+b .N/A (less than 16 years old/NILF who last worked more than 5 .years ago or never worked)
+1 .Employee of a private for-profit company or business, or of an .individual, for wages, salary, or commissions
+2 .Employee of a private not-for-profit, tax-exempt, or .charitable organization
+3 .Local government employee (city, county, etc.)
+4 .State government employee
+5 .Federal government employee
+6 .Self-employed in own not incorporated business, professional .practice, or farm
+7 .Self-employed in own incorporated business, professional .practice or farm
+8 .Working without pay in family business or farm
+9 .Unemployed and last worked 5 years ago or earlier or never .worked
+
+ENG Character 1
+Ability to speak English
+b .N/A (less than 5 years old/speaks only English)
+1 .Very well
+2 .Well
+3 .Not well
+4 .Not at all
+
+FER Character 1
+Gave birth to child within the past 12 months
+b .N/A (less than 15 years/greater than 50 years/ male)
+1 .Yes
+2 .No
+
+LANX Character 1
+Language other than English spoken at home
+b .N/A (less than 5 years old)
+1 .Yes, speaks another language
+2 .No, speaks only English
+
 Select variables
 ```{r}
 acs <- ACS2018_TriCity %>%  # page 30 of recode book
-  select(PWGTP, AGEP, CIT, COW, ENG, FER, JWMNP, LANX, MAR, SEX, SCHL, WAGP, ESR, WKHP , WRK, NATIVITY, PINCP )
+  select(PWGTP, SEX, AGEP, CIT, COW, ENG, FER, JWMNP, LANX, MAR, SEX, SCHL, WAGP, ESR, WKHP , WRK, NATIVITY, PINCP )
 ```
 
 Recode variables
@@ -46,16 +92,66 @@ acs_c <- acs %>%
                                 "4"="US Citizen by Naturalization",
                                "5"="Not a citizen of the US",
                                 .ordered=T)) %>% 
+   mutate(Work_Class = recode_factor(COW,   
+      # N/A (less than 16 years old/NILF who last worked more than 5 .years ago or never worked)
+                                "1"="Private",
+                                "2"="Private",
+                                "3"="Government",
+                                "4"="Government",
+                               "5"="Government",
+                               "6"="Self-Employed",
+                                "7"="Self-Employed",
+                               "8"="Working for family without pay",
+                               "9"="Unemployed",
+                                .ordered=T)) %>% 
   mutate(FER_c = recode_factor(FER,
                                 "1"="Yes",
                                 "2"="No",
-                                .ordered=T)) %>%
+                                .ordered=T)) %>% 
+    mutate(SEX_c = recode_factor(SEX,
+                                "1"="Male",
+                                "2"="Female",
+                                .ordered=T)) %>% 
+   mutate(AGE_C = cut(AGEP, breaks=c(-Inf,5.5,13.5,18.5,30.5,64.5,75, Inf),
+                      labels=c("5 and under", 
+                               "6-13",
+                               "14-18",
+         "19-30",
+         "31-64",
+         "65-75",
+         "over 75" ),
+          ordered_result = TRUE))
+  
 ```
 
 ```{r}
 acs_c %>% 
-  tabyl(ENG_c)
+  tabyl(AGE_C, Work_Class) %>% 
+    adorn_totals(c("row","col")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+    adorn_ns() %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped", full_width = T, 
+                position="left")  %>% 
+    add_header_above(c("","Work Class"= 7 ))
 ```
+
+```{r}
+acs_c %>% 
+  tabyl(SEX_c, Work_Class) %>% 
+    adorn_totals(c("row","col")) %>% 
+    adorn_percentages("row") %>% 
+    adorn_pct_formatting(digits=0) %>% 
+    adorn_ns() %>% 
+  
+  kable(booktabs = TRUE) %>%
+    kable_styling(bootstrap_options = "striped", full_width = T, 
+                position="left")  %>% 
+    add_header_above(c("","Work Class"= 7 ))
+```
+
 
 
 ```{r}
