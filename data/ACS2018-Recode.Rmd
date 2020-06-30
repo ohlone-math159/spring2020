@@ -25,7 +25,8 @@ ACS2018_TriCity <- readRDS("~/R/spring2020/data/ACS2018_TriCity.rds") ##RStudio 
 ```
 
 ```{r}
-tabyl(ACS2018_TriCity$COW)
+
+
 ```
 Codebook
 
@@ -73,7 +74,7 @@ b .N/A (less than 5 years old)
 Select variables
 ```{r}
 acs <- ACS2018_TriCity %>%  # page 30 of recode book
-  select(PWGTP, SEX, AGEP, CIT, COW, ENG, FER, JWMNP, LANX, MAR, SEX, SCHL, WAGP, ESR, WKHP , WRK, NATIVITY, PINCP )
+  select( SEX, AGEP, CIT, COW, ENG, FER, JWMNP, LANX, MAR, SEX, SCHL, WAGP, ESR, WKHP , WRK, NATIVITY, PINCP )
 ```
 
 Recode variables
@@ -152,6 +153,11 @@ acs_c %>%
     add_header_above(c("","Work Class"= 7 ))
 ```
 
+```{r}
+acs_c %>% 
+tabyl(AGE_C)
+```
+
 
 
 ```{r}
@@ -171,6 +177,10 @@ acs_c %>%
     kable_styling(bootstrap_options = "striped", full_width = T, 
                 position="left")  %>% 
     add_header_above(c("","Ability to Speak English"= 6 ))
+```
+
+```{r}
+write.csv(acs_c, file = "tricity_acs_2018_f2020.csv")
 ```
 
 
